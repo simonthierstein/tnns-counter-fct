@@ -4,52 +4,71 @@
 
 package com.example.demo;
 
+import static io.vavr.API.$;
+import static io.vavr.API.Case;
+import static io.vavr.API.Match;
+import static io.vavr.Predicates.instanceOf;
+
 import io.vavr.collection.List;
+import java.util.function.Function;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 
 
-
-
-public interface CounterState_ {
+public sealed interface CounterState_ permits CounterState_.Zero,CounterState_.Counting {
 
     static CounterState_ zero() {
         return new Zero();
     }
 
-    CounterState_ inc();
+    static CounterState_ inc(CounterState_ prev) {
+        return apply(prev, Zero.zeroInc(), Counting.countingInc());
+    }
 
-    Integer eval();
+    static Integer eval(CounterState_ prev) {
+        return apply(prev, Zero.zeroEval(), Counting.countingEval());
+    }
+
+    private static <T> T apply(CounterState_ prev,
+                               Function<Zero, T> f1,
+                               Function<Counting, T> f2
+    ) {
+        return Match(prev).of(
+                Case($(instanceOf(Zero.class)), f1),
+                Case($(instanceOf(Counting.class)), f2)
+        );
+    }
 
 
-    class Zero implements CounterState_ {
+    @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+    @EqualsAndHashCode final class Zero implements CounterState_ {
 
-        @Override public CounterState_ inc() {
-            return Counting.inst();
+        private static Function<Zero, Counting> zeroInc() {
+            return x -> Counting.inst();
         }
 
-        @Override public Integer eval() {
-            return 0;
+        private static Function<Zero, Integer> zeroEval() {
+            return x -> 0;
         }
     }
 
     @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
     @EqualsAndHashCode
-    class Counting implements CounterState_{
+    final class Counting implements CounterState_ {
 
         private final List<CounterState_> stateList;
-
-        @Override public CounterState_ inc() {
-            return new Counting(stateList.append(Counting.inst()));
-        }
 
         private static Counting inst() {
             return new Counting(List.empty());
         }
 
-        @Override public Integer eval() {
-            return stateList.foldLeft(1, (st, acc) -> st + 1);
+        private static Function<Counting, Counting> countingInc() {
+            return x -> new Counting(x.stateList.append(inst()));
+        }
+
+        private static Function<Counting, Integer> countingEval() {
+            return x -> x.stateList.foldLeft(1, (st, acc) -> st + 1);
         }
     }
 }

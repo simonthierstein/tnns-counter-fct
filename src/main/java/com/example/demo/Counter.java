@@ -18,10 +18,10 @@ class Counter {
     }
 
     Counter increment() {
-        return new Counter(state.inc());
+        return new Counter(CounterState_.inc(state));
     }
 
     Integer eval() {
-        return state.eval();
+        return CounterState_.eval(state);
     }
 }
