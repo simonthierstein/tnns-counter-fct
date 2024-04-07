@@ -11,17 +11,17 @@ import lombok.RequiredArgsConstructor;
 @EqualsAndHashCode
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 class Counter {
-    private final CounterState state;
+    private final CounterState_ state;
 
     static Counter initial() {
-        return new Counter(CounterState.zero());
+        return new Counter(CounterState_.zero());
     }
 
     Counter increment() {
-        return new Counter(CounterState.inc(state));
+        return new Counter(state.inc());
     }
 
     Integer eval() {
-        return CounterState.eval(state);
+        return state.eval();
     }
 }
