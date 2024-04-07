@@ -34,10 +34,10 @@ public sealed interface CounterState_ permits CounterState_.Zero,CounterState_.C
                                Function<Zero, T> f1,
                                Function<Counting, T> f2
     ) {
-        return Match(prev).of(
-                Case($(instanceOf(Zero.class)), f1),
-                Case($(instanceOf(Counting.class)), f2)
-        );
+        return switch (prev) {
+            case Zero zero -> f1.apply(zero);
+            case Counting zero -> f2.apply(zero);
+        };
     }
 
 
