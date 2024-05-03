@@ -15,6 +15,6 @@ public interface GameAggregateRoot {
     Function<Game, Tuple2<Integer, Integer>> eval2Integer = Game.export2Integer();
 
     static <T> T eval(final Function<Game, T> mapper, Game target) {
-        return mapper.apply(target);
+        return target.eval(mapper);
     }
 }
