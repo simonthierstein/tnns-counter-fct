@@ -25,4 +25,8 @@ public class Game {
     Game spielerPunktet() {
         return new Game(punkteSpieler.append(punkt()), punkteGegner);
     }
+
+    Game gegnerPunktet() {
+        return new Game(punkteSpieler, punkteGegner.append(punkt()));
+    }
 }

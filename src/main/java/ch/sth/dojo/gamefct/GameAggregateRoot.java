@@ -4,4 +4,8 @@ public interface GameAggregateRoot {
     static Game spielerPunktet(Game prev) {
         return prev.spielerPunktet();
     }
+
+    static Game gegnerPunktet(Game prev) {
+        return prev.gegnerPunktet();
+    }
 }
