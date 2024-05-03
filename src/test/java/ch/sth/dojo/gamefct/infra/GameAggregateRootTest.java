@@ -1,9 +1,10 @@
-package ch.sth.dojo.gamefct;
+package ch.sth.dojo.gamefct.infra;
 
 import static ch.sth.dojo.gamefct.GameAggregateRoot.gegnerPunktet;
 import static ch.sth.dojo.gamefct.GameAggregateRoot.spielerPunktet;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import ch.sth.dojo.gamefct.Game;
 import org.junit.jupiter.api.Test;
 
 class GameAggregateRootTest {
