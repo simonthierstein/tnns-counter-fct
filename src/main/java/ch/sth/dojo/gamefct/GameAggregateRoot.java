@@ -12,7 +12,9 @@ public interface GameAggregateRoot {
         return prev.gegnerPunktet();
     }
 
-    static Tuple2<Integer,Integer> eval2Integer(Game game) {
-        return game.eval(Game.export2Integer());
+    Function<Game, Tuple2<Integer, Integer>> eval2Integer = Game.export2Integer();
+
+    static <T> T eval(final Function<Game, T> mapper, Game target) {
+        return mapper.apply(target);
     }
 }

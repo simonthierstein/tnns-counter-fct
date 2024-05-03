@@ -44,7 +44,7 @@ class GameAggregateRootTest {
     @Test
     void spielerPunktetAndGegnerPunktetEval2Integer_is1To1() {
         Game prev1 = Game.initial();
-        final Tuple2<Integer, Integer> integerIntegerTuple2 = GameAggregateRoot.eval2Integer(gegnerPunktet(spielerPunktet(prev1)));
+        final Tuple2<Integer, Integer> integerIntegerTuple2 = GameAggregateRoot.eval(GameAggregateRoot.eval2Integer, gegnerPunktet(spielerPunktet(prev1)));
         assertThat(integerIntegerTuple2).isEqualTo(Tuple.of(1, 1));
         assertThat(integerIntegerTuple2).is(new Condition<>(t2 -> t2._1 == 1, "fdsa"));
         assertThat(integerIntegerTuple2).is(AllOf.allOf(
