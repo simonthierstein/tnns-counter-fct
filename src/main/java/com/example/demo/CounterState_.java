@@ -18,16 +18,16 @@ import lombok.RequiredArgsConstructor;
 
 public sealed interface CounterState_ permits CounterState_.Zero,CounterState_.Counting {
 
-    static CounterState_ zero() {
-        return new Zero();
+    static Function<Unit, CounterState_> zero() {
+        return x->new Zero();
     }
 
-    static CounterState_ inc(CounterState_ prev) {
-        return apply(prev, Zero.zeroInc(), Counting.countingInc());
+    static Function<CounterState_, CounterState_> inc() {
+        return prev->apply(prev, Zero.zeroInc(), Counting.countingInc());
     }
 
-    static Integer eval(CounterState_ prev) {
-        return apply(prev, Zero.zeroEval(), Counting.countingEval());
+    static Function<CounterState_, Integer> eval() {
+        return prev->apply(prev, Zero.zeroEval(), Counting.countingEval());
     }
 
     private static <T> T apply(CounterState_ prev,
