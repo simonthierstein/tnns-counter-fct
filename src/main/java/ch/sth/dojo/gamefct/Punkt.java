@@ -4,6 +4,13 @@
 
 package ch.sth.dojo.gamefct;
 
+import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
+import lombok.RequiredArgsConstructor;
+import lombok.ToString;
+
+@EqualsAndHashCode @ToString
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 final class Punkt {
     static Punkt punkt() {
         return new Punkt();
