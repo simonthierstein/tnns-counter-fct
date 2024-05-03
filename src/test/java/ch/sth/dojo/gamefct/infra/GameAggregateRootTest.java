@@ -42,7 +42,7 @@ class GameAggregateRootTest {
     }
 
     @Test
-    void fdsafas() {
+    void spielerPunktetAndGegnerPunktetEval2Integer_is1To1() {
         Game prev1 = Game.initial();
         final Tuple2<Integer, Integer> integerIntegerTuple2 = GameAggregateRoot.eval2Integer(gegnerPunktet(spielerPunktet(prev1)));
         assertThat(integerIntegerTuple2).isEqualTo(Tuple.of(1, 1));
