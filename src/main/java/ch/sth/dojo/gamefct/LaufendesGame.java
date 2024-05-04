@@ -26,11 +26,15 @@ public class LaufendesGame implements Game {
     }
 
     Game spielerPunktet() {
-        return new LaufendesGame(punkteSpieler.append(punkt()), punkteGegner);
+        return punkteSpieler.size() + 1 == 4
+                ? AbeschlossenesGame.abgeschlossenesGame(punkteSpieler.append(punkt()), punkteGegner)
+                : new LaufendesGame(punkteSpieler.append(punkt()), punkteGegner);
     }
 
     Game gegnerPunktet() {
-        return new LaufendesGame(punkteSpieler, punkteGegner.append(punkt()));
+        return punkteGegner.size() + 1 == 4
+                ? AbeschlossenesGame.abgeschlossenesGame(punkteSpieler, punkteGegner.append(punkt()))
+                : new LaufendesGame(punkteSpieler, punkteGegner.append(punkt()));
     }
 
     static Function<LaufendesGame, Tuple2<Integer, Integer>> export2Integer() {
