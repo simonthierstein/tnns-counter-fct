@@ -79,11 +79,7 @@ class GameAggregateRootTest {
                 .flatMap(gameEitherFunction)
                 .fold(err -> err, Object::toString);
 
-        System.out.println(fold);
-
         assertThat(fold).contains("AbgeschlossenesGame");
-
-
     }
 
     static Condition<String> hasSpieler1() {
