@@ -17,6 +17,7 @@ import ch.sth.dojo.gamefct.GameAggregateRoot;
 import io.vavr.Tuple;
 import io.vavr.Tuple2;
 import io.vavr.control.Either;
+import java.util.function.Function;
 import org.assertj.core.api.Condition;
 import org.assertj.core.condition.AllOf;
 import org.junit.jupiter.api.Test;
@@ -64,17 +65,23 @@ class GameAggregateRootTest {
 
 
     @Test
-    void fdsafdsa() {
+    void spielerPunktet_4punkte_abgeschlossenesGame() {
         final LaufendesGame initial = LaufendesGame.initial();
 
         final Game game = spielerPunktet(initial);
 
-        final String fold = Game.<Either<String, Game>>apply(game, prev1 -> Either.right(spielerPunktet(prev1)), x1 -> Either.left("geht nicht"))
-                .flatMap(game1 -> Game.apply(game1, prev -> Either.right(spielerPunktet(prev)), x -> Either.left("geht nicht")))
-                .flatMap(game1 -> Game.apply(game1, prev -> Either.right(spielerPunktet(prev)), x -> Either.left("geht nicht")))
-                .fold(err -> err, succ -> succ.toString());
+        final Function<LaufendesGame, Either<String, Game>> laufendesGameEitherFunction = prev1 -> Either.right(spielerPunktet(prev1));
+        final Function<AbgeschlossenesGame, Either<String, Game>> gehtNicht = x1 -> Either.left("geht nicht");
+        final Function<Game, Either<String, ? extends Game>> gameEitherFunction = game1 -> Game.apply(game1, laufendesGameEitherFunction, gehtNicht);
+
+        final String fold = gameEitherFunction.apply(game)
+                .flatMap(gameEitherFunction)
+                .flatMap(gameEitherFunction)
+                .fold(err -> err, Object::toString);
 
         System.out.println(fold);
+
+        assertThat(fold).contains("AbgeschlossenesGame");
 
 
     }
