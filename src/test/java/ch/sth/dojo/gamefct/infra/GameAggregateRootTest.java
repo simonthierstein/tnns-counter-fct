@@ -6,6 +6,7 @@ import static org.assertj.core.api.Assertions.allOf;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.condition.MappedCondition.mappedCondition;
 
+import ch.sth.dojo.gamefct.Game;
 import ch.sth.dojo.gamefct.LaufendesGame;
 import ch.sth.dojo.gamefct.GameAggregateRoot;
 import io.vavr.Tuple;
@@ -42,7 +43,9 @@ class GameAggregateRootTest {
     @Test
     void spielerPunktetAndGegnerPunktetEval2Integer_is1To1() {
         LaufendesGame prev1 = LaufendesGame.initial();
-        final Tuple2<Integer, Integer> integerIntegerTuple2 = GameAggregateRoot.eval(GameAggregateRoot.eval2Integer, gegnerPunktet(spielerPunktet(prev1)));
+        final LaufendesGame game = (LaufendesGame) spielerPunktet(prev1);
+        final LaufendesGame game1 = (LaufendesGame) gegnerPunktet(game);
+        final Tuple2<Integer, Integer> integerIntegerTuple2 = GameAggregateRoot.eval(GameAggregateRoot.eval2Integer, game1);
         assertThat(integerIntegerTuple2).isEqualTo(Tuple.of(1, 1));
         assertThat(integerIntegerTuple2).is(new Condition<>(t2 -> t2._1 == 1, "fdsa"));
         assertThat(integerIntegerTuple2).is(AllOf.allOf(

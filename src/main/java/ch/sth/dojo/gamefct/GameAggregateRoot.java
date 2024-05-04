@@ -4,11 +4,11 @@ import io.vavr.Tuple2;
 import java.util.function.Function;
 
 public interface GameAggregateRoot {
-    static LaufendesGame spielerPunktet(LaufendesGame prev) {
+    static Game spielerPunktet(LaufendesGame prev) {
         return prev.spielerPunktet();
     }
 
-    static LaufendesGame gegnerPunktet(LaufendesGame prev) {
+    static Game gegnerPunktet(LaufendesGame prev) {
         return prev.gegnerPunktet();
     }
 

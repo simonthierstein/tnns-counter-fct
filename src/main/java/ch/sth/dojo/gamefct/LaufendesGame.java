@@ -25,11 +25,11 @@ public class LaufendesGame implements Game {
         return new LaufendesGame(List.empty(),List.empty());
     }
 
-    LaufendesGame spielerPunktet() {
+    Game spielerPunktet() {
         return new LaufendesGame(punkteSpieler.append(punkt()), punkteGegner);
     }
 
-    LaufendesGame gegnerPunktet() {
+    Game gegnerPunktet() {
         return new LaufendesGame(punkteSpieler, punkteGegner.append(punkt()));
     }
 
