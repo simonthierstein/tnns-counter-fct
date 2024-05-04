@@ -27,13 +27,13 @@ public class LaufendesGame implements Game {
 
     Game spielerPunktet() {
         return punkteSpieler.size() + 1 == 4
-                ? AbeschlossenesGame.abgeschlossenesGame(punkteSpieler.append(punkt()), punkteGegner)
+                ? AbgeschlossenesGame.abgeschlossenesGame(punkteSpieler.append(punkt()), punkteGegner)
                 : new LaufendesGame(punkteSpieler.append(punkt()), punkteGegner);
     }
 
     Game gegnerPunktet() {
         return punkteGegner.size() + 1 == 4
-                ? AbeschlossenesGame.abgeschlossenesGame(punkteSpieler, punkteGegner.append(punkt()))
+                ? AbgeschlossenesGame.abgeschlossenesGame(punkteSpieler, punkteGegner.append(punkt()))
                 : new LaufendesGame(punkteSpieler, punkteGegner.append(punkt()));
     }
 
