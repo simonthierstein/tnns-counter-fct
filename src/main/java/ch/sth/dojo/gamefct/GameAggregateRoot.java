@@ -4,17 +4,17 @@ import io.vavr.Tuple2;
 import java.util.function.Function;
 
 public interface GameAggregateRoot {
-    static Game spielerPunktet(Game prev) {
+    static LaufendesGame spielerPunktet(LaufendesGame prev) {
         return prev.spielerPunktet();
     }
 
-    static Game gegnerPunktet(Game prev) {
+    static LaufendesGame gegnerPunktet(LaufendesGame prev) {
         return prev.gegnerPunktet();
     }
 
-    Function<Game, Tuple2<Integer, Integer>> eval2Integer = Game.export2Integer();
+    Function<LaufendesGame, Tuple2<Integer, Integer>> eval2Integer = LaufendesGame.export2Integer();
 
-    static <T> T eval(final Function<Game, T> mapper, Game target) {
+    static <T> T eval(final Function<LaufendesGame, T> mapper, LaufendesGame target) {
         return target.eval(mapper);
     }
 }
