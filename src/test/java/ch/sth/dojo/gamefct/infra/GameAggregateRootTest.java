@@ -69,30 +69,13 @@ class GameAggregateRootTest {
 
         final Game game = spielerPunktet(initial);
 
-        Either<String, Game> x = Match(game).of(
-                Case($(instanceOf(LaufendesGame.class)), prev -> Either.right(spielerPunktet(prev))),
-                Case($(instanceOf(AbgeschlossenesGame.class)), Either.left("geht nicht"))
-        );
+        final String fold = Game.<Either<String, Game>>apply(game, prev1 -> Either.right(spielerPunktet(prev1)), x1 -> Either.left("geht nicht"))
+                .flatMap(game1 -> Game.apply(game1, prev -> Either.right(spielerPunktet(prev)), x -> Either.left("geht nicht")))
+                .flatMap(game1 -> Game.apply(game1, prev -> Either.right(spielerPunktet(prev)), x -> Either.left("geht nicht")))
+                .fold(err -> err, succ -> succ.toString());
 
-        final Either<String, Game> gehtNicht = x.flatMap(game1 -> Match(game1).of(
-                Case($(instanceOf(LaufendesGame.class)), prev -> Either.right(spielerPunktet(prev))),
-                Case($(instanceOf(AbgeschlossenesGame.class)), Either.left("geht nicht"))
-        ));
+        System.out.println(fold);
 
-        System.out.println(gehtNicht);
-
-        final Either<String, Game> gehtNoch = gehtNicht.flatMap(game1 -> Match(game1).of(
-                Case($(instanceOf(LaufendesGame.class)), prev -> Either.right(spielerPunktet(prev))),
-                Case($(instanceOf(AbgeschlossenesGame.class)), Either.left("geht nicht"))
-        ));
-
-        System.out.println(gehtNoch);
-        final Either<String, Game> gehtNichtMehr = gehtNoch.flatMap(game1 -> Match(game1).of(
-                Case($(instanceOf(LaufendesGame.class)), prev -> Either.right(spielerPunktet(prev))),
-                Case($(instanceOf(AbgeschlossenesGame.class)), Either.left("geht nicht"))
-        ));
-
-        System.out.println(gehtNichtMehr);
 
     }
 
