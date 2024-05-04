@@ -4,6 +4,7 @@
 
 package ch.sth.dojo.gamefct;
 
+import static ch.sth.dojo.gamefct.AbgeschlossenesGame.abgeschlossenesGame;
 import static ch.sth.dojo.gamefct.Punkt.punkt;
 
 import io.vavr.Tuple;
@@ -27,13 +28,13 @@ public class LaufendesGame implements Game {
 
     Game spielerPunktet() {
         return punkteSpieler.size() + 1 == 4
-                ? AbgeschlossenesGame.abgeschlossenesGame(punkteSpieler.append(punkt()), punkteGegner)
+                ? abgeschlossenesGame(punkteSpieler.append(punkt()), punkteGegner)
                 : new LaufendesGame(punkteSpieler.append(punkt()), punkteGegner);
     }
 
     Game gegnerPunktet() {
         return punkteGegner.size() + 1 == 4
-                ? AbgeschlossenesGame.abgeschlossenesGame(punkteSpieler, punkteGegner.append(punkt()))
+                ? abgeschlossenesGame(punkteSpieler, punkteGegner.append(punkt()))
                 : new LaufendesGame(punkteSpieler, punkteGegner.append(punkt()));
     }
 
