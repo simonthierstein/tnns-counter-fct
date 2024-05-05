@@ -26,30 +26,30 @@ class GameAggregateRootTest {
 
     @Test
     void spielerPunktet_notequal_prev() {
-        LaufendesGame prev = LaufendesGame.initial();
+        LaufendesGame prev = GameAggregateRoot.initial();
         assertThat(spielerPunktet(prev)).isNotEqualTo(prev);
     }
     @Test
     void spielerPunktet_equal_empty_spielerPunktet() {
-        LaufendesGame prev1 = LaufendesGame.initial();
-        LaufendesGame prev2 = LaufendesGame.initial();
+        LaufendesGame prev1 = GameAggregateRoot.initial();
+        LaufendesGame prev2 = GameAggregateRoot.initial();
         assertThat(spielerPunktet(prev1)).isEqualTo(spielerPunktet(prev2));
     }
     @Test
     void gegnerPunktet_notequal_prev() {
-        LaufendesGame prev = LaufendesGame.initial();
+        LaufendesGame prev = GameAggregateRoot.initial();
         assertThat(gegnerPunktet(prev)).isNotEqualTo(prev);
     }
     @Test
     void gegnerPunktet_equal_empty_gegnerPunktet() {
-        LaufendesGame prev1 = LaufendesGame.initial();
-        LaufendesGame prev2 = LaufendesGame.initial();
+        LaufendesGame prev1 = GameAggregateRoot.initial();
+        LaufendesGame prev2 = GameAggregateRoot.initial();
         assertThat(gegnerPunktet(prev1)).isEqualTo(gegnerPunktet(prev2));
     }
 
     @Test
     void spielerPunktetAndGegnerPunktetEval2Integer_is1To1() {
-        LaufendesGame prev1 = LaufendesGame.initial();
+        LaufendesGame prev1 = GameAggregateRoot.initial();
         final LaufendesGame game = (LaufendesGame) spielerPunktet(prev1);
         final LaufendesGame game1 = (LaufendesGame) gegnerPunktet(game);
         final Tuple2<Integer, Integer> integerIntegerTuple2 = GameAggregateRoot.eval(GameAggregateRoot.eval2Integer, game1);
@@ -66,7 +66,7 @@ class GameAggregateRootTest {
 
     @Test
     void spielerPunktet_4punkte_abgeschlossenesGame() {
-        final LaufendesGame initial = LaufendesGame.initial();
+        final LaufendesGame initial = GameAggregateRoot.initial();
 
         final Game game = spielerPunktet(initial);
 

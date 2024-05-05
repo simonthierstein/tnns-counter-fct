@@ -22,20 +22,26 @@ public class LaufendesGame implements Game {
     private final List<Punkt> punkteSpieler;
     private final List<Punkt> punkteGegner;
 
-    public static LaufendesGame initial() {
-        return new LaufendesGame(List.empty(),List.empty());
+    static LaufendesGame initial() {
+        return laufendesGame(List.empty(), List.empty());
+    }
+
+    static LaufendesGame laufendesGame(final List<Punkt> punkteSpieler, final List<Punkt> punkteGegner) {
+        return new LaufendesGame(punkteSpieler, punkteGegner);
     }
 
     Game spielerPunktet() {
-        return punkteSpieler.size() + 1 == 4
-                ? abgeschlossenesGame(punkteSpieler.append(punkt()), punkteGegner)
-                : new LaufendesGame(punkteSpieler.append(punkt()), punkteGegner);
+        final List<Punkt> incremented = punkteSpieler.append(punkt());
+        return incremented.size() == 4
+                ? abgeschlossenesGame(incremented, punkteGegner)
+                : laufendesGame(incremented, punkteGegner);
     }
 
     Game gegnerPunktet() {
-        return punkteGegner.size() + 1 == 4
-                ? abgeschlossenesGame(punkteSpieler, punkteGegner.append(punkt()))
-                : new LaufendesGame(punkteSpieler, punkteGegner.append(punkt()));
+        final List<Punkt> incremented = punkteGegner.append(punkt());
+        return incremented.size() == 4
+                ? abgeschlossenesGame(punkteSpieler, incremented)
+                : laufendesGame(punkteSpieler, incremented);
     }
 
     static Function<LaufendesGame, Tuple2<Integer, Integer>> export2Integer() {
