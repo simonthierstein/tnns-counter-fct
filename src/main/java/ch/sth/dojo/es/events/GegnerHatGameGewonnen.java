@@ -4,7 +4,7 @@
 
 package ch.sth.dojo.es.events;
 
-public final class GegnerHatGameGewonnen implements DomainEvent {
+public record GegnerHatGameGewonnen() implements DomainEvent {
     public static GegnerHatGameGewonnen gegnerHatGameGewonnen() {
         return new GegnerHatGameGewonnen();
     }
