@@ -1,5 +1,6 @@
 package ch.sth.dojo.es;
 
+import ch.sth.dojo.es.events.DomainEvent;
 import io.vavr.Tuple2;
 import java.util.function.Function;
 

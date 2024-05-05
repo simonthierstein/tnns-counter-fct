@@ -4,11 +4,6 @@
 
 package ch.sth.dojo.gamefct;
 
-import static ch.sth.dojo.es.GegnerHatGameGewonnen.gegnerHatGameGewonnen;
-import static ch.sth.dojo.es.SpielerHatGameGewonnen.spielerHatGameGewonnen;
-
-import ch.sth.dojo.es.GegnerHatGameGewonnen;
-import ch.sth.dojo.es.SpielerHatGameGewonnen;
 import io.vavr.collection.List;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;

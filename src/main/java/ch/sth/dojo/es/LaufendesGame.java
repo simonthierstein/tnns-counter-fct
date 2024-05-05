@@ -6,10 +6,13 @@ package ch.sth.dojo.es;
 
 import static ch.sth.dojo.es.AbgeschlossenesGame.GegnerHatGameGewonnen;
 import static ch.sth.dojo.es.AbgeschlossenesGame.SpielerHatGameGewonnen;
-import static ch.sth.dojo.es.GegnerHatPunktGewonnen.gegnerHatPunktGewonnen;
+import static ch.sth.dojo.es.events.GegnerHatPunktGewonnen.gegnerHatPunktGewonnen;
 import static ch.sth.dojo.es.Punkt.punkt;
-import static ch.sth.dojo.es.SpielerHatPunktGewonnen.spielerHatPunktGewonnen;
+import static ch.sth.dojo.es.events.SpielerHatPunktGewonnen.spielerHatPunktGewonnen;
 
+import ch.sth.dojo.es.events.DomainEvent;
+import ch.sth.dojo.es.events.GegnerHatPunktGewonnen;
+import ch.sth.dojo.es.events.SpielerHatPunktGewonnen;
 import io.vavr.Tuple;
 import io.vavr.Tuple2;
 import io.vavr.collection.List;

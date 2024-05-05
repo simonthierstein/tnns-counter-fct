@@ -4,9 +4,11 @@
 
 package ch.sth.dojo.es;
 
-import static ch.sth.dojo.es.GegnerHatGameGewonnen.gegnerHatGameGewonnen;
-import static ch.sth.dojo.es.SpielerHatGameGewonnen.spielerHatGameGewonnen;
+import static ch.sth.dojo.es.events.GegnerHatGameGewonnen.gegnerHatGameGewonnen;
+import static ch.sth.dojo.es.events.SpielerHatGameGewonnen.spielerHatGameGewonnen;
 
+import ch.sth.dojo.es.events.GegnerHatGameGewonnen;
+import ch.sth.dojo.es.events.SpielerHatGameGewonnen;
 import io.vavr.collection.List;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
