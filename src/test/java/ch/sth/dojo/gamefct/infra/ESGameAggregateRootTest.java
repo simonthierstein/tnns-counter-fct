@@ -25,7 +25,7 @@ class ESGameAggregateRootTest {
         System.out.println(d);
 
         List<DomainEvent> xx = List.range(0, 4)
-                .map(x -> fdsa())
+                .map(x -> spielerPunktetFct())
                 .foldLeft(List.empty(), (xs, x) -> x.apply(xs));
 
         System.out.println(xx);
@@ -33,14 +33,14 @@ class ESGameAggregateRootTest {
 
 
         Function<List<DomainEvent>, List<DomainEvent>> fct=List.range(0, 4)
-                .map(x -> fdsa())
+                .map(x -> spielerPunktetFct())
                 .foldLeft(Function.identity(), (xs, x) -> x.compose(xs));
 
         System.out.println(fct.apply(List.empty()));
 
     }
 
-    static Function<List<DomainEvent>, List<DomainEvent>> fdsa() {
+    static Function<List<DomainEvent>, List<DomainEvent>> spielerPunktetFct() {
         return ESGameAggregateRootTest::doSpielerPunktet;
     }
 
