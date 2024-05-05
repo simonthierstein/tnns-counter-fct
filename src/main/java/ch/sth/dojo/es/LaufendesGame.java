@@ -33,7 +33,7 @@ public class LaufendesGame implements Game {
     DomainEvent spielerPunktet() {
         final List<Punkt> incremented = punkteSpieler.append(punkt());
         return incremented.size() == 4
-                ? abgeschlossenesGame(incremented, punkteGegner)
+                ? AbgeschlossenesGame.(incremented, punkteGegner)
                 : laufendesGame(incremented, punkteGegner);
     }
 

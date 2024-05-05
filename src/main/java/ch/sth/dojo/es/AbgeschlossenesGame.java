@@ -4,6 +4,9 @@
 
 package ch.sth.dojo.es;
 
+import static ch.sth.dojo.es.GegnerHatGameGewonnen.gegnerHatGameGewonnen;
+import static ch.sth.dojo.es.SpielerHatGameGewonnen.spielerHatGameGewonnen;
+
 import io.vavr.collection.List;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
@@ -19,5 +22,16 @@ public class AbgeschlossenesGame implements Game {
     static AbgeschlossenesGame abgeschlossenesGame(final List<Punkt> punkteSpieler,
                                                    final List<Punkt> punkteGegner) {
         return new AbgeschlossenesGame(punkteSpieler, punkteGegner);
+    }
+
+
+    static SpielerHatGameGewonnen SpielerHatGameGewonnen(final List<ch.sth.dojo.gamefct.Punkt> punkteSpieler,
+                                                         final List<ch.sth.dojo.gamefct.Punkt> punkteGegner) {
+        return spielerHatGameGewonnen();
+    }
+
+    static GegnerHatGameGewonnen GegnerHatGameGewonnen(final List<ch.sth.dojo.gamefct.Punkt> punkteSpieler,
+                                                       final List<ch.sth.dojo.gamefct.Punkt> punkteGegner) {
+        return gegnerHatGameGewonnen();
     }
 }

@@ -26,13 +26,4 @@ public class AbgeschlossenesGame implements Game {
         return new AbgeschlossenesGame(punkteSpieler, punkteGegner);
     }
 
-    static SpielerHatGameGewonnen SpielerHatGameGewonnen(final List<Punkt> punkteSpieler,
-                                                         final List<Punkt> punkteGegner) {
-        return spielerHatGameGewonnen();
-    }
-
-    static GegnerHatGameGewonnen GegnerHatGameGewonnen(final List<Punkt> punkteSpieler,
-                                                       final List<Punkt> punkteGegner) {
-        return gegnerHatGameGewonnen();
-    }
 }
