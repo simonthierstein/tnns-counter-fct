@@ -6,12 +6,19 @@ package ch.sth.dojo.es;
 
 import static ch.sth.dojo.es.AbgeschlossenesGame.GegnerHatGameGewonnen;
 import static ch.sth.dojo.es.AbgeschlossenesGame.SpielerHatGameGewonnen;
-import static ch.sth.dojo.es.events.GegnerHatPunktGewonnen.gegnerHatPunktGewonnen;
+import static ch.sth.dojo.es.AbgeschlossenesGame.abgeschlossenesGame;
 import static ch.sth.dojo.es.Punkt.punkt;
+import static ch.sth.dojo.es.events.GegnerHatPunktGewonnen.gegnerHatPunktGewonnen;
 import static ch.sth.dojo.es.events.SpielerHatPunktGewonnen.spielerHatPunktGewonnen;
+import static io.vavr.API.$;
+import static io.vavr.API.Case;
+import static io.vavr.API.Match;
+import static io.vavr.Predicates.instanceOf;
 
 import ch.sth.dojo.es.events.DomainEvent;
+import ch.sth.dojo.es.events.GegnerHatGameGewonnen;
 import ch.sth.dojo.es.events.GegnerHatPunktGewonnen;
+import ch.sth.dojo.es.events.SpielerHatGameGewonnen;
 import ch.sth.dojo.es.events.SpielerHatPunktGewonnen;
 import io.vavr.Tuple;
 import io.vavr.Tuple2;
@@ -39,6 +46,7 @@ public class LaufendesGame implements Game {
     static SpielerHatPunktGewonnen SpielerHatPunktGewonnen(final List<Punkt> punkteSpieler, final List<Punkt> punkteGegner) {
         return spielerHatPunktGewonnen();
     }
+
     static GegnerHatPunktGewonnen GegnerHatPunktGewonnen(final List<Punkt> punkteSpieler, final List<Punkt> punkteGegner) {
         return gegnerHatPunktGewonnen();
     }
@@ -67,5 +75,35 @@ public class LaufendesGame implements Game {
 
     <T> T eval(final Function<LaufendesGame, T> mapper) {
         return mapper.apply(this);
+    }
+
+    @Override
+    public Game handleEvent(final DomainEvent elem) {
+        return narrow(Match(elem).of(
+                Case($(instanceOf(SpielerHatPunktGewonnen.class)), shpg()),
+                Case($(instanceOf(GegnerHatPunktGewonnen.class)), ghpg()),
+                Case($(instanceOf(SpielerHatGameGewonnen.class)), shgg()),
+                Case($(instanceOf(GegnerHatGameGewonnen.class)), ghgg())
+        ));
+    }
+
+    private static <T extends Game> Game narrow(T expanded) {
+        return expanded;
+    }
+
+    private Function<SpielerHatGameGewonnen, Game> shgg() {
+        return event -> abgeschlossenesGame(punkteSpieler.append(punkt()), punkteGegner);
+    }
+
+    private Function<GegnerHatGameGewonnen, Game> ghgg() {
+        return event -> abgeschlossenesGame(punkteSpieler, punkteGegner.append(punkt()));
+    }
+
+    private Function<GegnerHatPunktGewonnen, Game> ghpg() {
+        return event -> laufendesGame(punkteSpieler, punkteGegner.append(punkt()));
+    }
+
+    private Function<SpielerHatPunktGewonnen, Game> shpg() {
+        return event -> laufendesGame(punkteSpieler.append(punkt()), punkteGegner);
     }
 }
