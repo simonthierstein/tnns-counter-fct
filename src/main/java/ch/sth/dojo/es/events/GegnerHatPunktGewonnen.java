@@ -5,7 +5,7 @@
 package ch.sth.dojo.es.events;
 
 public final class GegnerHatPunktGewonnen implements DomainEvent {
-    static GegnerHatPunktGewonnen gegnerHatPunktGewonnen() {
+    public static GegnerHatPunktGewonnen gegnerHatPunktGewonnen() {
         return new GegnerHatPunktGewonnen();
     }
 }
