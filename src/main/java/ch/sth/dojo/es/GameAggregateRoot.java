@@ -18,6 +18,12 @@ public interface GameAggregateRoot {
         return prev.gegnerPunktet();
     }
 
+    static Game handleEvent(Game state, DomainEvent event) {
+        return Game.handleEvent(state, event);
+    }
+
+
+
     Function<LaufendesGame, Tuple2<Integer, Integer>> eval2Integer = LaufendesGame.export2Integer();
 
     static <T> T eval(final Function<LaufendesGame, T> mapper, LaufendesGame target) {

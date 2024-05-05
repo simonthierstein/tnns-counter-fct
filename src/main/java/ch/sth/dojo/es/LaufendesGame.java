@@ -77,18 +77,13 @@ public class LaufendesGame implements Game {
         return mapper.apply(this);
     }
 
-    @Override
     public Game handleEvent(final DomainEvent elem) {
-        return narrow(Match(elem).of(
+        return Match(elem).of(
                 Case($(instanceOf(SpielerHatPunktGewonnen.class)), shpg()),
                 Case($(instanceOf(GegnerHatPunktGewonnen.class)), ghpg()),
                 Case($(instanceOf(SpielerHatGameGewonnen.class)), shgg()),
                 Case($(instanceOf(GegnerHatGameGewonnen.class)), ghgg())
-        ));
-    }
-
-    private static <T extends Game> Game narrow(T expanded) {
-        return expanded;
+        );
     }
 
     private Function<SpielerHatGameGewonnen, Game> shgg() {

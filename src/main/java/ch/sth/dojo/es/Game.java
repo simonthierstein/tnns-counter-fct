@@ -20,13 +20,16 @@ public interface Game {
     
     
     static Game eventHandler(List<DomainEvent> domainEvents) {
-        final Game initial = LaufendesGame.initial();
-
-        Game state = domainEvents.foldLeft(initial, (acc, elem) -> acc.handleEvent(elem));
-
-        return state;
-
+        return domainEvents.foldLeft(LaufendesGame.initial(), Game::handleEvent);
     }
 
-    Game handleEvent(DomainEvent elem);
+    static Game handleEvent(Game state, DomainEvent event) {
+        return Game.apply(state,
+                laufendesGame -> laufendesGame.handleEvent(event),
+                abgeschlossenesGame ->throwException(abgeschlossenesGame, event));
+    }
+
+    private static Game throwException(Game state, final DomainEvent event) {
+        throw new RuntimeException(String.format("invalid event=%s for state=%s", event, state));
+    }
 }

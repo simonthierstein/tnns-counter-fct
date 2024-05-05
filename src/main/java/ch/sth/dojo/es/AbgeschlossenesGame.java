@@ -45,7 +45,4 @@ public class AbgeschlossenesGame implements Game {
         return gegnerHatGameGewonnen();
     }
 
-    @Override public Game handleEvent(final DomainEvent elem) {
-        throw new RuntimeException("Abgeschlossen");
-    }
 }

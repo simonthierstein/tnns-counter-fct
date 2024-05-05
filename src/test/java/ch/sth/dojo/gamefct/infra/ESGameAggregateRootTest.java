@@ -5,6 +5,7 @@ import static ch.sth.dojo.es.Game.eventHandler;
 import ch.sth.dojo.es.AbgeschlossenesGame;
 import ch.sth.dojo.es.Game;
 import ch.sth.dojo.es.GameAggregateRoot;
+import ch.sth.dojo.es.LaufendesGame;
 import ch.sth.dojo.es.events.DomainEvent;
 import io.vavr.collection.List;
 import java.util.function.Function;
@@ -40,8 +41,19 @@ class ESGameAggregateRootTest {
 
     }
 
+
+    @Test
+    void fdafdasfdasfs() {
+        doSpielerPunktet_(GameAggregateRoot.initial(), laufendesGame -> GameAggregateRoot.spielerPunktet(laufendesGame));
+    }
+
     static Function<List<DomainEvent>, List<DomainEvent>> spielerPunktetFct() {
         return ESGameAggregateRootTest::doSpielerPunktet;
+    }
+
+
+    private static DomainEvent doSpielerPunktet_(Game state, final Function<LaufendesGame, DomainEvent> command) {
+        return Game.apply(state, command, err_());
     }
 
 
