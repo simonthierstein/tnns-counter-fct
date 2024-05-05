@@ -30,14 +30,14 @@ public class LaufendesGame implements Game {
         return new LaufendesGame(punkteSpieler, punkteGegner);
     }
 
-    Game spielerPunktet() {
+    DomainEvent spielerPunktet() {
         final List<Punkt> incremented = punkteSpieler.append(punkt());
         return incremented.size() == 4
                 ? abgeschlossenesGame(incremented, punkteGegner)
                 : laufendesGame(incremented, punkteGegner);
     }
 
-    Game gegnerPunktet() {
+    DomainEvent gegnerPunktet() {
         final List<Punkt> incremented = punkteGegner.append(punkt());
         return incremented.size() == 4
                 ? abgeschlossenesGame(punkteSpieler, incremented)

@@ -9,11 +9,11 @@ public interface GameAggregateRoot {
         return LaufendesGame.initial();
     }
 
-    static Game spielerPunktet(LaufendesGame prev) {
+    static DomainEvent spielerPunktet(LaufendesGame prev) {
         return prev.spielerPunktet();
     }
 
-    static Game gegnerPunktet(LaufendesGame prev) {
+    static DomainEvent gegnerPunktet(LaufendesGame prev) {
         return prev.gegnerPunktet();
     }
 
