@@ -25,13 +25,13 @@ public class AbgeschlossenesGame implements Game {
     }
 
 
-    static SpielerHatGameGewonnen SpielerHatGameGewonnen(final List<ch.sth.dojo.gamefct.Punkt> punkteSpieler,
-                                                         final List<ch.sth.dojo.gamefct.Punkt> punkteGegner) {
+    static SpielerHatGameGewonnen SpielerHatGameGewonnen(final List<Punkt> punkteSpieler,
+                                                         final List<Punkt> punkteGegner) {
         return spielerHatGameGewonnen();
     }
 
-    static GegnerHatGameGewonnen GegnerHatGameGewonnen(final List<ch.sth.dojo.gamefct.Punkt> punkteSpieler,
-                                                       final List<ch.sth.dojo.gamefct.Punkt> punkteGegner) {
+    static GegnerHatGameGewonnen GegnerHatGameGewonnen(final List<Punkt> punkteSpieler,
+                                                       final List<Punkt> punkteGegner) {
         return gegnerHatGameGewonnen();
     }
 }

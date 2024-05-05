@@ -4,8 +4,11 @@
 
 package ch.sth.dojo.es;
 
-import static ch.sth.dojo.gamefct.AbgeschlossenesGame.abgeschlossenesGame;
-import static ch.sth.dojo.gamefct.Punkt.punkt;
+import static ch.sth.dojo.es.AbgeschlossenesGame.GegnerHatGameGewonnen;
+import static ch.sth.dojo.es.AbgeschlossenesGame.SpielerHatGameGewonnen;
+import static ch.sth.dojo.es.GegnerHatPunktGewonnen.gegnerHatPunktGewonnen;
+import static ch.sth.dojo.es.Punkt.punkt;
+import static ch.sth.dojo.es.SpielerHatPunktGewonnen.spielerHatPunktGewonnen;
 
 import io.vavr.Tuple;
 import io.vavr.Tuple2;
@@ -30,18 +33,25 @@ public class LaufendesGame implements Game {
         return new LaufendesGame(punkteSpieler, punkteGegner);
     }
 
+    static SpielerHatPunktGewonnen SpielerHatPunktGewonnen(final List<Punkt> punkteSpieler, final List<Punkt> punkteGegner) {
+        return spielerHatPunktGewonnen();
+    }
+    static GegnerHatPunktGewonnen GegnerHatPunktGewonnen(final List<Punkt> punkteSpieler, final List<Punkt> punkteGegner) {
+        return gegnerHatPunktGewonnen();
+    }
+
     DomainEvent spielerPunktet() {
         final List<Punkt> incremented = punkteSpieler.append(punkt());
         return incremented.size() == 4
-                ? AbgeschlossenesGame.(incremented, punkteGegner)
-                : laufendesGame(incremented, punkteGegner);
+                ? SpielerHatGameGewonnen(incremented, punkteGegner)
+                : SpielerHatPunktGewonnen(incremented, punkteGegner);
     }
 
     DomainEvent gegnerPunktet() {
         final List<Punkt> incremented = punkteGegner.append(punkt());
         return incremented.size() == 4
-                ? abgeschlossenesGame(punkteSpieler, incremented)
-                : laufendesGame(punkteSpieler, incremented);
+                ? GegnerHatGameGewonnen(punkteSpieler, incremented)
+                : GegnerHatPunktGewonnen(punkteSpieler, incremented);
     }
 
     static Function<LaufendesGame, Tuple2<Integer, Integer>> export2Integer() {
