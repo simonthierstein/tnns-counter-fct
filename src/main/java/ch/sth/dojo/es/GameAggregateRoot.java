@@ -1,7 +1,7 @@
 package ch.sth.dojo.es;
 
+import ch.sth.dojo.es.commands.DomainCommand;
 import ch.sth.dojo.es.events.DomainEvent;
-import io.vavr.Tuple2;
 import java.util.function.Function;
 
 public interface GameAggregateRoot {
@@ -10,12 +10,8 @@ public interface GameAggregateRoot {
         return PreInitializedGame::erzeugeGame;
     }
 
-    static Function<LaufendesGame, DomainEvent> gegnerPunktetFct() {
-        return LaufendesGame::gegnerPunktet;
-    }
-
-    static Function<LaufendesGame, DomainEvent> spielerPunktetFct() {
-        return LaufendesGame::spielerPunktet;
+    static Function<LaufendesGame, DomainEvent> command(final DomainCommand command) {
+        return laufendesGame -> laufendesGame.handleCommand(command);
     }
 
     static Game handleEvent(Game state, DomainEvent event) {

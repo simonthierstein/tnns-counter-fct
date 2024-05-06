@@ -15,6 +15,9 @@ import static io.vavr.API.Case;
 import static io.vavr.API.Match;
 import static io.vavr.Predicates.instanceOf;
 
+import ch.sth.dojo.es.commands.DomainCommand;
+import ch.sth.dojo.es.commands.GegnerPunktet;
+import ch.sth.dojo.es.commands.SpielerPunktet;
 import ch.sth.dojo.es.events.DomainEvent;
 import ch.sth.dojo.es.events.GegnerHatGameGewonnen;
 import ch.sth.dojo.es.events.GegnerHatPunktGewonnen;
@@ -41,14 +44,22 @@ public class LaufendesGame implements Game {
         return laufendesGame(List.empty(), List.empty());
     }
 
-    DomainEvent spielerPunktet() {
+    DomainEvent handleCommand(DomainCommand command) {
+        return Match(command).of(
+                Case($(instanceOf(SpielerPunktet.class)), this::spielerPunktet),
+                Case($(instanceOf(GegnerPunktet.class)), this::gegnerPunktet)
+        );
+
+    }
+
+    private DomainEvent spielerPunktet() {
         final List<Punkt> incremented = punkteSpieler.append(punkt());
         return incremented.size() == 4
                 ? SpielerHatGameGewonnen(incremented, punkteGegner)
                 : SpielerHatPunktGewonnen(incremented, punkteGegner);
     }
 
-    DomainEvent gegnerPunktet() {
+    private DomainEvent gegnerPunktet() {
         final List<Punkt> incremented = punkteGegner.append(punkt());
         return incremented.size() == 4
                 ? GegnerHatGameGewonnen(punkteSpieler, incremented)

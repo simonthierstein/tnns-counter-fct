@@ -9,7 +9,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import ch.sth.dojo.es.Game;
 import ch.sth.dojo.es.GameAggregateRoot;
 import ch.sth.dojo.es.LaufendesGame;
-import ch.sth.dojo.es.PreInitializedGame;
+import ch.sth.dojo.es.commands.GegnerPunktet;
+import ch.sth.dojo.es.commands.SpielerPunktet;
 import ch.sth.dojo.es.events.DomainEvent;
 import ch.sth.dojo.es.events.SpielerHatGameGewonnen;
 import io.vavr.Tuple;
@@ -37,11 +38,11 @@ class Simulator {
     }
 
     private static Function<Tuple2<? extends Game, DomainEvent>, Tuple2<Game, DomainEvent>> doSpielerPunktet() {
-        return stateEvent2State().andThen(command2StateEvent(GameAggregateRoot.spielerPunktetFct()));
+        return stateEvent2State().andThen(command2StateEvent(GameAggregateRoot.command(new SpielerPunktet())));
     }
 
     private static Function<Tuple2<? extends Game, DomainEvent>, Tuple2<Game, DomainEvent>> doGegnerPunktet() {
-        return stateEvent2State().andThen(command2StateEvent(GameAggregateRoot.gegnerPunktetFct()));
+        return stateEvent2State().andThen(command2StateEvent(GameAggregateRoot.command(new GegnerPunktet())));
     }
 
     private static Function<Game, Tuple2<Game, DomainEvent>> command2StateEvent(final Function<LaufendesGame, DomainEvent> laufendesGameTFunction) {
