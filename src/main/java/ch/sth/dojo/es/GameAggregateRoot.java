@@ -14,14 +14,6 @@ public interface GameAggregateRoot {
         return PreInitializedGame.preInitializedGame();
     }
 
-    static DomainEvent spielerPunktet(LaufendesGame prev) {
-        return prev.spielerPunktet();
-    }
-
-    static DomainEvent gegnerPunktet(LaufendesGame prev) {
-        return prev.gegnerPunktet();
-    }
-
     static Game handleEvent(Game state, DomainEvent event) {
         return Game.handleEvent(state, event);
     }
