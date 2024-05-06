@@ -10,14 +10,8 @@ import static ch.sth.dojo.es.events.GegnerHatGameGewonnen.gegnerHatGameGewonnen;
 import static ch.sth.dojo.es.events.GegnerHatPunktGewonnen.gegnerHatPunktGewonnen;
 import static ch.sth.dojo.es.events.SpielerHatGameGewonnen.spielerHatGameGewonnen;
 import static ch.sth.dojo.es.events.SpielerHatPunktGewonnen.spielerHatPunktGewonnen;
-import static io.vavr.API.$;
-import static io.vavr.API.Case;
-import static io.vavr.API.Match;
-import static io.vavr.Predicates.instanceOf;
 
 import ch.sth.dojo.es.commands.DomainCommand;
-import ch.sth.dojo.es.commands.GegnerPunktet;
-import ch.sth.dojo.es.commands.SpielerPunktet;
 import ch.sth.dojo.es.events.DomainEvent;
 import ch.sth.dojo.es.events.GegnerHatGameGewonnen;
 import ch.sth.dojo.es.events.GegnerHatPunktGewonnen;
@@ -45,11 +39,9 @@ public class LaufendesGame implements Game {
     }
 
     DomainEvent handleCommand(DomainCommand command) {
-        return Match(command).of(
-                Case($(instanceOf(SpielerPunktet.class)), this::spielerPunktet),
-                Case($(instanceOf(GegnerPunktet.class)), this::gegnerPunktet)
-        );
-
+        return DomainCommand.handleCommand(command,
+                this::spielerPunktet,
+                this::gegnerPunktet);
     }
 
     private DomainEvent spielerPunktet() {
@@ -85,12 +77,11 @@ public class LaufendesGame implements Game {
     }
 
     public Game handleEvent(final DomainEvent elem) {
-        return Match(elem).of(
-                Case($(instanceOf(SpielerHatPunktGewonnen.class)), shpg()),
-                Case($(instanceOf(GegnerHatPunktGewonnen.class)), ghpg()),
-                Case($(instanceOf(SpielerHatGameGewonnen.class)), shgg()),
-                Case($(instanceOf(GegnerHatGameGewonnen.class)), ghgg())
-        );
+        return DomainEvent.handleEvent(elem,
+                shpg(),
+                ghpg(),
+                shgg(),
+                ghgg());
     }
 
     private Function<SpielerHatGameGewonnen, Game> shgg() {
