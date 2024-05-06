@@ -5,6 +5,7 @@ import static ch.sth.dojo.es.Game.eventHandler;
 import ch.sth.dojo.es.AbgeschlossenesGame;
 import ch.sth.dojo.es.Game;
 import ch.sth.dojo.es.GameAggregateRoot;
+import ch.sth.dojo.es.PreInitializedGame;
 import ch.sth.dojo.es.events.DomainEvent;
 import io.vavr.collection.List;
 import java.util.function.Function;
@@ -47,13 +48,19 @@ class ESGameAggregateRootTest {
 
 
     private static List<DomainEvent> doSpielerPunktet(List<DomainEvent> events) {
-        return events.append(Game.apply(eventHandler(events), GameAggregateRoot::spielerPunktet, err_()));
+        return events.append(Game.apply(eventHandler(events), GameAggregateRoot::spielerPunktet, err_Ab(), err_Pre()));
     }
 
-    private static Function<AbgeschlossenesGame, DomainEvent> err_() {
-        return x-> {
-            System.err.println("Fehler!!" + x);
-            return null;
-        };
+    private static Function<AbgeschlossenesGame, DomainEvent> err_Ab() {
+        return ESGameAggregateRootTest::doErr;
+    }
+
+    private static DomainEvent doErr(final Game x) {
+        System.err.println("Fehler!!" + x);
+        return null;
+    }
+
+    private static Function<PreInitializedGame, DomainEvent> err_Pre() {
+        return ESGameAggregateRootTest::doErr;
     }
 }

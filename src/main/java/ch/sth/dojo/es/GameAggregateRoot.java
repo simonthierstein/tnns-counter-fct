@@ -1,13 +1,17 @@
 package ch.sth.dojo.es;
 
 import ch.sth.dojo.es.events.DomainEvent;
+import ch.sth.dojo.es.events.GameErzeugt;
 import io.vavr.Tuple2;
 import java.util.function.Function;
 
 public interface GameAggregateRoot {
 
-    static LaufendesGame initial() {
-        return LaufendesGame.initial();
+    static GameErzeugt erzeugeGame() {
+        return new GameErzeugt();
+    }
+    static PreInitializedGame empty() {
+        return PreInitializedGame.preInitializedGame();
     }
 
     static DomainEvent spielerPunktet(LaufendesGame prev) {

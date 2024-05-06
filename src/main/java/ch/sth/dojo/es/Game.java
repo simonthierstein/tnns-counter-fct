@@ -11,10 +11,15 @@ import java.util.function.Function;
 
 public interface Game {
 
-    static <T> T apply(Game game, Function<LaufendesGame, T> laufendesGameTFunction, Function<AbgeschlossenesGame, T> abgeschlossenesGameTFunction) {
+    static Game empty() {
+        return PreInitializedGame.preInitializedGame();
+    }
+
+    static <T> T apply(Game game, Function<LaufendesGame, T> laufendesGameTFunction, Function<AbgeschlossenesGame, T> abgeschlossenesGameTFunction,Function<PreInitializedGame, T> preInitializedGameTFunction) {
         return Match(game).of(
                 Case($(instanceOf(LaufendesGame.class)), laufendesGameTFunction),
-                Case($(instanceOf(AbgeschlossenesGame.class)), abgeschlossenesGameTFunction)
+                Case($(instanceOf(AbgeschlossenesGame.class)), abgeschlossenesGameTFunction),
+                Case($(instanceOf(PreInitializedGame.class)), preInitializedGameTFunction)
         );
     }
     
@@ -26,10 +31,11 @@ public interface Game {
     static Game handleEvent(Game state, DomainEvent event) {
         return Game.apply(state,
                 laufendesGame -> laufendesGame.handleEvent(event),
-                abgeschlossenesGame ->throwException(abgeschlossenesGame, event));
+                abgeschlossenesGame ->throwException(abgeschlossenesGame, event),
+                preInitializedGame -> preInitializedGame.handleEvent(event));
     }
 
-    private static Game throwException(Game state, final DomainEvent event) {
+     static Game throwException(Game state, final DomainEvent event) {
         throw new RuntimeException(String.format("invalid event=%s for state=%s", event, state));
     }
 }
