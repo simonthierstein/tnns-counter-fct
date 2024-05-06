@@ -11,7 +11,7 @@ import java.util.function.Function;
 
 public interface Game {
 
-    static Game empty() {
+    static PreInitializedGame empty() {
         return PreInitializedGame.preInitializedGame();
     }
 

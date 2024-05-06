@@ -51,22 +51,14 @@ public class LaufendesGame implements Game {
         return gegnerHatPunktGewonnen();
     }
 
-    public static Function<LaufendesGame, DomainEvent> gegnerPunktetFct() {
-        return LaufendesGame::gegnerPunktet;
-    }
-
-    public static Function<LaufendesGame, DomainEvent> spielerPunktetFct() {
-        return LaufendesGame::spielerPunktet;
-    }
-
-    private DomainEvent spielerPunktet() {
+     DomainEvent spielerPunktet() {
         final List<Punkt> incremented = punkteSpieler.append(punkt());
         return incremented.size() == 4
                 ? SpielerHatGameGewonnen(incremented, punkteGegner)
                 : SpielerHatPunktGewonnen(incremented, punkteGegner);
     }
 
-    private DomainEvent gegnerPunktet() {
+     DomainEvent gegnerPunktet() {
         final List<Punkt> incremented = punkteGegner.append(punkt());
         return incremented.size() == 4
                 ? GegnerHatGameGewonnen(punkteSpieler, incremented)

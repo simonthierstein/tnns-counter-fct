@@ -4,5 +4,8 @@
 
 package ch.sth.dojo.es.events;
 
-public final class GameErzeugt implements DomainEvent{
+public final class GameErzeugt implements DomainEvent {
+    public static GameErzeugt gameErzeugt() {
+        return new GameErzeugt();
+    }
 }

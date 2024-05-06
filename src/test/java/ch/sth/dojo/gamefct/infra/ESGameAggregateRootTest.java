@@ -5,7 +5,6 @@ import static ch.sth.dojo.es.Game.eventHandler;
 import ch.sth.dojo.es.AbgeschlossenesGame;
 import ch.sth.dojo.es.Game;
 import ch.sth.dojo.es.GameAggregateRoot;
-import ch.sth.dojo.es.LaufendesGame;
 import ch.sth.dojo.es.PreInitializedGame;
 import ch.sth.dojo.es.events.DomainEvent;
 import io.vavr.collection.List;
@@ -49,7 +48,7 @@ class ESGameAggregateRootTest {
 
 
     private static List<DomainEvent> doSpielerPunktet(List<DomainEvent> events) {
-        return events.append(Game.apply(eventHandler(events), LaufendesGame.spielerPunktetFct(), err_Ab(), err_Pre()));
+        return events.append(Game.apply(eventHandler(events), GameAggregateRoot.spielerPunktetFct(), err_Ab(), err_Pre()));
     }
 
     private static Function<AbgeschlossenesGame, DomainEvent> err_Ab() {

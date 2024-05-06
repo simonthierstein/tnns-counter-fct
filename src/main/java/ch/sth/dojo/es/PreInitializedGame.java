@@ -4,6 +4,7 @@
 
 package ch.sth.dojo.es;
 
+import static ch.sth.dojo.es.events.GameErzeugt.gameErzeugt;
 import static io.vavr.API.$;
 import static io.vavr.API.Case;
 import static io.vavr.API.Match;
@@ -26,10 +27,15 @@ public class PreInitializedGame implements Game {
         return new PreInitializedGame();
     }
 
+    public GameErzeugt erzeugeGame() {
+        return gameErzeugt();
+    }
+
     LaufendesGame handleEvent(DomainEvent domainEvent) {
         return Match(domainEvent).of(
                 Case($(instanceOf(GameErzeugt.class)), x -> LaufendesGame.initial()),
                 Case($(), x->(LaufendesGame) Game.throwException(this, x))
         );
     }
+
 }

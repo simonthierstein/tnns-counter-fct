@@ -18,14 +18,12 @@ import io.vavr.control.Option;
 import java.util.function.Function;
 import org.junit.jupiter.api.Test;
 
-public class Simulator {
+class Simulator {
 
     @Test
     void name() {
-        Function<PreInitializedGame, DomainEvent> erzeuge = x -> GameAggregateRoot.erzeugeGame();
-
-        var orElseThrow = Option.some(GameAggregateRoot.empty())
-                .map(state -> Tuple.of(state, state).map2(erzeuge))
+        var orElseThrow = Option.some(Game.empty())
+                .map(state -> Tuple.of(state, state).map2(GameAggregateRoot.erzeugeSpiel()))
                 .map(doSpielerPunktet())
                 .map(doSpielerPunktet())
                 .map(doGegnerPunktet())
@@ -39,11 +37,11 @@ public class Simulator {
     }
 
     private static Function<Tuple2<? extends Game, DomainEvent>, Tuple2<Game, DomainEvent>> doSpielerPunktet() {
-        return stateEvent2State().andThen(command2StateEvent(LaufendesGame.spielerPunktetFct()));
+        return stateEvent2State().andThen(command2StateEvent(GameAggregateRoot.spielerPunktetFct()));
     }
 
     private static Function<Tuple2<? extends Game, DomainEvent>, Tuple2<Game, DomainEvent>> doGegnerPunktet() {
-        return stateEvent2State().andThen(command2StateEvent(LaufendesGame.gegnerPunktetFct()));
+        return stateEvent2State().andThen(command2StateEvent(GameAggregateRoot.gegnerPunktetFct()));
     }
 
     private static Function<Game, Tuple2<Game, DomainEvent>> command2StateEvent(final Function<LaufendesGame, DomainEvent> laufendesGameTFunction) {
