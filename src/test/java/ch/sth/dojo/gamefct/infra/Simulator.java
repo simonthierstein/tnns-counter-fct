@@ -11,12 +11,9 @@ import ch.sth.dojo.es.GameAggregateRoot;
 import ch.sth.dojo.es.LaufendesGame;
 import ch.sth.dojo.es.PreInitializedGame;
 import ch.sth.dojo.es.events.DomainEvent;
-import ch.sth.dojo.es.events.GameErzeugt;
 import ch.sth.dojo.es.events.SpielerHatGameGewonnen;
-import ch.sth.dojo.es.events.SpielerHatPunktGewonnen;
 import io.vavr.Tuple;
 import io.vavr.Tuple2;
-import io.vavr.collection.List;
 import io.vavr.control.Option;
 import java.util.function.Function;
 import org.junit.jupiter.api.Test;
@@ -25,19 +22,10 @@ public class Simulator {
 
     @Test
     void name() {
-
-        List<DomainEvent> repo = List.empty();
-
-
-        final GameErzeugt gameErzeugt = GameAggregateRoot.erzeugeGame();
-
-        final List<DomainEvent> app1 = repo.append(gameErzeugt);
-
-
         Function<PreInitializedGame, DomainEvent> erzeuge = x -> GameAggregateRoot.erzeugeGame();
 
         var orElseThrow = Option.some(GameAggregateRoot.empty())
-                .map(state -> Tuple.of(state, erzeuge.apply(state)))
+                .map(state -> Tuple.of(state, state).map2(erzeuge))
                 .map(doSpielerPunktet())
                 .map(doSpielerPunktet())
                 .map(doGegnerPunktet())
