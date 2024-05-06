@@ -31,7 +31,7 @@ public interface Game {
     static Game handleEvent(Game state, DomainEvent event) {
         return Game.apply(state,
                 laufendesGame -> laufendesGame.handleEvent(event),
-                abgeschlossenesGame ->throwException(abgeschlossenesGame, event),
+                abgeschlossenesGame ->abgeschlossenesGame.handleEvent(event),
                 preInitializedGame -> preInitializedGame.handleEvent(event));
     }
 

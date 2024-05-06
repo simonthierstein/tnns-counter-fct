@@ -4,20 +4,12 @@
 
 package ch.sth.dojo.es;
 
-import static ch.sth.dojo.es.events.GegnerHatGameGewonnen.gegnerHatGameGewonnen;
-import static ch.sth.dojo.es.events.SpielerHatGameGewonnen.spielerHatGameGewonnen;
 import static io.vavr.API.$;
 import static io.vavr.API.Case;
 import static io.vavr.API.Match;
-import static io.vavr.Predicates.instanceOf;
 
 import ch.sth.dojo.es.events.DomainEvent;
-import ch.sth.dojo.es.events.GegnerHatGameGewonnen;
-import ch.sth.dojo.es.events.GegnerHatPunktGewonnen;
-import ch.sth.dojo.es.events.SpielerHatGameGewonnen;
-import ch.sth.dojo.es.events.SpielerHatPunktGewonnen;
 import io.vavr.collection.List;
-import java.util.function.Function;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
@@ -35,14 +27,7 @@ public class AbgeschlossenesGame implements Game {
     }
 
 
-    static SpielerHatGameGewonnen SpielerHatGameGewonnen(final List<Punkt> punkteSpieler,
-                                                         final List<Punkt> punkteGegner) {
-        return spielerHatGameGewonnen();
+    Game handleEvent(final DomainEvent event) {
+        return Game.throwException(this, event);
     }
-
-    static GegnerHatGameGewonnen GegnerHatGameGewonnen(final List<Punkt> punkteSpieler,
-                                                       final List<Punkt> punkteGegner) {
-        return gegnerHatGameGewonnen();
-    }
-
 }

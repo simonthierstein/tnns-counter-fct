@@ -4,8 +4,8 @@
 
 package ch.sth.dojo.es.events;
 
-public record SpielerHatGameGewonnen() implements DomainEvent {
-    public static SpielerHatGameGewonnen spielerHatGameGewonnen() {
-        return new SpielerHatGameGewonnen();
+public record SpielerHatGameGewonnen(int punkteSpieler, int punkteGegner) implements DomainEvent {
+    public static SpielerHatGameGewonnen spielerHatGameGewonnen(int punkteSpieler, int punkteGegner) {
+        return new SpielerHatGameGewonnen(punkteSpieler, punkteGegner);
     }
 }

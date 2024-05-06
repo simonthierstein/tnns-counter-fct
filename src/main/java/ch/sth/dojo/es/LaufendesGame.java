@@ -4,11 +4,11 @@
 
 package ch.sth.dojo.es;
 
-import static ch.sth.dojo.es.AbgeschlossenesGame.GegnerHatGameGewonnen;
-import static ch.sth.dojo.es.AbgeschlossenesGame.SpielerHatGameGewonnen;
 import static ch.sth.dojo.es.AbgeschlossenesGame.abgeschlossenesGame;
 import static ch.sth.dojo.es.Punkt.punkt;
+import static ch.sth.dojo.es.events.GegnerHatGameGewonnen.gegnerHatGameGewonnen;
 import static ch.sth.dojo.es.events.GegnerHatPunktGewonnen.gegnerHatPunktGewonnen;
+import static ch.sth.dojo.es.events.SpielerHatGameGewonnen.spielerHatGameGewonnen;
 import static ch.sth.dojo.es.events.SpielerHatPunktGewonnen.spielerHatPunktGewonnen;
 import static io.vavr.API.$;
 import static io.vavr.API.Case;
@@ -20,8 +20,6 @@ import ch.sth.dojo.es.events.GegnerHatGameGewonnen;
 import ch.sth.dojo.es.events.GegnerHatPunktGewonnen;
 import ch.sth.dojo.es.events.SpielerHatGameGewonnen;
 import ch.sth.dojo.es.events.SpielerHatPunktGewonnen;
-import io.vavr.Tuple;
-import io.vavr.Tuple2;
 import io.vavr.collection.List;
 import java.util.function.Function;
 import lombok.AccessLevel;
@@ -35,46 +33,44 @@ public class LaufendesGame implements Game {
     private final List<Punkt> punkteSpieler;
     private final List<Punkt> punkteGegner;
 
+    private static LaufendesGame laufendesGame(final List<Punkt> punkteSpieler, final List<Punkt> punkteGegner) {
+        return new LaufendesGame(punkteSpieler, punkteGegner);
+    }
+
     static LaufendesGame initial() {
         return laufendesGame(List.empty(), List.empty());
     }
 
-    static LaufendesGame laufendesGame(final List<Punkt> punkteSpieler, final List<Punkt> punkteGegner) {
-        return new LaufendesGame(punkteSpieler, punkteGegner);
-    }
-
-    static SpielerHatPunktGewonnen SpielerHatPunktGewonnen(final List<Punkt> punkteSpieler, final List<Punkt> punkteGegner) {
-        return spielerHatPunktGewonnen();
-    }
-
-    static GegnerHatPunktGewonnen GegnerHatPunktGewonnen(final List<Punkt> punkteSpieler, final List<Punkt> punkteGegner) {
-        return gegnerHatPunktGewonnen();
-    }
-
-     DomainEvent spielerPunktet() {
+    DomainEvent spielerPunktet() {
         final List<Punkt> incremented = punkteSpieler.append(punkt());
         return incremented.size() == 4
                 ? SpielerHatGameGewonnen(incremented, punkteGegner)
                 : SpielerHatPunktGewonnen(incremented, punkteGegner);
     }
 
-     DomainEvent gegnerPunktet() {
+    DomainEvent gegnerPunktet() {
         final List<Punkt> incremented = punkteGegner.append(punkt());
         return incremented.size() == 4
                 ? GegnerHatGameGewonnen(punkteSpieler, incremented)
                 : GegnerHatPunktGewonnen(punkteSpieler, incremented);
     }
 
-    static Function<LaufendesGame, Tuple2<Integer, Integer>> export2Integer() {
-        return game -> {
-            final Integer spielerPts = game.punkteSpieler.foldLeft(0, (st, acc) -> st + 1);
-            final Integer gegnerPts = game.punkteGegner.foldLeft(0, (st, acc) -> st + 1);
-            return Tuple.of(spielerPts, gegnerPts);
-        };
+    private static SpielerHatGameGewonnen SpielerHatGameGewonnen(final List<Punkt> punkteSpieler,
+                                                                 final List<Punkt> punkteGegner) {
+        return spielerHatGameGewonnen(punkteSpieler.size(), punkteGegner.size());
     }
 
-    <T> T eval(final Function<LaufendesGame, T> mapper) {
-        return mapper.apply(this);
+    private static SpielerHatPunktGewonnen SpielerHatPunktGewonnen(final List<Punkt> punkteSpieler, final List<Punkt> punkteGegner) {
+        return spielerHatPunktGewonnen();
+    }
+
+    private static GegnerHatPunktGewonnen GegnerHatPunktGewonnen(final List<Punkt> punkteSpieler, final List<Punkt> punkteGegner) {
+        return gegnerHatPunktGewonnen();
+    }
+
+    private static GegnerHatGameGewonnen GegnerHatGameGewonnen(final List<Punkt> punkteSpieler,
+                                                               final List<Punkt> punkteGegner) {
+        return gegnerHatGameGewonnen();
     }
 
     public Game handleEvent(final DomainEvent elem) {
