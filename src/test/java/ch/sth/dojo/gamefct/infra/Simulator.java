@@ -44,15 +44,20 @@ public class Simulator {
 
         var orElseThrow = Option.some(GameAggregateRoot.empty())
                 .map(state -> Tuple.of(state, erzeuge.apply(state)))
-                .map(stateEvent2State())
-                .map(state2StateEvent(spieler))
-                .map(stateEvent2State())
-                .map(state2StateEvent(spieler))
+                .map(doSpielerPunktet(spieler))
+                .map(doSpielerPunktet(spieler))
+                .map(doSpielerPunktet(gegner))
+                .map(doSpielerPunktet(spieler))
+                .map(doSpielerPunktet(spieler))
                 .getOrElseThrow(() -> new RuntimeException());
 
 
         assertThat(orElseThrow._2).isInstanceOf(SpielerHatPunktGewonnen.class);
 
+    }
+
+    private static Function<Tuple2<? extends Game, DomainEvent>, Tuple2<Game, DomainEvent>> doSpielerPunktet(final Function<LaufendesGame, DomainEvent> punktetCommandFunction) {
+        return stateEvent2State().andThen(state2StateEvent(punktetCommandFunction));
     }
 
     private static Function<Game, Tuple2<Game, DomainEvent>> state2StateEvent(final Function<LaufendesGame, DomainEvent> spieler) {
