@@ -5,9 +5,12 @@ import static io.vavr.API.Case;
 import static io.vavr.API.Match;
 import static io.vavr.Predicates.instanceOf;
 
+import ch.sth.dojo.es.commands.DomainCommand;
 import ch.sth.dojo.es.events.DomainEvent;
 import io.vavr.collection.List;
+import io.vavr.control.Either;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 public interface Game {
 
@@ -22,7 +25,18 @@ public interface Game {
                 Case($(instanceOf(PreInitializedGame.class)), preInitializedGameTFunction)
         );
     }
-    
+
+
+    static  Either<DomainError, DomainEvent> commandHandler(Game target, DomainCommand command, Supplier<DomainError> errorSupplier){
+       return apply(target,
+                laufendesGame -> laufendesGame.handleCommand(command),
+                abgeschlossenesGame -> Either.<DomainError, DomainEvent>left(errorSupplier.get()),
+                preInitializedGame -> preInitializedGame.handleCommand(command));
+    }
+
+
+
+
     
     static Game eventHandler(List<DomainEvent> domainEvents) {
         return domainEvents.foldLeft(LaufendesGame.initial(), Game::handleEvent);

@@ -3,13 +3,17 @@ package ch.sth.dojo.gamefct.infra;
 import static ch.sth.dojo.es.Game.eventHandler;
 
 import ch.sth.dojo.es.AbgeschlossenesGame;
+import ch.sth.dojo.es.DomainError;
 import ch.sth.dojo.es.Game;
 import ch.sth.dojo.es.GameAggregateRoot;
+import ch.sth.dojo.es.InvalidCommandForState;
 import ch.sth.dojo.es.PreInitializedGame;
 import ch.sth.dojo.es.commands.SpielerPunktet;
 import ch.sth.dojo.es.events.DomainEvent;
 import io.vavr.collection.List;
+import io.vavr.control.Either;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import org.junit.jupiter.api.Test;
 
 class ESGameAggregateRootTest {
@@ -49,7 +53,15 @@ class ESGameAggregateRootTest {
 
 
     private static List<DomainEvent> doSpielerPunktet(List<DomainEvent> events) {
-        return events.append(Game.apply(eventHandler(events), GameAggregateRoot.command(new SpielerPunktet()), err_Ab(), err_Pre()));
+        final Game target = eventHandler(events);
+        final SpielerPunktet command = new SpielerPunktet();
+        final Either<DomainError, DomainEvent> domainEvents = Game.commandHandler(target, command, errSup(target, command));
+        return domainEvents.map(domainEvent -> events.append(domainEvent))
+                .getOrElseThrow(err -> new RuntimeException(err.toString()));
+    }
+
+    private static Supplier<DomainError> errSup(final Game state, final SpielerPunktet command) {
+        return () -> new InvalidCommandForState(state, command);
     }
 
     private static Function<AbgeschlossenesGame, DomainEvent> err_Ab() {

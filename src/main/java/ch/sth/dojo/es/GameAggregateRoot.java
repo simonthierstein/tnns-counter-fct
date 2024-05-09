@@ -2,6 +2,7 @@ package ch.sth.dojo.es;
 
 import ch.sth.dojo.es.commands.DomainCommand;
 import ch.sth.dojo.es.events.DomainEvent;
+import io.vavr.control.Either;
 import java.util.function.Function;
 
 public interface GameAggregateRoot {
@@ -10,7 +11,7 @@ public interface GameAggregateRoot {
         return PreInitializedGame::erzeugeGame;
     }
 
-    static Function<LaufendesGame, DomainEvent> command(final DomainCommand command) {
+    static Function<LaufendesGame, Either<DomainError,DomainEvent>> command(final DomainCommand command) {
         return laufendesGame -> laufendesGame.handleCommand(command);
     }
 

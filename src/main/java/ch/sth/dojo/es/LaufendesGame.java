@@ -18,6 +18,7 @@ import ch.sth.dojo.es.events.GegnerHatPunktGewonnen;
 import ch.sth.dojo.es.events.SpielerHatGameGewonnen;
 import ch.sth.dojo.es.events.SpielerHatPunktGewonnen;
 import io.vavr.collection.List;
+import io.vavr.control.Either;
 import java.util.function.Function;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
@@ -40,10 +41,11 @@ public class LaufendesGame implements Game {
 
     // commands
 
-    DomainEvent handleCommand(DomainCommand command) {
+    Either<DomainError, DomainEvent> handleCommand(DomainCommand command) {
         return DomainCommand.handleCommand(command,
-                this::spielerPunktet,
-                this::gegnerPunktet);
+                () -> Either.right(spielerPunktet()),
+                () -> Either.right(gegnerPunktet()),
+                () -> Either.left(new InvalidCommandForState(this, command)));
     }
 
     private DomainEvent spielerPunktet() {

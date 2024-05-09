@@ -4,17 +4,22 @@
 
 package ch.sth.dojo.gamefct.infra;
 
+import static ch.sth.dojo.es.Game.eventHandler;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import ch.sth.dojo.es.DomainError;
 import ch.sth.dojo.es.Game;
 import ch.sth.dojo.es.GameAggregateRoot;
+import ch.sth.dojo.es.InvalidCommandForState;
 import ch.sth.dojo.es.LaufendesGame;
 import ch.sth.dojo.es.PreInitializedGame;
+import ch.sth.dojo.es.commands.DomainCommand;
 import ch.sth.dojo.es.commands.GegnerPunktet;
 import ch.sth.dojo.es.commands.SpielerPunktet;
 import ch.sth.dojo.es.events.DomainEvent;
 import io.vavr.Tuple;
 import io.vavr.Tuple2;
+import io.vavr.collection.List;
 import io.vavr.control.Either;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -49,7 +54,8 @@ class Simulator {
     }
 
     private static Function<Tuple2<? extends Game, DomainEvent>, Either<DomainError, Tuple2<Game, DomainEvent>>> doSpielerPunktet() {
-        return stateEvent2State().andThen(command2StateEvent(GameAggregateRoot.command(new SpielerPunktet()))).andThen(transform());
+        return stateEvent2State()
+                .andThen(command2StateEvent(new SpielerPunktet()));
     }
 
     private static Function<? super Tuple2<Game, Either<DomainError, DomainEvent>>, Either<DomainError, Tuple2<Game, DomainEvent>>> transform() {
@@ -57,14 +63,13 @@ class Simulator {
     }
 
     private static Function<Tuple2<? extends Game, DomainEvent>, Either<DomainError, Tuple2<Game, DomainEvent>>> doGegnerPunktet() {
-        return stateEvent2State().andThen(command2StateEvent(GameAggregateRoot.command(new GegnerPunktet()))).andThen(transform());
+        return stateEvent2State()
+                .andThen(command2StateEvent(new GegnerPunktet()));
     }
 
-    private static Function<Game, Tuple2<Game, Either<DomainError, DomainEvent>>> command2StateEvent(final Function<LaufendesGame, DomainEvent> laufendesGameTFunction) {
-        return state -> Tuple.of(state, Game.apply(state,
-                laufendesGameTFunction.andThen(Either::right),
-                err(),
-                err()));
+    private static Function<Game, Either<DomainError, Tuple2<Game, DomainEvent>>> command2StateEvent(final DomainCommand command) {
+        return game -> Game.commandHandler(game, command, () -> new InvalidCommandForState(game, null))
+                .map(domainEvent -> Tuple.of(game, domainEvent));
     }
 
     private static Function<Tuple2<? extends Game, DomainEvent>, Game> stateEvent2State() {
@@ -73,7 +78,7 @@ class Simulator {
 
 
     static <I extends Game> Function<I, Either<DomainError, DomainEvent>> err() {
-        return i -> Either.left(new InvalidCommandForState(null, i));
+        return i -> Either.left(new InvalidCommandForState(i, null));
     }
 }
 
