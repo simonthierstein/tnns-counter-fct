@@ -29,6 +29,7 @@ class Simulator {
                 .flatMap(doSpielerPunktet())
                 .flatMap(doSpielerPunktet())
                 .flatMap(doSpielerPunktet())
+                .flatMap(doGegnerPunktet())
                 .flatMap(doSpielerPunktet())
                 .flatMap(doSpielerPunktet())
                 .peekLeft(System.err::println);
@@ -47,11 +48,6 @@ class Simulator {
         return Either::isRight;
     }
 
-    private static Function<Tuple2<? extends Game, DomainEvent>, Tuple2<Game, DomainEvent>> unwrap(final Function<Tuple2<? extends Game, DomainEvent>,
-            Tuple2<Game, Either<DomainError, DomainEvent>>> commandFct) {
-        return commandFct.andThen(gameEitherTuple2 -> gameEitherTuple2.map2(eith -> eith.getOrElseThrow(err -> new RuntimeException(err.toString()))));
-    }
-
     private static Function<Tuple2<? extends Game, DomainEvent>, Either<DomainError, Tuple2<Game, DomainEvent>>> doSpielerPunktet() {
         return stateEvent2State().andThen(command2StateEvent(GameAggregateRoot.command(new SpielerPunktet()))).andThen(transform());
     }
@@ -60,8 +56,8 @@ class Simulator {
         return prev -> prev._2.map(domainEvent -> Tuple.of(prev._1, domainEvent));
     }
 
-    private static Function<Tuple2<? extends Game, DomainEvent>, Tuple2<Game, Either<DomainError, DomainEvent>>> doGegnerPunktet() {
-        return stateEvent2State().andThen(command2StateEvent(GameAggregateRoot.command(new GegnerPunktet())));
+    private static Function<Tuple2<? extends Game, DomainEvent>, Either<DomainError, Tuple2<Game, DomainEvent>>> doGegnerPunktet() {
+        return stateEvent2State().andThen(command2StateEvent(GameAggregateRoot.command(new GegnerPunktet()))).andThen(transform());
     }
 
     private static Function<Game, Tuple2<Game, Either<DomainError, DomainEvent>>> command2StateEvent(final Function<LaufendesGame, DomainEvent> laufendesGameTFunction) {
