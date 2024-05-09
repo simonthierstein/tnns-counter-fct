@@ -4,14 +4,12 @@
 
 package ch.sth.dojo.gamefct.infra;
 
-import static ch.sth.dojo.es.Game.eventHandler;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import ch.sth.dojo.es.DomainError;
 import ch.sth.dojo.es.Game;
 import ch.sth.dojo.es.GameAggregateRoot;
 import ch.sth.dojo.es.InvalidCommandForState;
-import ch.sth.dojo.es.LaufendesGame;
 import ch.sth.dojo.es.PreInitializedGame;
 import ch.sth.dojo.es.commands.DomainCommand;
 import ch.sth.dojo.es.commands.GegnerPunktet;
@@ -19,13 +17,12 @@ import ch.sth.dojo.es.commands.SpielerPunktet;
 import ch.sth.dojo.es.events.DomainEvent;
 import io.vavr.Tuple;
 import io.vavr.Tuple2;
-import io.vavr.collection.List;
 import io.vavr.control.Either;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import org.junit.jupiter.api.Test;
 
-class Simulator {
+class SimulatorTest {
 
     @Test
     void name() {
@@ -58,10 +55,6 @@ class Simulator {
                 .andThen(command2StateEvent(new SpielerPunktet()));
     }
 
-    private static Function<? super Tuple2<Game, Either<DomainError, DomainEvent>>, Either<DomainError, Tuple2<Game, DomainEvent>>> transform() {
-        return prev -> prev._2.map(domainEvent -> Tuple.of(prev._1, domainEvent));
-    }
-
     private static Function<Tuple2<? extends Game, DomainEvent>, Either<DomainError, Tuple2<Game, DomainEvent>>> doGegnerPunktet() {
         return stateEvent2State()
                 .andThen(command2StateEvent(new GegnerPunktet()));
@@ -76,10 +69,6 @@ class Simulator {
         return t2 -> t2.map2(domainEvent -> GameAggregateRoot.handleEvent(t2._1, domainEvent))._2;
     }
 
-
-    static <I extends Game> Function<I, Either<DomainError, DomainEvent>> err() {
-        return i -> Either.left(new InvalidCommandForState(i, null));
-    }
 }
 
 record PlayerScore() {
