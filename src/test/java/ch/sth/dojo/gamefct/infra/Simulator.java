@@ -33,7 +33,7 @@ class SimulatorTest {
                 .flatMap(doSpielerPunktet())
                 .flatMap(doGegnerPunktet())
                 .flatMap(doSpielerPunktet())
-                .flatMap(doSpielerPunktet())
+                .flatMap(doGegnerPunktet())
                 .peekLeft(System.err::println);
 
 
