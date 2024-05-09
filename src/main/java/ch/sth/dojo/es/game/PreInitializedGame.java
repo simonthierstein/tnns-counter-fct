@@ -4,8 +4,6 @@
 
 package ch.sth.dojo.es.game;
 
-import static ch.sth.dojo.es.events.GameErzeugt.gameErzeugt;
-
 import ch.sth.dojo.es.Unit;
 import ch.sth.dojo.es.events.GameErzeugt;
 import java.util.function.Function;
@@ -34,7 +32,7 @@ public class PreInitializedGame implements Game {
 
     //evt
     static Function<GameErzeugt, LaufendesGame> gameErzeugt() {
-        return LaufendesGame.handleGameErzeugt();
+        return LaufendesGame.gameErzeugt();
     }
 
 

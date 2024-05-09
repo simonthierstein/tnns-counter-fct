@@ -38,21 +38,27 @@ public class LaufendesGame implements Game {
         return laufendesGame(List.empty(), List.empty());
     }
 
-    static Function<GameErzeugt, LaufendesGame> handleGameErzeugt() {
+    static Function<GameErzeugt, LaufendesGame> gameErzeugt() {
         return gameErzeugt -> initial();
     }
 
     // commands
+    static Function<LaufendesGame, DomainEvent> spielerPunktet() {
+        return LaufendesGame::doSpielerPunktet;
+    }
 
+    static Function<LaufendesGame, DomainEvent> gegnerPunktet() {
+        return LaufendesGame::doGegnerPunktet;
+    }
 
-     DomainEvent spielerPunktet() {
+    private DomainEvent doSpielerPunktet() {
         final List<Punkt> incremented = punkteSpieler.append(punkt());
         return incremented.size() == 4
                 ? SpielerHatGameGewonnen(incremented, punkteGegner)
                 : SpielerHatPunktGewonnen(incremented, punkteGegner);
     }
 
-     DomainEvent gegnerPunktet() {
+    private DomainEvent doGegnerPunktet() {
         final List<Punkt> incremented = punkteGegner.append(punkt());
         return incremented.size() == 4
                 ? GegnerHatGameGewonnen(punkteSpieler, incremented)
@@ -79,28 +85,19 @@ public class LaufendesGame implements Game {
 
     // events
 
-
-    public Game handleEvent(final DomainEvent elem) {
-        return DomainEvent.handleEvent(elem,
-                shpg(),
-                ghpg(),
-                shgg(),
-                ghgg());
+    static Function<SpielerHatGameGewonnen, Game> shgg(LaufendesGame prev) {
+        return event -> abgeschlossenesGame().apply(prev.punkteSpieler.append(punkt()), prev.punkteGegner);
     }
 
-    private Function<SpielerHatGameGewonnen, Game> shgg() {
-        return event -> abgeschlossenesGame().apply(punkteSpieler.append(punkt()), punkteGegner);
+    static Function<GegnerHatGameGewonnen, Game> ghgg(LaufendesGame prev) {
+        return event -> abgeschlossenesGame().apply(prev.punkteSpieler, prev.punkteGegner.append(punkt()));
     }
 
-    private Function<GegnerHatGameGewonnen, Game> ghgg() {
-        return event -> abgeschlossenesGame().apply(punkteSpieler, punkteGegner.append(punkt()));
+    static Function<GegnerHatPunktGewonnen, Game> ghpg(LaufendesGame prev) {
+        return event -> laufendesGame(prev.punkteSpieler, prev.punkteGegner.append(punkt()));
     }
 
-    private Function<GegnerHatPunktGewonnen, Game> ghpg() {
-        return event -> laufendesGame(punkteSpieler, punkteGegner.append(punkt()));
-    }
-
-    private Function<SpielerHatPunktGewonnen, Game> shpg() {
-        return event -> laufendesGame(punkteSpieler.append(punkt()), punkteGegner);
+    static Function<SpielerHatPunktGewonnen, Game> shpg(LaufendesGame prev) {
+        return event -> laufendesGame(prev.punkteSpieler.append(punkt()), prev.punkteGegner);
     }
 }
