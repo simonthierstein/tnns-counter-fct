@@ -85,19 +85,19 @@ public class LaufendesGame implements Game {
 
     // events
 
-    static Function<SpielerHatGameGewonnen, Game> shgg(LaufendesGame prev) {
+    static Function<SpielerHatGameGewonnen, AbgeschlossenesGame> shgg(LaufendesGame prev) {
         return event -> abgeschlossenesGame().apply(prev.punkteSpieler.append(punkt()), prev.punkteGegner);
     }
 
-    static Function<GegnerHatGameGewonnen, Game> ghgg(LaufendesGame prev) {
+    static Function<GegnerHatGameGewonnen, AbgeschlossenesGame> ghgg(LaufendesGame prev) {
         return event -> abgeschlossenesGame().apply(prev.punkteSpieler, prev.punkteGegner.append(punkt()));
     }
 
-    static Function<GegnerHatPunktGewonnen, Game> ghpg(LaufendesGame prev) {
+    static Function<GegnerHatPunktGewonnen, LaufendesGame> ghpg(LaufendesGame prev) {
         return event -> laufendesGame(prev.punkteSpieler, prev.punkteGegner.append(punkt()));
     }
 
-    static Function<SpielerHatPunktGewonnen, Game> shpg(LaufendesGame prev) {
+    static Function<SpielerHatPunktGewonnen, LaufendesGame> shpg(LaufendesGame prev) {
         return event -> laufendesGame(prev.punkteSpieler.append(punkt()), prev.punkteGegner);
     }
 }

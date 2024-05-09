@@ -5,8 +5,9 @@ import static io.vavr.API.Case;
 import static io.vavr.API.Match;
 import static io.vavr.Predicates.instanceOf;
 
+import ch.sth.dojo.es.DomainError;
 import ch.sth.dojo.es.events.DomainEvent;
-import io.vavr.collection.List;
+import io.vavr.control.Either;
 import java.util.function.Function;
 
 public interface Game {
@@ -20,23 +21,60 @@ public interface Game {
         );
     }
 
-    static Game eventHandler(List<DomainEvent> domainEvents) {
-        return domainEvents.foldLeft(LaufendesGame.initial(), Game::handleEvent);
-    }
-
-    static Game handleEvent(Game state, DomainEvent event) {
+    static Either<DomainError, Game> handleEvent(Game state, DomainEvent event) {
         return Game.apply(state,
                 laufendesGame -> handleLaufendesGame(laufendesGame, event),
-                abgeschlossenesGame -> abgeschlossenesGame,
-                preInitializedGame -> preInitializedGame);
+                abgeschlossenesGame -> handleAbgeschlossenesGame(abgeschlossenesGame, event),
+                preInitializedGame -> handlePreInitializedGame(preInitializedGame, event));
     }
 
-    private static Game handleLaufendesGame(final LaufendesGame laufendesGame, final DomainEvent event) {
+    static Either<DomainError, Game> handlePreInitializedGame(PreInitializedGame preInitializedGame, DomainEvent event) {
         return DomainEvent.handleEvent(event,
-                LaufendesGame.shpg(laufendesGame),
-                LaufendesGame.ghpg(laufendesGame),
-                LaufendesGame.shgg(laufendesGame),
-                LaufendesGame.ghgg(laufendesGame));
+                left(eventToError(preInitializedGame)),
+                left(eventToError(preInitializedGame)),
+                left(eventToError(preInitializedGame)),
+                left(eventToError(preInitializedGame)),
+                right(PreInitializedGame.gameErzeugt())
+        );
     }
+
+    static Either<DomainError, Game> handleAbgeschlossenesGame(AbgeschlossenesGame state, DomainEvent event) {
+        return Either.left(new DomainError.InvalidEventForState(state, event));
+    }
+
+    private static Either<DomainError, Game> handleLaufendesGame(final LaufendesGame laufendesGame, final DomainEvent event) {
+        return DomainEvent.handleEvent(event,
+                right(LaufendesGame.shpg(laufendesGame)),
+                right(LaufendesGame.ghpg(laufendesGame)),
+                right(LaufendesGame.shgg(laufendesGame)),
+                right(LaufendesGame.ghgg(laufendesGame)),
+                left(eventToError(laufendesGame)));
+    }
+
+    static <I extends DomainEvent, L extends DomainError, R extends Game> Function<I, Either<L, Game>> right(Function<I, R> inputFunction) {
+        return i -> Either.<L, I>right(i).map(inputFunction);
+    }
+    static <I extends DomainEvent, L extends DomainError, R extends Game> Function<I, Either<DomainError, R>> left(Function<I, L> inputFunction) {
+        return i -> Either.<I, R>left(i).mapLeft(inputFunction);
+    }
+
+
+    static <E extends DomainEvent, G extends Game> Function<E, Game> xxx(Function<E, G> ind) {
+        return e -> ind.apply(e);
+    }
+
+
+    static <E extends DomainEvent> Function<E, DomainError> eventToError(Game state) {
+        return event -> new DomainError.InvalidEventForState(state, event);
+    }
+
+    static <I, L, R> Function<I, Either<L, R>> toRight(Function<I, R> inputFunction) {
+        return i -> Either.right(inputFunction.apply(i));
+    }
+
+    static <I, L, R> Function<I, Either<L, R>> toLeft(Function<I, L> inputFunction) {
+        return i -> Either.left(inputFunction.apply(i));
+    }
+
 
 }

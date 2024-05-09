@@ -31,8 +31,8 @@ public class PreInitializedGame implements Game {
     }
 
     //evt
-    static Function<GameErzeugt, LaufendesGame> gameErzeugt() {
-        return LaufendesGame.gameErzeugt();
+    static Function<GameErzeugt, Game> gameErzeugt() {
+        return LaufendesGame.gameErzeugt().andThen(x->x);
     }
 
 
