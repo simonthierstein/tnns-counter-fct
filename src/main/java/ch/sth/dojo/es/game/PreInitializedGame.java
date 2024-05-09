@@ -22,12 +22,15 @@ public class PreInitializedGame implements Game {
         return new PreInitializedGame();
     }
 
+
     static Function<Unit, PreInitializedGame> PreInitializedGame() {
         return unit -> preInitializedGame();
     }
 
+
     static Function<PreInitializedGame, GameErzeugt> erzeugeGame() {
         return x-> gameErzeugt();
     }
+
 
 }
