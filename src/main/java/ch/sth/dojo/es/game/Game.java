@@ -1,10 +1,11 @@
-package ch.sth.dojo.es;
+package ch.sth.dojo.es.game;
 
 import static io.vavr.API.$;
 import static io.vavr.API.Case;
 import static io.vavr.API.Match;
 import static io.vavr.Predicates.instanceOf;
 
+import ch.sth.dojo.es.DomainError;
 import ch.sth.dojo.es.commands.DomainCommand;
 import ch.sth.dojo.es.events.DomainEvent;
 import io.vavr.collection.List;

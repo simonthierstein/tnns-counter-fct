@@ -5,7 +5,7 @@ import static io.vavr.API.Case;
 import static io.vavr.API.Match;
 import static io.vavr.Predicates.instanceOf;
 
-import ch.sth.dojo.es.Game;
+import ch.sth.dojo.es.game.Game;
 import java.util.function.Function;
 
 public sealed interface DomainEvent permits GameErzeugt, GegnerHatGameGewonnen, GegnerHatPunktGewonnen, SpielerHatGameGewonnen, SpielerHatPunktGewonnen {

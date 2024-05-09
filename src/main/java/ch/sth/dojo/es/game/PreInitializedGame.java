@@ -2,7 +2,7 @@
  * Copyright (C) Schweizerische Bundesbahnen SBB, 2024.
  */
 
-package ch.sth.dojo.es;
+package ch.sth.dojo.es.game;
 
 import static ch.sth.dojo.es.events.GameErzeugt.gameErzeugt;
 import static io.vavr.API.$;
@@ -10,6 +10,7 @@ import static io.vavr.API.Case;
 import static io.vavr.API.Match;
 import static io.vavr.Predicates.instanceOf;
 
+import ch.sth.dojo.es.DomainError;
 import ch.sth.dojo.es.commands.DomainCommand;
 import ch.sth.dojo.es.events.DomainEvent;
 import ch.sth.dojo.es.events.GameErzeugt;

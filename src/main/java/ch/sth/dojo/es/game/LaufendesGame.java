@@ -2,15 +2,16 @@
  * Copyright (C) Schweizerische Bundesbahnen SBB, 2024.
  */
 
-package ch.sth.dojo.es;
+package ch.sth.dojo.es.game;
 
-import static ch.sth.dojo.es.AbgeschlossenesGame.abgeschlossenesGame;
-import static ch.sth.dojo.es.Punkt.punkt;
+import static ch.sth.dojo.es.game.AbgeschlossenesGame.abgeschlossenesGame;
+import static ch.sth.dojo.es.game.Punkt.punkt;
 import static ch.sth.dojo.es.events.GegnerHatGameGewonnen.gegnerHatGameGewonnen;
 import static ch.sth.dojo.es.events.GegnerHatPunktGewonnen.gegnerHatPunktGewonnen;
 import static ch.sth.dojo.es.events.SpielerHatGameGewonnen.spielerHatGameGewonnen;
 import static ch.sth.dojo.es.events.SpielerHatPunktGewonnen.spielerHatPunktGewonnen;
 
+import ch.sth.dojo.es.DomainError;
 import ch.sth.dojo.es.commands.DomainCommand;
 import ch.sth.dojo.es.events.DomainEvent;
 import ch.sth.dojo.es.events.GegnerHatGameGewonnen;
