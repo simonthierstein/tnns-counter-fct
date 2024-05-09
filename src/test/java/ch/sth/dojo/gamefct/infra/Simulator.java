@@ -61,7 +61,7 @@ class SimulatorTest {
     }
 
     private static Function<Game, Either<DomainError, Tuple2<Game, DomainEvent>>> command2StateEvent(final DomainCommand command) {
-        return game -> Game.commandHandler(game, command, () -> new InvalidCommandForState(game, null))
+        return game -> Game.commandHandler(game, command, () -> new InvalidCommandForState(game, command))
                 .map(domainEvent -> Tuple.of(game, domainEvent));
     }
 
