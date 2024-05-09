@@ -5,13 +5,9 @@ import static io.vavr.API.Case;
 import static io.vavr.API.Match;
 import static io.vavr.Predicates.instanceOf;
 
-import ch.sth.dojo.es.DomainError;
-import ch.sth.dojo.es.commands.DomainCommand;
 import ch.sth.dojo.es.events.DomainEvent;
 import io.vavr.collection.List;
-import io.vavr.control.Either;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 public interface Game {
 
@@ -19,7 +15,7 @@ public interface Game {
         return PreInitializedGame.preInitializedGame();
     }
 
-    static <T> T apply(Game game, Function<LaufendesGame, T> laufendesGameTFunction, Function<AbgeschlossenesGame, T> abgeschlossenesGameTFunction,Function<PreInitializedGame, T> preInitializedGameTFunction) {
+    private static <T> T apply(Game game, Function<LaufendesGame, T> laufendesGameTFunction, Function<AbgeschlossenesGame, T> abgeschlossenesGameTFunction,Function<PreInitializedGame, T> preInitializedGameTFunction) {
         return Match(game).of(
                 Case($(instanceOf(LaufendesGame.class)), laufendesGameTFunction),
                 Case($(instanceOf(AbgeschlossenesGame.class)), abgeschlossenesGameTFunction),
@@ -27,18 +23,6 @@ public interface Game {
         );
     }
 
-
-    static  Either<DomainError, DomainEvent> commandHandler(Game target, DomainCommand command, Supplier<DomainError> errorSupplier){
-       return apply(target,
-                laufendesGame -> laufendesGame.handleCommand(command),
-                abgeschlossenesGame -> Either.<DomainError, DomainEvent>left(errorSupplier.get()),
-                preInitializedGame -> preInitializedGame.handleCommand(command));
-    }
-
-
-
-
-    
     static Game eventHandler(List<DomainEvent> domainEvents) {
         return domainEvents.foldLeft(LaufendesGame.initial(), Game::handleEvent);
     }
@@ -46,11 +30,8 @@ public interface Game {
     static Game handleEvent(Game state, DomainEvent event) {
         return Game.apply(state,
                 laufendesGame -> laufendesGame.handleEvent(event),
-                abgeschlossenesGame ->abgeschlossenesGame.handleEvent(event),
-                preInitializedGame -> preInitializedGame.handleEvent(event));
+                abgeschlossenesGame ->abgeschlossenesGame,
+                preInitializedGame -> preInitializedGame);
     }
 
-     static Game throwException(Game state, final DomainEvent event) {
-        throw new RuntimeException(String.format("invalid event=%s for state=%s", event, state));
-    }
 }

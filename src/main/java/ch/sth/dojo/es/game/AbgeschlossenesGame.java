@@ -26,8 +26,4 @@ public class AbgeschlossenesGame implements Game {
         return new AbgeschlossenesGame(punkteSpieler, punkteGegner);
     }
 
-
-    Game handleEvent(final DomainEvent event) {
-        return Game.throwException(this, event);
-    }
 }

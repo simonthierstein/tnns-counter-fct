@@ -4,22 +4,19 @@
 
 package ch.sth.dojo.es.game;
 
-import static ch.sth.dojo.es.game.AbgeschlossenesGame.abgeschlossenesGame;
-import static ch.sth.dojo.es.game.Punkt.punkt;
 import static ch.sth.dojo.es.events.GegnerHatGameGewonnen.gegnerHatGameGewonnen;
 import static ch.sth.dojo.es.events.GegnerHatPunktGewonnen.gegnerHatPunktGewonnen;
 import static ch.sth.dojo.es.events.SpielerHatGameGewonnen.spielerHatGameGewonnen;
 import static ch.sth.dojo.es.events.SpielerHatPunktGewonnen.spielerHatPunktGewonnen;
+import static ch.sth.dojo.es.game.AbgeschlossenesGame.abgeschlossenesGame;
+import static ch.sth.dojo.es.game.Punkt.punkt;
 
-import ch.sth.dojo.es.DomainError;
-import ch.sth.dojo.es.commands.DomainCommand;
 import ch.sth.dojo.es.events.DomainEvent;
 import ch.sth.dojo.es.events.GegnerHatGameGewonnen;
 import ch.sth.dojo.es.events.GegnerHatPunktGewonnen;
 import ch.sth.dojo.es.events.SpielerHatGameGewonnen;
 import ch.sth.dojo.es.events.SpielerHatPunktGewonnen;
 import io.vavr.collection.List;
-import io.vavr.control.Either;
 import java.util.function.Function;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
@@ -42,21 +39,15 @@ public class LaufendesGame implements Game {
 
     // commands
 
-    Either<DomainError, DomainEvent> handleCommand(DomainCommand command) {
-        return DomainCommand.handleCommand(command,
-                () -> Either.right(spielerPunktet()),
-                () -> Either.right(gegnerPunktet()),
-                () -> Either.left(new InvalidCommandForState(this, command)));
-    }
 
-    private DomainEvent spielerPunktet() {
+     DomainEvent spielerPunktet() {
         final List<Punkt> incremented = punkteSpieler.append(punkt());
         return incremented.size() == 4
                 ? SpielerHatGameGewonnen(incremented, punkteGegner)
                 : SpielerHatPunktGewonnen(incremented, punkteGegner);
     }
 
-    private DomainEvent gegnerPunktet() {
+     DomainEvent gegnerPunktet() {
         final List<Punkt> incremented = punkteGegner.append(punkt());
         return incremented.size() == 4
                 ? GegnerHatGameGewonnen(punkteSpieler, incremented)
