@@ -58,23 +58,8 @@ public interface Game {
         return i -> Either.<I, R>left(i).mapLeft(inputFunction);
     }
 
-
-    static <E extends DomainEvent, G extends Game> Function<E, Game> xxx(Function<E, G> ind) {
-        return e -> ind.apply(e);
-    }
-
-
     static <E extends DomainEvent> Function<E, DomainError> eventToError(Game state) {
         return event -> new DomainError.InvalidEventForState(state, event);
     }
-
-    static <I, L, R> Function<I, Either<L, R>> toRight(Function<I, R> inputFunction) {
-        return i -> Either.right(inputFunction.apply(i));
-    }
-
-    static <I, L, R> Function<I, Either<L, R>> toLeft(Function<I, L> inputFunction) {
-        return i -> Either.left(inputFunction.apply(i));
-    }
-
 
 }
