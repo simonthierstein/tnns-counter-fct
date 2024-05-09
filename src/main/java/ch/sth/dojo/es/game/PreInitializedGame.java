@@ -22,14 +22,19 @@ public class PreInitializedGame implements Game {
         return new PreInitializedGame();
     }
 
-
+// gehört eigentlich nicht hier rein...
     static Function<Unit, PreInitializedGame> PreInitializedGame() {
         return unit -> preInitializedGame();
     }
 
-
+    //cmd
     static Function<PreInitializedGame, GameErzeugt> erzeugeGame() {
-        return x-> gameErzeugt();
+        return x -> GameErzeugt.gameErzeugt();
+    }
+
+    //evt
+    static Function<GameErzeugt, LaufendesGame> gameErzeugt() {
+        return LaufendesGame.handleGameErzeugt();
     }
 
 

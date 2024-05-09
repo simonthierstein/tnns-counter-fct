@@ -4,11 +4,7 @@
 
 package ch.sth.dojo.es.game;
 
-import static io.vavr.API.$;
-import static io.vavr.API.Case;
-import static io.vavr.API.Match;
-
-import ch.sth.dojo.es.events.DomainEvent;
+import io.vavr.Function2;
 import io.vavr.collection.List;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
@@ -21,15 +17,8 @@ public class AbgeschlossenesGame implements Game {
     private final List<Punkt> punkteSpieler;
     private final List<Punkt> punkteGegner;
 
-    static AbgeschlossenesGame abgeschlossenesGame(final List<Punkt> punkteSpieler,
-                                                   final List<Punkt> punkteGegner) {
-        return new AbgeschlossenesGame(punkteSpieler, punkteGegner);
+    static Function2<List<Punkt>, List<Punkt>, AbgeschlossenesGame> abgeschlossenesGame() {
+        return AbgeschlossenesGame::new;
     }
-    static AbgeschlossenesGame abgeschlossenesGame(final List<Punkt> punkteSpieler,
-                                                   final List<Punkt> punkteGegner) {
-        return new AbgeschlossenesGame(punkteSpieler, punkteGegner);
-    }
-
-
 
 }

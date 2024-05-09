@@ -12,6 +12,7 @@ import static ch.sth.dojo.es.game.AbgeschlossenesGame.abgeschlossenesGame;
 import static ch.sth.dojo.es.game.Punkt.punkt;
 
 import ch.sth.dojo.es.events.DomainEvent;
+import ch.sth.dojo.es.events.GameErzeugt;
 import ch.sth.dojo.es.events.GegnerHatGameGewonnen;
 import ch.sth.dojo.es.events.GegnerHatPunktGewonnen;
 import ch.sth.dojo.es.events.SpielerHatGameGewonnen;
@@ -35,6 +36,10 @@ public class LaufendesGame implements Game {
 
     static LaufendesGame initial() {
         return laufendesGame(List.empty(), List.empty());
+    }
+
+    static Function<GameErzeugt, LaufendesGame> handleGameErzeugt() {
+        return gameErzeugt -> initial();
     }
 
     // commands
@@ -84,11 +89,11 @@ public class LaufendesGame implements Game {
     }
 
     private Function<SpielerHatGameGewonnen, Game> shgg() {
-        return event -> abgeschlossenesGame(punkteSpieler.append(punkt()), punkteGegner);
+        return event -> abgeschlossenesGame().apply(punkteSpieler.append(punkt()), punkteGegner);
     }
 
     private Function<GegnerHatGameGewonnen, Game> ghgg() {
-        return event -> abgeschlossenesGame(punkteSpieler, punkteGegner.append(punkt()));
+        return event -> abgeschlossenesGame().apply(punkteSpieler, punkteGegner.append(punkt()));
     }
 
     private Function<GegnerHatPunktGewonnen, Game> ghpg() {
