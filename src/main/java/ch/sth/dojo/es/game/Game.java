@@ -28,7 +28,7 @@ public interface Game {
                 preInitializedGame -> handlePreInitializedGame(preInitializedGame, event));
     }
 
-    static Either<DomainError, Game> handlePreInitializedGame(PreInitializedGame preInitializedGame, DomainEvent event) {
+    private static Either<DomainError, Game> handlePreInitializedGame(PreInitializedGame preInitializedGame, DomainEvent event) {
         return DomainEvent.handleEvent(event,
                 left(eventToError(preInitializedGame)),
                 left(eventToError(preInitializedGame)),
@@ -38,7 +38,7 @@ public interface Game {
         );
     }
 
-    static Either<DomainError, Game> handleAbgeschlossenesGame(AbgeschlossenesGame state, DomainEvent event) {
+    private static Either<DomainError, Game> handleAbgeschlossenesGame(AbgeschlossenesGame state, DomainEvent event) {
         return Either.left(new DomainError.InvalidEventForState(state, event));
     }
 
