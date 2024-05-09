@@ -11,7 +11,8 @@ import java.util.function.Function;
 
 public interface Game {
 
-    private static <T> T apply(Game game, Function<LaufendesGame, T> laufendesGameTFunction, Function<AbgeschlossenesGame, T> abgeschlossenesGameTFunction,Function<PreInitializedGame, T> preInitializedGameTFunction) {
+    private static <T> T apply(Game game, Function<LaufendesGame, T> laufendesGameTFunction, Function<AbgeschlossenesGame, T> abgeschlossenesGameTFunction,
+                               Function<PreInitializedGame, T> preInitializedGameTFunction) {
         return Match(game).of(
                 Case($(instanceOf(LaufendesGame.class)), laufendesGameTFunction),
                 Case($(instanceOf(AbgeschlossenesGame.class)), abgeschlossenesGameTFunction),
@@ -25,9 +26,17 @@ public interface Game {
 
     static Game handleEvent(Game state, DomainEvent event) {
         return Game.apply(state,
-                laufendesGame -> laufendesGame,
-                abgeschlossenesGame ->abgeschlossenesGame,
+                laufendesGame -> handleLaufendesGame(laufendesGame, event),
+                abgeschlossenesGame -> abgeschlossenesGame,
                 preInitializedGame -> preInitializedGame);
+    }
+
+    private static Game handleLaufendesGame(final LaufendesGame laufendesGame, final DomainEvent event) {
+        return DomainEvent.handleEvent(event,
+                LaufendesGame.shpg(laufendesGame),
+                LaufendesGame.ghpg(laufendesGame),
+                LaufendesGame.shgg(laufendesGame),
+                LaufendesGame.ghgg(laufendesGame));
     }
 
 }
