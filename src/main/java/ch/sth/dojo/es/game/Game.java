@@ -11,10 +11,6 @@ import java.util.function.Function;
 
 public interface Game {
 
-    static PreInitializedGame empty() {
-        return PreInitializedGame.preInitializedGame();
-    }
-
     private static <T> T apply(Game game, Function<LaufendesGame, T> laufendesGameTFunction, Function<AbgeschlossenesGame, T> abgeschlossenesGameTFunction,Function<PreInitializedGame, T> preInitializedGameTFunction) {
         return Match(game).of(
                 Case($(instanceOf(LaufendesGame.class)), laufendesGameTFunction),

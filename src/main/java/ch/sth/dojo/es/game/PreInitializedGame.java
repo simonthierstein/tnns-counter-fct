@@ -6,7 +6,9 @@ package ch.sth.dojo.es.game;
 
 import static ch.sth.dojo.es.events.GameErzeugt.gameErzeugt;
 
+import ch.sth.dojo.es.Unit;
 import ch.sth.dojo.es.events.GameErzeugt;
+import java.util.function.Function;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
@@ -16,12 +18,16 @@ import lombok.ToString;
 @EqualsAndHashCode @ToString
 public class PreInitializedGame implements Game {
 
-    static PreInitializedGame preInitializedGame() {
+    private static PreInitializedGame preInitializedGame() {
         return new PreInitializedGame();
     }
 
-    static GameErzeugt erzeugeGame() {
-        return gameErzeugt();
+    static Function<Unit, PreInitializedGame> PreInitializedGame() {
+        return unit -> preInitializedGame();
+    }
+
+    static Function<PreInitializedGame, GameErzeugt> erzeugeGame() {
+        return x-> gameErzeugt();
     }
 
 }
