@@ -38,6 +38,8 @@ public class LaufendesGame implements Game {
         return laufendesGame(List.empty(), List.empty());
     }
 
+    // commands
+
     DomainEvent handleCommand(DomainCommand command) {
         return DomainCommand.handleCommand(command,
                 this::spielerPunktet,
@@ -75,6 +77,9 @@ public class LaufendesGame implements Game {
                                                                final List<Punkt> punkteGegner) {
         return gegnerHatGameGewonnen();
     }
+
+    // events
+
 
     public Game handleEvent(final DomainEvent elem) {
         return DomainEvent.handleEvent(elem,
