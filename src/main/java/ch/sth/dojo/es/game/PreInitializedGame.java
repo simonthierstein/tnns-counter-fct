@@ -4,8 +4,11 @@
 
 package ch.sth.dojo.es.game;
 
+import ch.sth.dojo.es.DomainError;
 import ch.sth.dojo.es.Unit;
+import ch.sth.dojo.es.events.DomainEvent;
 import ch.sth.dojo.es.events.GameErzeugt;
+import io.vavr.control.Either;
 import java.util.function.Function;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
@@ -36,4 +39,10 @@ public class PreInitializedGame implements Game {
     }
 
 
+    static Function<PreInitializedGame, Either<DomainError, DomainEvent>> handleSpielerPunktet() {
+        return PreInitializedGame::handleSpielerPunktet;
+    }
+    private static Either<DomainError, DomainEvent> handleSpielerPunktet(final PreInitializedGame prev) {
+        return Either.left(new DomainError.InvalidCommandForState(prev, "handleSpielerPunktet"));
+    }
 }

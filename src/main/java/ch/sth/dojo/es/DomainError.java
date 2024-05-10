@@ -7,4 +7,6 @@ public interface DomainError {
 
     record InvalidEventForState(Game state, DomainEvent event) implements DomainError {
     }
+    record InvalidCommandForState(Game state, String command) implements DomainError {
+    }
 }

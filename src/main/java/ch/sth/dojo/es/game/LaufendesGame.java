@@ -11,6 +11,7 @@ import static ch.sth.dojo.es.events.SpielerHatPunktGewonnen.spielerHatPunktGewon
 import static ch.sth.dojo.es.game.AbgeschlossenesGame.abgeschlossenesGame;
 import static ch.sth.dojo.es.game.Punkt.punkt;
 
+import ch.sth.dojo.es.DomainError;
 import ch.sth.dojo.es.events.DomainEvent;
 import ch.sth.dojo.es.events.GameErzeugt;
 import ch.sth.dojo.es.events.GegnerHatGameGewonnen;
@@ -18,6 +19,7 @@ import ch.sth.dojo.es.events.GegnerHatPunktGewonnen;
 import ch.sth.dojo.es.events.SpielerHatGameGewonnen;
 import ch.sth.dojo.es.events.SpielerHatPunktGewonnen;
 import io.vavr.collection.List;
+import io.vavr.control.Either;
 import java.util.function.Function;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
@@ -49,6 +51,13 @@ public class LaufendesGame implements Game {
 
     static Function<LaufendesGame, DomainEvent> gegnerPunktet() {
         return LaufendesGame::doGegnerPunktet;
+    }
+
+    static Function<LaufendesGame, Either<DomainError, DomainEvent>> handleSpielerPunktet() {
+        return LaufendesGame::handleSpielerPunktet;
+    }
+    private static Either<DomainError, DomainEvent> handleSpielerPunktet(final LaufendesGame prev) {
+        return Either.right(prev.doSpielerPunktet());
     }
 
     private DomainEvent doSpielerPunktet() {
