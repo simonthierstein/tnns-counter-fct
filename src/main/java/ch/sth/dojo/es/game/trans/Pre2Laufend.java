@@ -18,7 +18,7 @@ public class Pre2Laufend {
 
     //evt
     public static Function<GameErzeugt, Game> gameErzeugt() {
-        return LaufendesGame.gameErzeugt().andThen(x->x);
+        return gameErzeugt -> LaufendesGame.initial();
     }
 
 }

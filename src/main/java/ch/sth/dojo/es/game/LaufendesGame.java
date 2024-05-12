@@ -13,7 +13,6 @@ import static ch.sth.dojo.es.game.Punkt.punkt;
 
 import ch.sth.dojo.es.DomainError;
 import ch.sth.dojo.es.events.DomainEvent;
-import ch.sth.dojo.es.events.GameErzeugt;
 import ch.sth.dojo.es.events.GegnerHatGameGewonnen;
 import ch.sth.dojo.es.events.GegnerHatPunktGewonnen;
 import ch.sth.dojo.es.events.SpielerHatGameGewonnen;
@@ -36,12 +35,8 @@ public class LaufendesGame implements Game {
         return new LaufendesGame(punkteSpieler, punkteGegner);
     }
 
-    static LaufendesGame initial() {
+    public static LaufendesGame initial() {
         return laufendesGame(List.empty(), List.empty());
-    }
-
-    public static Function<GameErzeugt, LaufendesGame> gameErzeugt() {
-        return gameErzeugt -> initial();
     }
 
     // commands
