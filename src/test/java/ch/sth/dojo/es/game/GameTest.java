@@ -5,6 +5,7 @@ import ch.sth.dojo.es.Unit;
 import ch.sth.dojo.es.events.DomainEvent;
 import ch.sth.dojo.es.events.GameErzeugt;
 import ch.sth.dojo.es.events.SpielerHatPunktGewonnen;
+import ch.sth.dojo.es.game.trans.Unit2Pre;
 import io.vavr.Tuple;
 import io.vavr.Tuple2;
 import io.vavr.control.Either;
@@ -16,7 +17,7 @@ class GameTest {
     @Test
     void name() {
         final Either<DomainError, Game> next = Game.handleEvent()
-                .apply(PreInitializedGame.PreInitializedGame().apply(Unit.Unit()))
+                .apply(Unit2Pre.createEmpty().apply(Unit.Unit()))
                 .apply(new GameErzeugt());
 
         final Either<DomainError, Game> games = next.flatMap(game -> Game.handleEvent().apply(game, new SpielerHatPunktGewonnen()))
@@ -34,7 +35,7 @@ class GameTest {
     void fdsafas() {
 
         var games = Either.<DomainError, Unit>right(Unit.Unit())
-                .map(PreInitializedGame.PreInitializedGame())
+                .map(Unit2Pre.createEmpty())
                 .map(state2StateTuple(Game.erzeugeGame()))
                 .flatMap(applyEvent())
                 .flatMap(applyCommand(Game.handleSpielerPunktet()))

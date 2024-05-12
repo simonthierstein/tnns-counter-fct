@@ -8,6 +8,8 @@ import static io.vavr.Predicates.instanceOf;
 import ch.sth.dojo.es.DomainError;
 import ch.sth.dojo.es.events.DomainEvent;
 import ch.sth.dojo.es.events.GameErzeugt;
+import ch.sth.dojo.es.game.trans.ErrorHandling;
+import ch.sth.dojo.es.game.trans.Pre2Laufend;
 import io.vavr.Function2;
 import io.vavr.control.Either;
 import java.util.function.Function;
@@ -15,7 +17,7 @@ import java.util.function.Function;
 public interface Game {
 
     static Function<PreInitializedGame, GameErzeugt> erzeugeGame() {
-        return PreInitializedGame.erzeugeGame();
+        return Pre2Laufend.erzeugeGame();
     }
 
     static Function2<Game, DomainEvent, Either<DomainError, Game>> handleEvent() {
@@ -36,7 +38,7 @@ public interface Game {
         return apply(prev,
                 LaufendesGame.handleSpielerPunktet(),
                 AbgeschlossenesGame.handleSpielerPunktet(),
-                PreInitializedGame.handleSpielerPunktet()
+                ErrorHandling.handleSpielerPunktet()
         );
     }
 
@@ -55,7 +57,7 @@ public interface Game {
                 left(eventToError(preInitializedGame)),
                 left(eventToError(preInitializedGame)),
                 left(eventToError(preInitializedGame)),
-                right(PreInitializedGame.gameErzeugt())
+                right(Pre2Laufend.gameErzeugt())
         );
     }
 

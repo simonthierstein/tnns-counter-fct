@@ -40,7 +40,7 @@ public class LaufendesGame implements Game {
         return laufendesGame(List.empty(), List.empty());
     }
 
-    static Function<GameErzeugt, LaufendesGame> gameErzeugt() {
+    public static Function<GameErzeugt, LaufendesGame> gameErzeugt() {
         return gameErzeugt -> initial();
     }
 
