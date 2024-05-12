@@ -15,10 +15,10 @@ import java.util.function.Function;
 
 public class Laufend2Abgeschlossen {
     public static Function<SpielerHatGameGewonnen, AbgeschlossenesGame> shgg(LaufendesGame prev) {
-        return event -> abgeschlossenesGame().apply(prev.punkteSpieler.append(punkt()), prev.punkteGegner);
+        return event -> abgeschlossenesGame(prev.punkteSpieler.append(punkt()), prev.punkteGegner);
     }
 
     public static Function<GegnerHatGameGewonnen, AbgeschlossenesGame> ghgg(LaufendesGame prev) {
-        return event -> abgeschlossenesGame().apply(prev.punkteSpieler, prev.punkteGegner.append(punkt()));
+        return event -> abgeschlossenesGame(prev.punkteSpieler, prev.punkteGegner.append(punkt()));
     }
 }

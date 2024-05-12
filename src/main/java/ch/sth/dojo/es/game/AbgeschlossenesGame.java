@@ -21,8 +21,8 @@ public class AbgeschlossenesGame implements Game {
     private final List<Punkt> punkteSpieler;
     private final List<Punkt> punkteGegner;
 
-    public static Function2<List<Punkt>, List<Punkt>, AbgeschlossenesGame> abgeschlossenesGame() {
-        return AbgeschlossenesGame::new;
+    public static AbgeschlossenesGame abgeschlossenesGame(final List<Punkt> punkteSpieler, final List<Punkt> punkteGegner) {
+        return new AbgeschlossenesGame(punkteSpieler, punkteGegner);
     }
 
 }
