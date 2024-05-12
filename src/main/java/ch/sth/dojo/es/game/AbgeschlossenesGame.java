@@ -21,15 +21,8 @@ public class AbgeschlossenesGame implements Game {
     private final List<Punkt> punkteSpieler;
     private final List<Punkt> punkteGegner;
 
-    static Function2<List<Punkt>, List<Punkt>, AbgeschlossenesGame> abgeschlossenesGame() {
+    public static Function2<List<Punkt>, List<Punkt>, AbgeschlossenesGame> abgeschlossenesGame() {
         return AbgeschlossenesGame::new;
     }
 
-    static Function<AbgeschlossenesGame, Either<DomainError, DomainEvent>> handleSpielerPunktet() {
-        return AbgeschlossenesGame::handleSpielerPunktet;
-    }
-
-    private static Either<DomainError, DomainEvent> handleSpielerPunktet(final AbgeschlossenesGame prev) {
-        return Either.left(new DomainError.InvalidCommandForState(prev, "handleSpielerPunktet"));
-    }
 }

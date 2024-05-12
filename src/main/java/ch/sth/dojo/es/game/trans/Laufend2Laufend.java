@@ -63,4 +63,12 @@ public class Laufend2Laufend {
                 ? GegnerHatGameGewonnen(prev.punkteSpieler, incremented)
                 : GegnerHatPunktGewonnen(prev.punkteSpieler, incremented);
     }
+
+    public static Function<GegnerHatPunktGewonnen, LaufendesGame> ghpg(LaufendesGame prev) {
+        return event -> LaufendesGame.laufendesGame(prev.punkteSpieler, prev.punkteGegner.append(punkt()));
+    }
+
+    public static Function<SpielerHatPunktGewonnen, LaufendesGame> shpg(LaufendesGame prev) {
+        return event -> LaufendesGame.laufendesGame(prev.punkteSpieler.append(punkt()), prev.punkteGegner);
+    }
 }

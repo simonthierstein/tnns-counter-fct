@@ -9,6 +9,7 @@ import ch.sth.dojo.es.DomainError;
 import ch.sth.dojo.es.events.DomainEvent;
 import ch.sth.dojo.es.events.GameErzeugt;
 import ch.sth.dojo.es.game.trans.ErrorHandling;
+import ch.sth.dojo.es.game.trans.Laufend2Abgeschlossen;
 import ch.sth.dojo.es.game.trans.Laufend2Laufend;
 import ch.sth.dojo.es.game.trans.Pre2Laufend;
 import io.vavr.Function2;
@@ -38,7 +39,7 @@ public interface Game {
     private static Either<DomainError, DomainEvent> handleSpielerPunktet(Game prev) {
         return apply(prev,
                 Laufend2Laufend.handleSpielerPunktet(),
-                AbgeschlossenesGame.handleSpielerPunktet(),
+                ErrorHandling.handleSpielerPunktet(),
                 ErrorHandling.handleSpielerPunktet()
         );
     }
@@ -68,10 +69,10 @@ public interface Game {
 
     private static Either<DomainError, Game> handleLaufendesGame(final LaufendesGame laufendesGame, final DomainEvent event) {
         return DomainEvent.handleEvent(event,
-                right(LaufendesGame.shpg(laufendesGame)),
-                right(LaufendesGame.ghpg(laufendesGame)),
-                right(LaufendesGame.shgg(laufendesGame)),
-                right(LaufendesGame.ghgg(laufendesGame)),
+                right(Laufend2Laufend.shpg(laufendesGame)),
+                right(Laufend2Laufend.ghpg(laufendesGame)),
+                right(Laufend2Abgeschlossen.shgg(laufendesGame)),
+                right(Laufend2Abgeschlossen.ghgg(laufendesGame)),
                 left(eventToError(laufendesGame)));
     }
 
