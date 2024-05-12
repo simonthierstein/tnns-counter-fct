@@ -6,7 +6,6 @@ package ch.sth.dojo.es.game.trans;
 
 import ch.sth.dojo.es.DomainError;
 import ch.sth.dojo.es.events.DomainEvent;
-import ch.sth.dojo.es.game.AbgeschlossenesGame;
 import ch.sth.dojo.es.game.Game;
 import io.vavr.control.Either;
 import java.util.function.Function;
