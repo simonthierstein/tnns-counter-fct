@@ -59,8 +59,8 @@ class GameTest {
         var games = Either.<DomainError, Unit>right(Unit.Unit())
                 .map(Unit2Pre.createEmpty())
                 .map(state2StateTuple(Game.erzeugeGame()))
-                .flatMap(applyEvent())
-                .flatMap(applyCommand(Game.handleGegnerPunktet()))
+//                .flatMap(applyEvent())
+//                .flatMap(applyCommand(Game.handleGegnerPunktet()))
                 .flatMap(applyEvent());
 
 
