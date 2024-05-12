@@ -11,8 +11,8 @@ import lombok.ToString;
 
 @EqualsAndHashCode @ToString
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-final class Punkt {
-    static Punkt punkt() {
+public final class Punkt {
+    public static Punkt punkt() {
         return new Punkt();
     }
 }
