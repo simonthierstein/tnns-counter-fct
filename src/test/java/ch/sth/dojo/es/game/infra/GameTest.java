@@ -1,10 +1,11 @@
-package ch.sth.dojo.es.game;
+package ch.sth.dojo.es.game.infra;
 
 import ch.sth.dojo.es.DomainError;
 import ch.sth.dojo.es.Unit;
 import ch.sth.dojo.es.events.DomainEvent;
 import ch.sth.dojo.es.events.GameErzeugt;
 import ch.sth.dojo.es.events.SpielerHatPunktGewonnen;
+import ch.sth.dojo.es.game.Game;
 import ch.sth.dojo.es.game.trans.Unit2Pre;
 import io.vavr.Tuple;
 import io.vavr.Tuple2;
