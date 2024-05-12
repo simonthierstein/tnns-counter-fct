@@ -53,6 +53,21 @@ class GameTest {
 
 
     }
+    @Test
+    void rewqrewq() {
+
+        var games = Either.<DomainError, Unit>right(Unit.Unit())
+                .map(Unit2Pre.createEmpty())
+                .map(state2StateTuple(Game.erzeugeGame()))
+                .flatMap(applyEvent())
+                .flatMap(applyCommand(Game.handleGegnerPunktet()))
+                .flatMap(applyEvent());
+
+
+        System.out.println(games);
+
+
+    }
 
     private static Function<Game, Either<DomainError, ? extends Tuple2<Game, DomainEvent>>> applyCommand(final Function<Game, Either<DomainError, DomainEvent>> command) {
         return game -> command.apply(game).map(event -> Tuple.of(game, event));

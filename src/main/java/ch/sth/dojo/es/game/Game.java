@@ -11,6 +11,7 @@ import ch.sth.dojo.es.events.GameErzeugt;
 import ch.sth.dojo.es.game.trans.ErrorHandling;
 import ch.sth.dojo.es.game.trans.Laufend2Abgeschlossen;
 import ch.sth.dojo.es.game.trans.Laufend2Laufend;
+import ch.sth.dojo.es.game.trans.Laufend2X;
 import ch.sth.dojo.es.game.trans.Pre2Laufend;
 import io.vavr.Function2;
 import io.vavr.control.Either;
@@ -38,11 +39,20 @@ public interface Game {
     }
     private static Either<DomainError, DomainEvent> handleSpielerPunktet(Game prev) {
         return apply(prev,
-                Laufend2Laufend.handleSpielerPunktet(),
+                Laufend2X.handleSpielerPunktet(),
                 ErrorHandling.handleSpielerPunktet(),
                 ErrorHandling.handleSpielerPunktet()
         );
     }
+
+//    static Function<Game, Either<DomainError, DomainEvent>> handleGegnerPunktet() {
+//        return game -> apply(game,
+//
+//
+//
+//                )
+//
+//    }
 
     private static <T> T apply(Game game, Function<LaufendesGame, T> laufendesGameTFunction, Function<AbgeschlossenesGame, T> abgeschlossenesGameTFunction,
                                Function<PreInitializedGame, T> preInitializedGameTFunction) {
@@ -87,5 +97,4 @@ public interface Game {
     private static <E extends DomainEvent> Function<E, DomainError> eventToError(Game state) {
         return event -> new DomainError.InvalidEventForState(state, event);
     }
-
 }
