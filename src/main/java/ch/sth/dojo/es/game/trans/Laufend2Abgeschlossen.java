@@ -29,11 +29,11 @@ public class Laufend2Abgeschlossen {
         return event -> abgeschlossenesGame(prev.punkteSpieler, prev.punkteGegner.append(punkt()));
     }
 
-    public static SpielerHatGameGewonnen SpielerHatGameGewonnen(final List<Punkt> punkteSpieler, final List<Punkt> punkteGegner) {
+    private static SpielerHatGameGewonnen SpielerHatGameGewonnen(final List<Punkt> punkteSpieler, final List<Punkt> punkteGegner) {
         return spielerHatGameGewonnen(punkteSpieler.size(), punkteGegner.size());
     }
 
-    public static GegnerHatGameGewonnen GegnerHatGameGewonnen(final List<Punkt> punkteSpieler, final List<Punkt> punkteGegner) {
+    private static GegnerHatGameGewonnen GegnerHatGameGewonnen(final List<Punkt> punkteSpieler, final List<Punkt> punkteGegner) {
         return gegnerHatGameGewonnen();
     }
 
