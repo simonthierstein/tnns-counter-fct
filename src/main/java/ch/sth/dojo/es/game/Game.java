@@ -1,6 +1,7 @@
 package ch.sth.dojo.es.game;
 
 import static ch.sth.dojo.es.game.Punkt.punkt;
+import static ch.sth.dojo.es.game.trans.ErrorHandling.invalidCommandForState;
 import static ch.sth.dojo.es.game.trans.Routing.selective2Split;
 import static io.vavr.API.$;
 import static io.vavr.API.Case;
@@ -43,28 +44,34 @@ public interface Game {
 
     private static Either<DomainError, DomainEvent> handleSpielerPunktet(Game prev) {
         return apply(prev,
-//                Laufend2X.handleSpielerPunktet(),
                 laufendesGameHandleSpielerPunktet(),
-                ErrorHandling.handleSpielerPunktet(),
-                ErrorHandling.handleSpielerPunktet()
+                invalidCommandForState("handleSpielerPunktet"),
+                invalidCommandForState("handleSpielerPunktet")
+        );
+    }
+
+    static Function<Game, Either<DomainError, DomainEvent>> handleGegnerPunktet() {
+        return game -> apply(game,
+                laufendesGameHandleGegnerPunktet(),
+                invalidCommandForState("handleGegnerPunktet"),
+                invalidCommandForState("handleGegnerPunktet")
+        );
+    }
+
+    static Function<LaufendesGame, Either<DomainError, DomainEvent>> laufendesGameHandleGegnerPunktet() {
+        return in -> selective2Split(in,
+                passIfGegnerSize4(),
+                Laufend2Abgeschlossen.gegnerGewinneGame(),
+                Laufend2Laufend.gegnerGewinnePunkt()
         );
     }
 
     private static Function<LaufendesGame, Either<DomainError, DomainEvent>> laufendesGameHandleSpielerPunktet() {
         return in -> selective2Split(in,
-                passIfSize4(),
+                passIfSpielerSize4(),
                 Laufend2Abgeschlossen.spielerGewinneGame(),
                 Laufend2Laufend.spielerGewinnePunkt());
     }
-
-    //    static Function<Game, Either<DomainError, DomainEvent>> handleGegnerPunktet() {
-//        return game -> apply(game,
-//
-//
-//
-//                )
-//
-//    }
 
     private static <T> T apply(Game game, Function<LaufendesGame, T> laufendesGameTFunction, Function<AbgeschlossenesGame, T> abgeschlossenesGameTFunction,
                                Function<PreInitializedGame, T> preInitializedGameTFunction) {
@@ -110,18 +117,17 @@ public interface Game {
         return event -> new DomainError.InvalidEventForState(state, event);
     }
 
-    static Predicate<LaufendesGame> passIfSize4() {
+    static Predicate<LaufendesGame> passIfSpielerSize4() {
         return prev -> isSize4(prev.punkteSpieler.append(punkt()));
+    }
+
+    static Predicate<LaufendesGame> passIfGegnerSize4() {
+        return prev -> isSize4(prev.punkteGegner.append(punkt()));
     }
 
     static boolean isSize4(final List<Punkt> incremented) {
         return incremented.size() == 4;
     }
 
-    static DomainEvent doGegnerPunktet(LaufendesGame prev) {
-        final List<Punkt> incremented = prev.punkteGegner.append(punkt());
-        return incremented.size() == 4
-                ? Laufend2Abgeschlossen.GegnerHatGameGewonnen(prev.punkteSpieler, incremented)
-                : Laufend2Laufend.GegnerHatPunktGewonnen(prev.punkteSpieler, incremented);
-    }
+
 }

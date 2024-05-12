@@ -37,7 +37,10 @@ public class Laufend2Laufend {
     }
 
     public static Function<LaufendesGame, Either<DomainError, DomainEvent>> spielerGewinnePunkt() {
-        return laufendesGame -> Either.right(SpielerHatPunktGewonnen(laufendesGame.punkteSpieler.append(punkt()),
-                laufendesGame.punkteGegner));
+        return laufendesGame -> Either.right(SpielerHatPunktGewonnen(laufendesGame.punkteSpieler.append(punkt()), laufendesGame.punkteGegner));
+    }
+
+    public static Function<LaufendesGame, Either<DomainError, DomainEvent>> gegnerGewinnePunkt() {
+        return laufendesGame -> Either.right(GegnerHatPunktGewonnen(laufendesGame.punkteSpieler, laufendesGame.punkteGegner.append(punkt())));
     }
 }

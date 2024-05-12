@@ -29,18 +29,19 @@ public class Laufend2Abgeschlossen {
         return event -> abgeschlossenesGame(prev.punkteSpieler, prev.punkteGegner.append(punkt()));
     }
 
-    public static SpielerHatGameGewonnen SpielerHatGameGewonnen(final List<Punkt> punkteSpieler,
-                                                                final List<Punkt> punkteGegner) {
+    public static SpielerHatGameGewonnen SpielerHatGameGewonnen(final List<Punkt> punkteSpieler, final List<Punkt> punkteGegner) {
         return spielerHatGameGewonnen(punkteSpieler.size(), punkteGegner.size());
     }
 
-    public static GegnerHatGameGewonnen GegnerHatGameGewonnen(final List<Punkt> punkteSpieler,
-                                                              final List<Punkt> punkteGegner) {
+    public static GegnerHatGameGewonnen GegnerHatGameGewonnen(final List<Punkt> punkteSpieler, final List<Punkt> punkteGegner) {
         return gegnerHatGameGewonnen();
     }
 
     public static Function<LaufendesGame, Either<DomainError, DomainEvent>> spielerGewinneGame() {
-        return laufendesGame -> Either.right(SpielerHatGameGewonnen(laufendesGame.punkteSpieler.append(punkt()),
-                laufendesGame.punkteGegner));
+        return laufendesGame -> Either.right(SpielerHatGameGewonnen(laufendesGame.punkteSpieler.append(punkt()), laufendesGame.punkteGegner));
+    }
+
+    public static Function<LaufendesGame, Either<DomainError, DomainEvent>> gegnerGewinneGame() {
+        return laufendesGame -> Either.right(GegnerHatGameGewonnen(laufendesGame.punkteSpieler, laufendesGame.punkteGegner.append(punkt())));
     }
 }
