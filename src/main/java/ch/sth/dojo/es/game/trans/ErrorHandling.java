@@ -20,7 +20,4 @@ public class ErrorHandling {
         return Either.left(new DomainError.InvalidCommandForState(prev, commandAsString));
     }
 
-    static Function<AbgeschlossenesGame, Either<DomainError, DomainEvent>> handleGegnerPunktet() {
-        return null;
-    }
 }
