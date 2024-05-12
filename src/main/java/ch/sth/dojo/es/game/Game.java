@@ -11,7 +11,6 @@ import static io.vavr.Predicates.instanceOf;
 import ch.sth.dojo.es.DomainError;
 import ch.sth.dojo.es.events.DomainEvent;
 import ch.sth.dojo.es.events.GameErzeugt;
-import ch.sth.dojo.es.game.trans.ErrorHandling;
 import ch.sth.dojo.es.game.trans.Laufend2Abgeschlossen;
 import ch.sth.dojo.es.game.trans.Laufend2Laufend;
 import ch.sth.dojo.es.game.trans.Pre2Laufend;
@@ -28,22 +27,14 @@ public interface Game {
     }
 
     static Function2<Game, DomainEvent, Either<DomainError, Game>> handleEvent() {
-        return Game::handleEvent;
-    }
-
-    static Either<DomainError, Game> handleEvent(Game state, DomainEvent event) {
-        return Game.apply(state,
+        return (state, event) -> Game.apply(state,
                 laufendesGame -> handleLaufendesGame(laufendesGame, event),
                 abgeschlossenesGame -> handleAbgeschlossenesGame(abgeschlossenesGame, event),
                 preInitializedGame -> handlePreInitializedGame(preInitializedGame, event));
     }
 
     static Function<Game, Either<DomainError, DomainEvent>> handleSpielerPunktet() {
-        return Game::handleSpielerPunktet;
-    }
-
-    private static Either<DomainError, DomainEvent> handleSpielerPunktet(Game prev) {
-        return apply(prev,
+        return prev -> apply(prev,
                 laufendesGameHandleSpielerPunktet(),
                 invalidCommandForState("handleSpielerPunktet"),
                 invalidCommandForState("handleSpielerPunktet")
