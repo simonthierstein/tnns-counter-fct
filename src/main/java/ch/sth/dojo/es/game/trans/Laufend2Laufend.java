@@ -20,14 +20,6 @@ import java.util.function.Function;
 
 public class Laufend2Laufend {
 
-    public static SpielerHatPunktGewonnen SpielerHatPunktGewonnen(final List<Punkt> punkteSpieler, final List<Punkt> punkteGegner) {
-        return spielerHatPunktGewonnen();
-    }
-
-    public static GegnerHatPunktGewonnen GegnerHatPunktGewonnen(final List<Punkt> punkteSpieler, final List<Punkt> punkteGegner) {
-        return gegnerHatPunktGewonnen();
-    }
-
     public static Function<GegnerHatPunktGewonnen, LaufendesGame> ghpg(LaufendesGame prev) {
         return event -> LaufendesGame.laufendesGame(prev.punkteSpieler, prev.punkteGegner.append(punkt()));
     }
@@ -42,5 +34,13 @@ public class Laufend2Laufend {
 
     public static Function<LaufendesGame, Either<DomainError, DomainEvent>> gegnerGewinnePunkt() {
         return laufendesGame -> Either.right(GegnerHatPunktGewonnen(laufendesGame.punkteSpieler, laufendesGame.punkteGegner.append(punkt())));
+    }
+
+    private static SpielerHatPunktGewonnen SpielerHatPunktGewonnen(final List<Punkt> punkteSpieler, final List<Punkt> punkteGegner) {
+        return spielerHatPunktGewonnen();
+    }
+
+    private static GegnerHatPunktGewonnen GegnerHatPunktGewonnen(final List<Punkt> punkteSpieler, final List<Punkt> punkteGegner) {
+        return gegnerHatPunktGewonnen();
     }
 }
