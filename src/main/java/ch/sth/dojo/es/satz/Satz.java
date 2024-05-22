@@ -33,8 +33,8 @@ public interface Satz {
                 event,
                 left(eventToError(state)),
                 left(eventToError(state)),
-                right(evt -> state.incrementSpieler()),
-                right(evt -> state.incrementGegner()),
+                right(LaufenderSatz.spielerHatGameGewonnen(state)),
+                right(LaufenderSatz.gegnerHatGameGewonnen(state)),
                 left(eventToError(state)),
                 left(eventToError(state)),
                 left(eventToError(state))
