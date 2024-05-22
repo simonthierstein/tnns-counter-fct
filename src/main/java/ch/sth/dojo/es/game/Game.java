@@ -79,7 +79,9 @@ public interface Game {
                 left(eventToError(preInitializedGame)),
                 left(eventToError(preInitializedGame)),
                 left(eventToError(preInitializedGame)),
-                right(Pre2Laufend.gameErzeugt())
+                right(Pre2Laufend.gameErzeugt()),
+                left(eventToError(preInitializedGame)),
+                left(eventToError(preInitializedGame))
         );
     }
 
@@ -93,7 +95,10 @@ public interface Game {
                 right(Laufend2Laufend.ghpg(laufendesGame)),
                 right(Laufend2Abgeschlossen.shgg(laufendesGame)),
                 right(Laufend2Abgeschlossen.ghgg(laufendesGame)),
-                left(eventToError(laufendesGame)));
+                left(eventToError(laufendesGame)),
+                left(eventToError(laufendesGame)),
+                left(eventToError(laufendesGame))
+        );
     }
 
     private static <I extends DomainEvent, L extends DomainError, R extends Game> Function<I, Either<L, Game>> right(Function<I, R> inputFunction) {
