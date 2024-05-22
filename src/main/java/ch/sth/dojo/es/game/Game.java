@@ -86,7 +86,7 @@ public interface Game {
     }
 
     private static Either<DomainError, Game> handleAbgeschlossenesGame(AbgeschlossenesGame state, DomainEvent event) {
-        return Either.left(new DomainError.InvalidEventForState(state, event));
+        return Either.left(new DomainError.InvalidEventForGame(state, event));
     }
 
     private static Either<DomainError, Game> handleLaufendesGame(final LaufendesGame laufendesGame, final DomainEvent event) {
@@ -110,7 +110,7 @@ public interface Game {
     }
 
     private static <E extends DomainEvent> Function<E, DomainError> eventToError(Game state) {
-        return event -> new DomainError.InvalidEventForState(state, event);
+        return event -> new DomainError.InvalidEventForGame(state, event);
     }
 
     static Predicate<LaufendesGame> passIfSpielerSize4() {

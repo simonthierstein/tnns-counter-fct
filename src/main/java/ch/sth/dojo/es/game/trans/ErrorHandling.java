@@ -16,7 +16,7 @@ public class ErrorHandling {
     }
 
     private static Either<DomainError, DomainEvent> invalidCommandForState(final Game prev, final String commandAsString) {
-        return Either.left(new DomainError.InvalidCommandForState(prev, commandAsString));
+        return Either.left(new DomainError.InvalidCommandForGame(prev, commandAsString));
     }
 
 }
