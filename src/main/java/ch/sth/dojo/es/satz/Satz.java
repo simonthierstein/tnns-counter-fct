@@ -11,8 +11,6 @@ import static io.vavr.Predicates.instanceOf;
 
 import ch.sth.dojo.es.DomainError;
 import ch.sth.dojo.es.events.DomainEvent;
-import ch.sth.dojo.es.events.GegnerHatGameGewonnen;
-import ch.sth.dojo.es.events.SpielerHatGameGewonnen;
 import io.vavr.control.Either;
 import java.util.function.Function;
 
@@ -35,25 +33,11 @@ public interface Satz {
                 event,
                 left(eventToError(state)),
                 left(eventToError(state)),
-                evt -> spielerHatGameGewonnen(state, evt),
-                evt -> gegnerHatGameGewonnen(state, evt),
+                right(evt -> state.incrementSpieler()),
+                right(evt -> state.incrementGegner()),
                 left(eventToError(state)),
                 left(eventToError(state)),
                 left(eventToError(state))
-        );
-    }
-
-    private static Either<DomainError, Satz> spielerHatGameGewonnen(Satz prev, SpielerHatGameGewonnen event) {
-        return apply(prev,
-                laufenderSatz -> Either.right(laufenderSatz.incrementSpieler()),
-                abgeschlossenerSatz -> Either.left(new DomainError.InvalidEventForSatz(abgeschlossenerSatz, event))
-        );
-    }
-
-    private static Either<DomainError, Satz> gegnerHatGameGewonnen(Satz prev, GegnerHatGameGewonnen event) {
-        return apply(prev,
-                laufenderSatz -> Either.right(laufenderSatz.incrementGegner()),
-                abgeschlossenerSatz -> Either.left(new DomainError.InvalidEventForSatz(abgeschlossenerSatz, event))
         );
     }
 
