@@ -20,26 +20,37 @@ public interface Satz {
 
 
     static Either<DomainError, Satz> handleEvent(Satz prev, DomainEvent event) {
-        return DomainEvent.handleEvent(
-                event,
-                left(eventToError(prev)),
-                left(eventToError(prev)),
-                evt -> spielerHatGameGewonnen(prev, evt),
-                evt -> gegnerHatGameGewonnen(prev, evt),
-                left(eventToError(prev)),
-                left(eventToError(prev)),
-                left(eventToError(prev))
+        return apply(prev,
+                state -> handleLaufenderSatz(state, event),
+                state -> handleAbgeschlossenerSatz(state, event)
         );
     }
 
-    static Either<DomainError, Satz> spielerHatGameGewonnen(Satz prev, SpielerHatGameGewonnen event) {
+    static Either<DomainError, Satz> handleAbgeschlossenerSatz(final AbgeschlossenerSatz state, final DomainEvent event) {
+        return Either.left(new DomainError.InvalidEventForSatz(state, event));
+    }
+
+    private static Either<DomainError, Satz> handleLaufenderSatz(final LaufenderSatz state, final DomainEvent event) {
+        return DomainEvent.handleEvent(
+                event,
+                left(eventToError(state)),
+                left(eventToError(state)),
+                evt -> spielerHatGameGewonnen(state, evt),
+                evt -> gegnerHatGameGewonnen(state, evt),
+                left(eventToError(state)),
+                left(eventToError(state)),
+                left(eventToError(state))
+        );
+    }
+
+    private static Either<DomainError, Satz> spielerHatGameGewonnen(Satz prev, SpielerHatGameGewonnen event) {
         return apply(prev,
                 laufenderSatz -> Either.right(laufenderSatz.incrementSpieler()),
                 abgeschlossenerSatz -> Either.left(new DomainError.InvalidEventForSatz(abgeschlossenerSatz, event))
         );
     }
 
-    static Either<DomainError, Satz> gegnerHatGameGewonnen(Satz prev, GegnerHatGameGewonnen event) {
+    private static Either<DomainError, Satz> gegnerHatGameGewonnen(Satz prev, GegnerHatGameGewonnen event) {
         return apply(prev,
                 laufenderSatz -> Either.right(laufenderSatz.incrementGegner()),
                 abgeschlossenerSatz -> Either.left(new DomainError.InvalidEventForSatz(abgeschlossenerSatz, event))
