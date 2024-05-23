@@ -1,8 +1,8 @@
 package ch.sth.dojo.es.game;
 
+import static ch.sth.dojo.es.Routing.selective2SplitEither;
 import static ch.sth.dojo.es.game.Punkt.punkt;
 import static ch.sth.dojo.es.game.trans.ErrorHandling.invalidCommandForState;
-import static ch.sth.dojo.es.game.trans.Routing.selective2Split;
 import static io.vavr.API.$;
 import static io.vavr.API.Case;
 import static io.vavr.API.Match;
@@ -50,7 +50,7 @@ public interface Game {
     }
 
     static Function<LaufendesGame, Either<DomainError, DomainEvent>> laufendesGameHandleGegnerPunktet() {
-        return in -> selective2Split(in,
+        return in -> selective2SplitEither(in,
                 passIfGegnerSize4(),
                 Laufend2Abgeschlossen.gegnerGewinneGame(),
                 Laufend2Laufend.gegnerGewinnePunkt()
@@ -58,7 +58,7 @@ public interface Game {
     }
 
     private static Function<LaufendesGame, Either<DomainError, DomainEvent>> laufendesGameHandleSpielerPunktet() {
-        return in -> selective2Split(in,
+        return in -> selective2SplitEither(in,
                 passIfSpielerSize4(),
                 Laufend2Abgeschlossen.spielerGewinneGame(),
                 Laufend2Laufend.spielerGewinnePunkt());

@@ -45,6 +45,12 @@ public interface Satz {
         return LaufenderSatz.zero();
     }
 
+
+    static <T extends Satz> Function<LaufenderSatz, Satz> narrowSatz(Function<LaufenderSatz, T> toNarrow) {
+        return toNarrow::apply;
+    }
+
+
     private static <T> T apply(final Satz prev,
                                Function<LaufenderSatz, T> f1,
                                Function<AbgeschlossenerSatz, T> f2

@@ -4,5 +4,5 @@
 
 package ch.sth.dojo.es.satz;
 
-public record AbgeschlossenerSatz() implements Satz {
+public record AbgeschlossenerSatz(int punkteSpieler, int punkteGegner) implements Satz {
 }
