@@ -4,6 +4,8 @@
 
 package ch.sth.dojo.es.satz;
 
+import static ch.sth.dojo.es.satz.AbgeschlossenerSatz.handleAbgeschlossenerSatz;
+import static ch.sth.dojo.es.satz.LaufenderSatz.handleLaufenderSatz;
 import static io.vavr.API.$;
 import static io.vavr.API.Case;
 import static io.vavr.API.Match;
@@ -52,35 +54,10 @@ public interface Satz {
         );
     }
 
-    private static Either<DomainError, Satz> handleAbgeschlossenerSatz(final AbgeschlossenerSatz state, final DomainEvent event) {
-        return Either.left(new DomainError.InvalidEventForSatz(state, event));
-    }
-
-    private static Either<DomainError, Satz> handleLaufenderSatz(final LaufenderSatz state, final DomainEvent event) {
-        return DomainEvent.handleEventF2(
-                event, state,
-                leftF2(eventToErrorF2()),
-                leftF2(eventToErrorF2()),
-                rightF2(LaufenderSatz.spielerHatGameGewonnen()),
-                rightF2(LaufenderSatz.gegnerHatGameGewonnen()),
-                leftF2(eventToErrorF2()),
-                rightF2(LaufenderSatz.spielerHatSatzGewonnen()),
-                rightF2(LaufenderSatz.gegnerHatSatzGewonnen())
-        );
-    }
-
-    private static <S extends Satz, E extends DomainEvent> Function2<S, E, DomainError> eventToErrorF2() {
-        return DomainError.InvalidEventForSatz::new;
-    }
-
     static Satz zero() {
         return LaufenderSatz.zero();
     }
 
-
-    static <T extends Satz> Function<LaufenderSatz, Satz> narrowSatz(Function<LaufenderSatz, T> toNarrow) {
-        return toNarrow::apply;
-    }
 
 
     private static <T> T apply(final Satz prev,
@@ -93,28 +70,32 @@ public interface Satz {
         );
     }
 
-    private static <S, E extends DomainEvent, L extends DomainError, R> Function2<S, E, Either<L, R>> rightF2(Function2<S, E, R> inputFunction) {
+    static <S, E extends DomainEvent, L extends DomainError, R> Function2<S, E, Either<L, R>> rightF2(Function2<S, E, R> inputFunction) {
         return (s, e) -> Either.<L, E>right(e).map(inputFunction.apply(s));
     }
 
-    private static <S, E extends DomainEvent, L extends DomainError, R> Function2<S, E, Either<L, R>> leftF2(Function2<S, E, L> inputFunction) {
+    static <S, E extends DomainEvent, L extends DomainError, R> Function2<S, E, Either<L, R>> leftF2(Function2<S, E, L> inputFunction) {
         return (s, e) -> Either.<E, R>left(e).mapLeft(inputFunction.apply(s));
     }
 
-    private static <I extends DomainEvent, L extends DomainError, R> Function<I, Either<L, R>> right(Function<I, R> inputFunction) {
+    static <I extends DomainEvent, L extends DomainError, R> Function<I, Either<L, R>> right(Function<I, R> inputFunction) {
         return i -> Either.<L, I>right(i).map(inputFunction);
     }
 
-    private static <I extends DomainEvent, L extends DomainError, R> Function<I, Either<DomainError, R>> left(Function<I, L> inputFunction) {
+    static <I extends DomainEvent, L extends DomainError, R> Function<I, Either<DomainError, R>> left(Function<I, L> inputFunction) {
         return i -> Either.<I, R>left(i).mapLeft(inputFunction);
     }
 
-    private static <E extends DomainEvent> Function<E, DomainError> eventToError(Satz state, String command) {
+    static <E extends DomainEvent> Function<E, DomainError> eventToError(Satz state, String command) {
         return event -> new DomainError.InvalidCommandForSatz(state, command);
     }
 
-    private static <E extends DomainEvent> Function<E, DomainError> eventToError(Satz state) {
+    static <E extends DomainEvent> Function<E, DomainError> eventToError(Satz state) {
         return event -> new DomainError.InvalidEventForSatz(state, event);
+    }
+
+    static <S extends Satz, E extends DomainEvent> Function2<S, E, DomainError> eventToErrorF2() {
+        return DomainError.InvalidEventForSatz::new;
     }
 
 }

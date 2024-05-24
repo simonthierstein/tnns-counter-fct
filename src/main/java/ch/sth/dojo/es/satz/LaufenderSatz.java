@@ -7,6 +7,7 @@ package ch.sth.dojo.es.satz;
 import static ch.sth.dojo.es.game.Punkt.punkt;
 import static ch.sth.dojo.es.satz.AbgeschlossenerSatz.AbgeschlossenerSatz;
 
+import ch.sth.dojo.es.DomainError;
 import ch.sth.dojo.es.Routing;
 import ch.sth.dojo.es.events.DomainEvent;
 import ch.sth.dojo.es.events.GegnerHatGameGewonnen;
@@ -17,6 +18,7 @@ import ch.sth.dojo.es.game.Punkt;
 import io.vavr.Function2;
 import io.vavr.Predicates;
 import io.vavr.collection.List;
+import io.vavr.control.Either;
 import io.vavr.control.Option;
 import java.util.function.Function;
 
@@ -114,6 +116,19 @@ public record LaufenderSatz(List<Punkt> punkteSpieler, List<Punkt> punkteGegner)
                 .filter(Predicates.anyOf(x -> x.punkteGegner.size() == 6 && x.punkteSpieler.size() <= 4,
                         x -> x.punkteGegner.size() == 7))
                 .isDefined();
+    }
+
+    static Either<DomainError, Satz> handleLaufenderSatz(final LaufenderSatz state, final DomainEvent event) {
+        return DomainEvent.handleEventF2(
+                event, state,
+                Satz.leftF2(Satz.eventToErrorF2()),
+                Satz.leftF2(Satz.eventToErrorF2()),
+                Satz.rightF2(spielerHatGameGewonnen()),
+                Satz.rightF2(gegnerHatGameGewonnen()),
+                Satz.leftF2(Satz.eventToErrorF2()),
+                Satz.rightF2(spielerHatSatzGewonnen()),
+                Satz.rightF2(gegnerHatSatzGewonnen())
+        );
     }
 
     private LaufenderSatz incrementSpieler() {
