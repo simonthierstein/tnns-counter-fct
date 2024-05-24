@@ -60,11 +60,11 @@ public interface Satz {
                 event,
                 left(eventToError(state)),
                 left(eventToError(state)),
-                right(spielerHatGameGewonnen(state)),
-                right(gegnerHatGameGewonnen(state)),
+                right(x -> LaufenderSatz.handleEvent(state, x)),
+                right(x -> LaufenderSatz.handleEvent(state, x)),
                 left(eventToError(state)),
-                left(eventToError(state)),
-                left(eventToError(state))
+                right(x -> LaufenderSatz.handleEvent(state, x)),
+                right(x -> LaufenderSatz.handleEvent(state, x))
         );
     }
 
@@ -106,13 +106,13 @@ public interface Satz {
 
     static Function<SpielerHatGameGewonnen, Satz> spielerHatGameGewonnen(LaufenderSatz prev) {
         return evt -> Option.of(prev)
-                .map(LaufenderSatz::spielerGewinneGame)
+                .map(state -> LaufenderSatz.handleEvent(state, evt))
                 .get();
     }
 
     static Function<GegnerHatGameGewonnen, Satz> gegnerHatGameGewonnen(LaufenderSatz prev) {
         return evt -> Option.of(prev)
-                .map(LaufenderSatz::gegnerGewinneGame)
+                .map(state -> LaufenderSatz.handleEvent(state, evt))
                 .get();
     }
 }
