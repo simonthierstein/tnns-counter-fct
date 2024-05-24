@@ -20,6 +20,30 @@ import java.util.function.Function;
 public interface Satz {
 
 
+    static Either<DomainError, DomainEvent> handleCommand(Satz prev, DomainEvent event) {
+        return apply(prev,
+                state -> handleLaufenderSatzCmd(state, event),
+                state -> handleAbgeschlossenerSatzCmd(state, event)
+        );
+    }
+
+    static Either<DomainError, DomainEvent> handleLaufenderSatzCmd(LaufenderSatz state, DomainEvent event) {
+        return DomainEvent.handleEvent(
+                event,
+                left(eventToError(state, "handleLaufenderSatzCmd")),
+                left(eventToError(state, "handleLaufenderSatzCmd")),
+                right(x -> LaufenderSatz.spielerGewinneGameCmd(state, x)),
+                right(x -> LaufenderSatz.gegnerGewinneGameCmd(state, x)),
+                left(eventToError(state, "handleLaufenderSatzCmd")),
+                left(eventToError(state, "handleLaufenderSatzCmd")),
+                left(eventToError(state, "handleLaufenderSatzCmd"))
+        );
+    }
+
+    static Either<DomainError, DomainEvent> handleAbgeschlossenerSatzCmd(AbgeschlossenerSatz state, DomainEvent event) {
+        return null;
+    }
+
     static Either<DomainError, Satz> handleEvent(Satz prev, DomainEvent event) {
         return apply(prev,
                 state -> handleLaufenderSatz(state, event),
@@ -64,12 +88,16 @@ public interface Satz {
         );
     }
 
-    private static <I extends DomainEvent, L extends DomainError, R extends Satz> Function<I, Either<L, Satz>> right(Function<I, R> inputFunction) {
+    private static <I extends DomainEvent, L extends DomainError, R> Function<I, Either<L, R>> right(Function<I, R> inputFunction) {
         return i -> Either.<L, I>right(i).map(inputFunction);
     }
 
-    private static <I extends DomainEvent, L extends DomainError, R extends Satz> Function<I, Either<DomainError, R>> left(Function<I, L> inputFunction) {
+    private static <I extends DomainEvent, L extends DomainError, R> Function<I, Either<DomainError, R>> left(Function<I, L> inputFunction) {
         return i -> Either.<I, R>left(i).mapLeft(inputFunction);
+    }
+
+    private static <E extends DomainEvent> Function<E, DomainError> eventToError(Satz state, String command) {
+        return event -> new DomainError.InvalidCommandForSatz(state, command);
     }
 
     private static <E extends DomainEvent> Function<E, DomainError> eventToError(Satz state) {
