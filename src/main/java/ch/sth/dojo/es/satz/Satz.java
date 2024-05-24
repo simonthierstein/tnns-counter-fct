@@ -11,11 +11,8 @@ import static io.vavr.Predicates.instanceOf;
 
 import ch.sth.dojo.es.DomainError;
 import ch.sth.dojo.es.events.DomainEvent;
-import ch.sth.dojo.es.events.GegnerHatGameGewonnen;
-import ch.sth.dojo.es.events.SpielerHatGameGewonnen;
 import io.vavr.Function2;
 import io.vavr.control.Either;
-import io.vavr.control.Option;
 import java.util.function.Function;
 
 public interface Satz {
@@ -44,6 +41,9 @@ public interface Satz {
     static Either<DomainError, DomainEvent> handleAbgeschlossenerSatzCmd(AbgeschlossenerSatz state, DomainEvent event) {
         return null;
     }
+
+
+    // event
 
     static Either<DomainError, Satz> handleEvent(Satz prev, DomainEvent event) {
         return apply(prev,
@@ -117,15 +117,4 @@ public interface Satz {
         return event -> new DomainError.InvalidEventForSatz(state, event);
     }
 
-    static Function<SpielerHatGameGewonnen, Satz> spielerHatGameGewonnen(LaufenderSatz prev) {
-        return evt -> Option.of(prev)
-                .map(state -> LaufenderSatz.spielerHatGameGewonnen().apply(state, evt))
-                .get();
-    }
-
-    static Function<GegnerHatGameGewonnen, Satz> gegnerHatGameGewonnen(LaufenderSatz prev) {
-        return evt -> Option.of(prev)
-                .map(state -> LaufenderSatz.gegnerHatGameGewonnen().apply(state, evt))
-                .get();
-    }
 }
