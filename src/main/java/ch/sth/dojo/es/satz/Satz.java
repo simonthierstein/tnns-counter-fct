@@ -5,7 +5,9 @@
 package ch.sth.dojo.es.satz;
 
 import static ch.sth.dojo.es.satz.AbgeschlossenerSatz.handleAbgeschlossenerSatz;
+import static ch.sth.dojo.es.satz.AbgeschlossenerSatz.handleAbgeschlossenerSatzCmd;
 import static ch.sth.dojo.es.satz.LaufenderSatz.handleLaufenderSatz;
+import static ch.sth.dojo.es.satz.LaufenderSatz.handleLaufenderSatzCmd;
 import static io.vavr.API.$;
 import static io.vavr.API.Case;
 import static io.vavr.API.Match;
@@ -19,29 +21,13 @@ import java.util.function.Function;
 
 public interface Satz {
 
+    // command
 
     static Either<DomainError, DomainEvent> handleCommand(Satz prev, DomainEvent event) {
         return apply(prev,
                 state -> handleLaufenderSatzCmd(state, event),
                 state -> handleAbgeschlossenerSatzCmd(state, event)
         );
-    }
-
-    static Either<DomainError, DomainEvent> handleLaufenderSatzCmd(LaufenderSatz state, DomainEvent event) {
-        return DomainEvent.handleEvent(
-                event,
-                left(eventToError(state, "handleLaufenderSatzCmd")),
-                left(eventToError(state, "handleLaufenderSatzCmd")),
-                right(x -> LaufenderSatz.spielerGewinneGameCmd(state, x)),
-                right(x -> LaufenderSatz.gegnerGewinneGameCmd(state, x)),
-                left(eventToError(state, "handleLaufenderSatzCmd")),
-                left(eventToError(state, "handleLaufenderSatzCmd")),
-                left(eventToError(state, "handleLaufenderSatzCmd"))
-        );
-    }
-
-    static Either<DomainError, DomainEvent> handleAbgeschlossenerSatzCmd(AbgeschlossenerSatz state, DomainEvent event) {
-        return null;
     }
 
 
@@ -58,12 +44,11 @@ public interface Satz {
         return LaufenderSatz.zero();
     }
 
-
+    // util
 
     private static <T> T apply(final Satz prev,
                                Function<LaufenderSatz, T> f1,
-                               Function<AbgeschlossenerSatz, T> f2
-    ) {
+                               Function<AbgeschlossenerSatz, T> f2) {
         return Match(prev).of(
                 Case($(instanceOf(LaufenderSatz.class)), f1),
                 Case($(instanceOf(AbgeschlossenerSatz.class)), f2)

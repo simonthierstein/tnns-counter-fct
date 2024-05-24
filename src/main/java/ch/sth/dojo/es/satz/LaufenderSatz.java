@@ -29,14 +29,27 @@ public record LaufenderSatz(List<Punkt> punkteSpieler, List<Punkt> punkteGegner)
 
     //command
 
-    static DomainEvent spielerGewinneGameCmd(LaufenderSatz state, SpielerHatGameGewonnen event) {
+    public static Either<DomainError, DomainEvent> handleLaufenderSatzCmd(LaufenderSatz state, DomainEvent event) {
+        return DomainEvent.handleEvent(
+                event,
+                Satz.left(Satz.eventToError(state, "handleLaufenderSatzCmd")),
+                Satz.left(Satz.eventToError(state, "handleLaufenderSatzCmd")),
+                Satz.right(x -> spielerGewinneGameCmd(state, x)),
+                Satz.right(x -> gegnerGewinneGameCmd(state, x)),
+                Satz.left(Satz.eventToError(state, "handleLaufenderSatzCmd")),
+                Satz.left(Satz.eventToError(state, "handleLaufenderSatzCmd")),
+                Satz.left(Satz.eventToError(state, "handleLaufenderSatzCmd"))
+        );
+    }
+
+    private static DomainEvent spielerGewinneGameCmd(LaufenderSatz state, SpielerHatGameGewonnen event) {
         return Routing.selection(state.incrementSpieler(),
                 LaufenderSatz::passIfSpielerWon,
                 toAbgeschlossenEventSpieler(),
                 toLaufendEvent(event));
     }
 
-    static DomainEvent gegnerGewinneGameCmd(final LaufenderSatz state, final GegnerHatGameGewonnen event) {
+    private static DomainEvent gegnerGewinneGameCmd(final LaufenderSatz state, final GegnerHatGameGewonnen event) {
         return Routing.selection(state.incrementGegner(),
                 LaufenderSatz::passIfGegnerWon,
                 toAbgeschlossenEventGegner(),
@@ -56,38 +69,35 @@ public record LaufenderSatz(List<Punkt> punkteSpieler, List<Punkt> punkteGegner)
     }
 
 
+
     //event
+    static Either<DomainError, Satz> handleLaufenderSatz(final LaufenderSatz state, final DomainEvent event) {
+        return DomainEvent.handleEventF2(
+                event, state,
+                Satz.leftF2(Satz.eventToErrorF2()),
+                Satz.leftF2(Satz.eventToErrorF2()),
+                Satz.rightF2(spielerHatGameGewonnen()),
+                Satz.rightF2(gegnerHatGameGewonnen()),
+                Satz.leftF2(Satz.eventToErrorF2()),
+                Satz.rightF2(spielerHatSatzGewonnen()),
+                Satz.rightF2(gegnerHatSatzGewonnen())
+        );
+    }
 
     static Function2<LaufenderSatz, SpielerHatGameGewonnen, Satz> spielerHatGameGewonnen() {
-        return LaufenderSatz::handleEvent;
+        return (state, event) -> toLaufenderSatzSpieler().apply(state);
     }
 
     static Function2<LaufenderSatz, GegnerHatGameGewonnen, Satz> gegnerHatGameGewonnen() {
-        return LaufenderSatz::handleEvent;
+        return (state, event) -> toLaufenderSatzGegner().apply(state);
     }
 
     static Function2<LaufenderSatz, SpielerHatSatzGewonnen, Satz> spielerHatSatzGewonnen() {
-        return LaufenderSatz::handleEvent;
+        return (state, event) -> toAbgeschlossenerSatz().apply(state);
     }
 
     static Function2<LaufenderSatz, GegnerHatSatzGewonnen, Satz> gegnerHatSatzGewonnen() {
-        return LaufenderSatz::handleEvent;
-    }
-
-    private static Satz handleEvent(LaufenderSatz state, SpielerHatGameGewonnen event) {
-        return toLaufenderSatzSpieler().apply(state);
-    }
-
-    private static Satz handleEvent(LaufenderSatz state, GegnerHatGameGewonnen event) {
-        return toLaufenderSatzGegner().apply(state);
-    }
-
-    private static Satz handleEvent(LaufenderSatz state, GegnerHatSatzGewonnen event) {
-        return toAbgeschlossenerSatz().apply(state);
-    }
-
-    private static Satz handleEvent(LaufenderSatz state, SpielerHatSatzGewonnen event) {
-        return toAbgeschlossenerSatz().apply(state);
+        return (state, event) -> toAbgeschlossenerSatz().apply(state);
     }
 
 
@@ -116,19 +126,6 @@ public record LaufenderSatz(List<Punkt> punkteSpieler, List<Punkt> punkteGegner)
                 .filter(Predicates.anyOf(x -> x.punkteGegner.size() == 6 && x.punkteSpieler.size() <= 4,
                         x -> x.punkteGegner.size() == 7))
                 .isDefined();
-    }
-
-    static Either<DomainError, Satz> handleLaufenderSatz(final LaufenderSatz state, final DomainEvent event) {
-        return DomainEvent.handleEventF2(
-                event, state,
-                Satz.leftF2(Satz.eventToErrorF2()),
-                Satz.leftF2(Satz.eventToErrorF2()),
-                Satz.rightF2(spielerHatGameGewonnen()),
-                Satz.rightF2(gegnerHatGameGewonnen()),
-                Satz.leftF2(Satz.eventToErrorF2()),
-                Satz.rightF2(spielerHatSatzGewonnen()),
-                Satz.rightF2(gegnerHatSatzGewonnen())
-        );
     }
 
     private LaufenderSatz incrementSpieler() {
