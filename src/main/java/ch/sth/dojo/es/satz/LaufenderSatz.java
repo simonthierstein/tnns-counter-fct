@@ -8,8 +8,6 @@ import static ch.sth.dojo.es.game.Punkt.punkt;
 import static ch.sth.dojo.es.satz.Satz.narrowSatz;
 
 import ch.sth.dojo.es.Routing;
-import ch.sth.dojo.es.events.GegnerHatGameGewonnen;
-import ch.sth.dojo.es.events.SpielerHatGameGewonnen;
 import ch.sth.dojo.es.game.Punkt;
 import io.vavr.collection.List;
 import io.vavr.control.Option;
@@ -25,42 +23,24 @@ public record LaufenderSatz(List<Punkt> punkteSpieler, List<Punkt> punkteGegner)
         return laufenderSatz -> new LaufenderSatz(laufenderSatz.punkteSpieler.append(punkt()), laufenderSatz.punkteGegner);
     }
 
-    static Function<LaufenderSatz, AbgeschlossenerSatz> toAbgeschlossenerSatz() {
-        return laufenderSatz -> new AbgeschlossenerSatz(laufenderSatz.punkteSpieler.size(), laufenderSatz.punkteGegner.size());
-    }
-
     static Function<LaufenderSatz, LaufenderSatz> toLaufenderSatzGegner() {
         return laufenderSatz -> new LaufenderSatz(laufenderSatz.punkteSpieler, laufenderSatz.punkteGegner.append(punkt()));
     }
 
-    static Function<SpielerHatGameGewonnen, Satz> spielerHatGameGewonnen(LaufenderSatz prev) {
-        return evt -> Option.of(prev)
-                .map(spielerGewinneGame())
-                .get();
+    static Function<LaufenderSatz, AbgeschlossenerSatz> toAbgeschlossenerSatz() {
+        return laufenderSatz -> new AbgeschlossenerSatz(laufenderSatz.punkteSpieler.size(), laufenderSatz.punkteGegner.size());
     }
 
-    static Function<GegnerHatGameGewonnen, Satz> gegnerHatGameGewonnen(LaufenderSatz prev) {
-        return evt -> gegnerGewinneGame().apply(prev);
-    }
 
-    public static Function<LaufenderSatz, Satz> spielerGewinneGame() {
-        return prev -> spielerGewinneGame(prev);
-    }
-
-    public static Function<LaufenderSatz, Satz> gegnerGewinneGame() {
-        return prev -> gegnerGewinneGame(prev);
-
-    }
-
-    private static Satz spielerGewinneGame(final LaufenderSatz prev) {
-        return Routing.selective2Split(prev,
+    static Satz spielerGewinneGame(final LaufenderSatz prev) {
+        return Routing.selection(prev,
                 LaufenderSatz::passIfSpielerWon,
                 narrowSatz(toAbgeschlossenerSatz()),
                 narrowSatz(toLaufenderSatzSpieler()));
     }
 
-    private static Satz gegnerGewinneGame(final LaufenderSatz prev) {
-        return Routing.selective2Split(prev,
+    static Satz gegnerGewinneGame(final LaufenderSatz prev) {
+        return Routing.selection(prev,
                 LaufenderSatz::passIfGegnerWon,
                 narrowSatz(toAbgeschlossenerSatz()),
                 narrowSatz(toLaufenderSatzGegner()));

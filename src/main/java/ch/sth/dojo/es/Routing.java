@@ -22,10 +22,10 @@ public final class Routing {
 
     }
 
-    public static <T, R> R selective2Split(T prev,
-                                           Predicate<T> split,
-                                           Function<T, R> positiveHandler,
-                                           Function<T, R> negativeHandler) {
+    public static <T, R> R selection(T prev,
+                                     Predicate<T> split,
+                                     Function<T, R> positiveHandler,
+                                     Function<T, R> negativeHandler) {
         return Option.some(prev)
                 .filter(split)
                 .map(positiveHandler)
