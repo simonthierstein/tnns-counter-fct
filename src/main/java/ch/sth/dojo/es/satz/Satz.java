@@ -56,19 +56,6 @@ public interface Satz {
         return Either.left(new DomainError.InvalidEventForSatz(state, event));
     }
 
-    private static Either<DomainError, Satz> handleLaufenderSatzn(final LaufenderSatz state, final DomainEvent event) {
-        return DomainEvent.handleEvent(
-                event,
-                left(eventToError(state)),
-                left(eventToError(state)),
-                right(x -> LaufenderSatz.handleEvent(state, x)),
-                right(x -> LaufenderSatz.handleEvent(state, x)),
-                left(eventToError(state)),
-                right(x -> LaufenderSatz.handleEvent(state, x)),
-                right(x -> LaufenderSatz.handleEvent(state, x))
-        );
-    }
-
     private static Either<DomainError, Satz> handleLaufenderSatz(final LaufenderSatz state, final DomainEvent event) {
         return DomainEvent.handleEventF2(
                 event, state,
@@ -132,13 +119,13 @@ public interface Satz {
 
     static Function<SpielerHatGameGewonnen, Satz> spielerHatGameGewonnen(LaufenderSatz prev) {
         return evt -> Option.of(prev)
-                .map(state -> LaufenderSatz.handleEvent(state, evt))
+                .map(state -> LaufenderSatz.spielerHatGameGewonnen().apply(state, evt))
                 .get();
     }
 
     static Function<GegnerHatGameGewonnen, Satz> gegnerHatGameGewonnen(LaufenderSatz prev) {
         return evt -> Option.of(prev)
-                .map(state -> LaufenderSatz.handleEvent(state, evt))
+                .map(state -> LaufenderSatz.gegnerHatGameGewonnen().apply(state, evt))
                 .get();
     }
 }

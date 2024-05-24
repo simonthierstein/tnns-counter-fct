@@ -72,19 +72,19 @@ public record LaufenderSatz(List<Punkt> punkteSpieler, List<Punkt> punkteGegner)
         return LaufenderSatz::handleEvent;
     }
 
-    static Satz handleEvent(LaufenderSatz state, SpielerHatGameGewonnen event) {
+    private static Satz handleEvent(LaufenderSatz state, SpielerHatGameGewonnen event) {
         return toLaufenderSatzSpieler().apply(state);
     }
 
-    static Satz handleEvent(LaufenderSatz state, GegnerHatGameGewonnen event) {
+    private static Satz handleEvent(LaufenderSatz state, GegnerHatGameGewonnen event) {
         return toLaufenderSatzGegner().apply(state);
     }
 
-    static Satz handleEvent(LaufenderSatz state, GegnerHatSatzGewonnen event) {
+    private static Satz handleEvent(LaufenderSatz state, GegnerHatSatzGewonnen event) {
         return toAbgeschlossenerSatz().apply(state);
     }
 
-    static Satz handleEvent(LaufenderSatz state, SpielerHatSatzGewonnen event) {
+    private static Satz handleEvent(LaufenderSatz state, SpielerHatSatzGewonnen event) {
         return toAbgeschlossenerSatz().apply(state);
     }
 
