@@ -4,8 +4,6 @@
 
 package ch.sth.dojo.es.satz;
 
-import static ch.sth.dojo.es.events.GegnerHatSatzGewonnen.gegnerHatSatzGewonnen;
-import static ch.sth.dojo.es.events.SpielerHatSatzGewonnen.spielerHatSatzGewonnen;
 import static ch.sth.dojo.es.game.Punkt.punkt;
 import static ch.sth.dojo.es.satz.AbgeschlossenerSatz.AbgeschlossenerSatz;
 
@@ -16,6 +14,7 @@ import ch.sth.dojo.es.events.GegnerHatSatzGewonnen;
 import ch.sth.dojo.es.events.SpielerHatGameGewonnen;
 import ch.sth.dojo.es.events.SpielerHatSatzGewonnen;
 import ch.sth.dojo.es.game.Punkt;
+import io.vavr.Function2;
 import io.vavr.Predicates;
 import io.vavr.collection.List;
 import io.vavr.control.Option;
@@ -47,15 +46,31 @@ public record LaufenderSatz(List<Punkt> punkteSpieler, List<Punkt> punkteGegner)
     }
 
     private static Function<LaufenderSatz, DomainEvent> toAbgeschlossenEventSpieler() {
-        return prev -> spielerHatSatzGewonnen();
+        return prev -> SpielerHatSatzGewonnen.spielerHatSatzGewonnen();
     }
 
     private static Function<LaufenderSatz, DomainEvent> toAbgeschlossenEventGegner() {
-        return prev -> gegnerHatSatzGewonnen();
+        return prev -> GegnerHatSatzGewonnen.gegnerHatSatzGewonnen();
     }
 
 
     //event
+
+    static Function2<LaufenderSatz, SpielerHatGameGewonnen, Satz> spielerHatGameGewonnen() {
+        return LaufenderSatz::handleEvent;
+    }
+
+    static Function2<LaufenderSatz, GegnerHatGameGewonnen, Satz> gegnerHatGameGewonnen() {
+        return LaufenderSatz::handleEvent;
+    }
+
+    static Function2<LaufenderSatz, SpielerHatSatzGewonnen, Satz> spielerHatSatzGewonnen() {
+        return LaufenderSatz::handleEvent;
+    }
+
+    static Function2<LaufenderSatz, GegnerHatSatzGewonnen, Satz> gegnerHatSatzGewonnen() {
+        return LaufenderSatz::handleEvent;
+    }
 
     static Satz handleEvent(LaufenderSatz state, SpielerHatGameGewonnen event) {
         return toLaufenderSatzSpieler().apply(state);

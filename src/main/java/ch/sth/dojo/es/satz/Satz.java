@@ -13,6 +13,7 @@ import ch.sth.dojo.es.DomainError;
 import ch.sth.dojo.es.events.DomainEvent;
 import ch.sth.dojo.es.events.GegnerHatGameGewonnen;
 import ch.sth.dojo.es.events.SpielerHatGameGewonnen;
+import io.vavr.Function2;
 import io.vavr.control.Either;
 import io.vavr.control.Option;
 import java.util.function.Function;
@@ -55,7 +56,7 @@ public interface Satz {
         return Either.left(new DomainError.InvalidEventForSatz(state, event));
     }
 
-    private static Either<DomainError, Satz> handleLaufenderSatz(final LaufenderSatz state, final DomainEvent event) {
+    private static Either<DomainError, Satz> handleLaufenderSatzn(final LaufenderSatz state, final DomainEvent event) {
         return DomainEvent.handleEvent(
                 event,
                 left(eventToError(state)),
@@ -66,6 +67,23 @@ public interface Satz {
                 right(x -> LaufenderSatz.handleEvent(state, x)),
                 right(x -> LaufenderSatz.handleEvent(state, x))
         );
+    }
+
+    private static Either<DomainError, Satz> handleLaufenderSatz(final LaufenderSatz state, final DomainEvent event) {
+        return DomainEvent.handleEventF2(
+                event, state,
+                leftF2(eventToErrorF2()),
+                leftF2(eventToErrorF2()),
+                rightF2(LaufenderSatz.spielerHatGameGewonnen()),
+                rightF2(LaufenderSatz.gegnerHatGameGewonnen()),
+                leftF2(eventToErrorF2()),
+                rightF2(LaufenderSatz.spielerHatSatzGewonnen()),
+                rightF2(LaufenderSatz.gegnerHatSatzGewonnen())
+        );
+    }
+
+    private static <S extends Satz, E extends DomainEvent> Function2<S, E, DomainError> eventToErrorF2() {
+        return DomainError.InvalidEventForSatz::new;
     }
 
     static Satz zero() {
@@ -86,6 +104,14 @@ public interface Satz {
                 Case($(instanceOf(LaufenderSatz.class)), f1),
                 Case($(instanceOf(AbgeschlossenerSatz.class)), f2)
         );
+    }
+
+    private static <S, E extends DomainEvent, L extends DomainError, R> Function2<S, E, Either<L, R>> rightF2(Function2<S, E, R> inputFunction) {
+        return (s, e) -> Either.<L, E>right(e).map(inputFunction.apply(s));
+    }
+
+    private static <S, E extends DomainEvent, L extends DomainError, R> Function2<S, E, Either<L, R>> leftF2(Function2<S, E, L> inputFunction) {
+        return (s, e) -> Either.<E, R>left(e).mapLeft(inputFunction.apply(s));
     }
 
     private static <I extends DomainEvent, L extends DomainError, R> Function<I, Either<L, R>> right(Function<I, R> inputFunction) {
