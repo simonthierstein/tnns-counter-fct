@@ -34,7 +34,7 @@ public class LaufendesGame implements Game {
         return new LaufendesGame(increment(prev.punkteSpieler), prev.punkteGegner);
     }
 
-    public static List<Punkt> increment(final List<Punkt> prev) {
+    private static List<Punkt> increment(final List<Punkt> prev) {
         return prev.append(punkt());
     }
 }
