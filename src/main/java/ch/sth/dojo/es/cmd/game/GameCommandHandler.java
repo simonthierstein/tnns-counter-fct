@@ -1,7 +1,7 @@
-package ch.sth.dojo.es.cmd;
+package ch.sth.dojo.es.cmd.game;
 
 import static ch.sth.dojo.es.Routing.selective2SplitEither;
-import static ch.sth.dojo.es.cmd.GameCommandHandler.invalidCommandForState;
+import static ch.sth.dojo.es.cmd.game.GameCommandHandler.invalidCommandForState;
 
 import ch.sth.dojo.es.DomainError;
 import ch.sth.dojo.es.events.DomainEvent;

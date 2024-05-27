@@ -1,7 +1,7 @@
-package ch.sth.dojo.es.cmd;
+package ch.sth.dojo.es.cmd.satz;
 
-import static ch.sth.dojo.es.cmd.AbgeschlossenerSatzCommandHandler.handleAbgeschlossenerSatzCmd;
-import static ch.sth.dojo.es.cmd.LaufenderSatzCommandHandler.handleLaufenderSatzCmd;
+import static ch.sth.dojo.es.cmd.satz.AbgeschlossenerSatzCommandHandler.handleAbgeschlossenerSatzCmd;
+import static ch.sth.dojo.es.cmd.satz.LaufenderSatzCommandHandler.handleLaufenderSatzCmd;
 
 import ch.sth.dojo.es.DomainError;
 import ch.sth.dojo.es.events.DomainEvent;

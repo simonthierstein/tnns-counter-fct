@@ -1,4 +1,4 @@
-package ch.sth.dojo.es.evt;
+package ch.sth.dojo.es.evt.game;
 
 import ch.sth.dojo.es.DomainError;
 import ch.sth.dojo.es.Util;

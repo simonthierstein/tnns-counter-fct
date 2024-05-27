@@ -2,7 +2,7 @@
  * Copyright (C) Schweizerische Bundesbahnen SBB, 2024.
  */
 
-package ch.sth.dojo.es.evt;
+package ch.sth.dojo.es.evt.satz;
 
 import static ch.sth.dojo.es.satz.AbgeschlossenerSatz.AbgeschlossenerSatz;
 

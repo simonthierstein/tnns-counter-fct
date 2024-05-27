@@ -7,13 +7,13 @@ package ch.sth.dojo.es.game;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import ch.sth.dojo.es.DomainError;
-import ch.sth.dojo.es.cmd.SatzCommandHandler;
+import ch.sth.dojo.es.cmd.satz.SatzCommandHandler;
 import ch.sth.dojo.es.events.DomainEvent;
 import ch.sth.dojo.es.events.GegnerHatGameGewonnen;
 import ch.sth.dojo.es.events.GegnerHatSatzGewonnen;
 import ch.sth.dojo.es.events.SpielerHatGameGewonnen;
 import ch.sth.dojo.es.events.SpielerHatSatzGewonnen;
-import ch.sth.dojo.es.evt.SatzEventHandler;
+import ch.sth.dojo.es.evt.satz.SatzEventHandler;
 import ch.sth.dojo.es.satz.AbgeschlossenerSatz;
 import ch.sth.dojo.es.satz.LaufenderSatz;
 import ch.sth.dojo.es.satz.Satz;
