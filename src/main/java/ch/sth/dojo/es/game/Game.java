@@ -11,9 +11,12 @@ import static io.vavr.Predicates.instanceOf;
 import ch.sth.dojo.es.DomainError;
 import ch.sth.dojo.es.events.DomainEvent;
 import ch.sth.dojo.es.events.GameErzeugt;
-import ch.sth.dojo.es.game.trans.Laufend2Abgeschlossen;
-import ch.sth.dojo.es.game.trans.Laufend2Laufend;
-import ch.sth.dojo.es.game.trans.Pre2Laufend;
+import ch.sth.dojo.es.game.trans.Laufend2AbgeschlossenCommandHandler;
+import ch.sth.dojo.es.game.trans.Laufend2AbgeschlossenEventHandler;
+import ch.sth.dojo.es.game.trans.Laufend2LaufendCommandHandler;
+import ch.sth.dojo.es.game.trans.Laufend2LaufendEventHandler;
+import ch.sth.dojo.es.game.trans.Pre2LaufendCommandHandler;
+import ch.sth.dojo.es.game.trans.Pre2LaufendEventHandler;
 import io.vavr.Function2;
 import io.vavr.collection.List;
 import io.vavr.control.Either;
@@ -23,7 +26,7 @@ import java.util.function.Predicate;
 public interface Game {
 
     static Function<PreInitializedGame, GameErzeugt> erzeugeGame() {
-        return Pre2Laufend.erzeugeGame();
+        return Pre2LaufendCommandHandler.erzeugeGame();
     }
 
     static Function2<Game, DomainEvent, Either<DomainError, Game>> handleEvent() {
@@ -52,16 +55,16 @@ public interface Game {
     static Function<LaufendesGame, Either<DomainError, DomainEvent>> laufendesGameHandleGegnerPunktet() {
         return in -> selective2SplitEither(in,
                 passIfGegnerSize4(),
-                Laufend2Abgeschlossen.gegnerGewinneGame(),
-                Laufend2Laufend.gegnerGewinnePunkt()
+                Laufend2AbgeschlossenCommandHandler.gegnerGewinneGame(),
+                Laufend2LaufendCommandHandler.gegnerGewinnePunkt()
         );
     }
 
     private static Function<LaufendesGame, Either<DomainError, DomainEvent>> laufendesGameHandleSpielerPunktet() {
         return in -> selective2SplitEither(in,
                 passIfSpielerSize4(),
-                Laufend2Abgeschlossen.spielerGewinneGame(),
-                Laufend2Laufend.spielerGewinnePunkt());
+                Laufend2AbgeschlossenCommandHandler.spielerGewinneGame(),
+                Laufend2LaufendCommandHandler.spielerGewinnePunkt());
     }
 
     private static <T> T apply(Game game, Function<LaufendesGame, T> laufendesGameTFunction, Function<AbgeschlossenesGame, T> abgeschlossenesGameTFunction,
@@ -79,7 +82,7 @@ public interface Game {
                 left(eventToError(preInitializedGame)),
                 left(eventToError(preInitializedGame)),
                 left(eventToError(preInitializedGame)),
-                right(Pre2Laufend.gameErzeugt()),
+                right(Pre2LaufendEventHandler.gameErzeugt()),
                 left(eventToError(preInitializedGame)),
                 left(eventToError(preInitializedGame))
         );
@@ -91,10 +94,10 @@ public interface Game {
 
     private static Either<DomainError, Game> handleLaufendesGame(final LaufendesGame laufendesGame, final DomainEvent event) {
         return DomainEvent.handleEvent(event,
-                right(Laufend2Laufend.shpg(laufendesGame)),
-                right(Laufend2Laufend.ghpg(laufendesGame)),
-                right(Laufend2Abgeschlossen.shgg(laufendesGame)),
-                right(Laufend2Abgeschlossen.ghgg(laufendesGame)),
+                right(Laufend2LaufendEventHandler.shpg(laufendesGame)),
+                right(Laufend2LaufendEventHandler.ghpg(laufendesGame)),
+                right(Laufend2AbgeschlossenEventHandler.shgg(laufendesGame)),
+                right(Laufend2AbgeschlossenEventHandler.ghgg(laufendesGame)),
                 left(eventToError(laufendesGame)),
                 left(eventToError(laufendesGame)),
                 left(eventToError(laufendesGame))

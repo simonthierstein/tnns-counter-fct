@@ -17,15 +17,7 @@ import io.vavr.collection.List;
 import io.vavr.control.Either;
 import java.util.function.Function;
 
-public class Laufend2Laufend {
-
-    public static Function<GegnerHatPunktGewonnen, LaufendesGame> ghpg(LaufendesGame prev) {
-        return event -> LaufendesGame.incrementGegner(prev);
-    }
-
-    public static Function<SpielerHatPunktGewonnen, LaufendesGame> shpg(LaufendesGame prev) {
-        return event -> LaufendesGame.incrementSpieler(prev);
-    }
+public class Laufend2LaufendCommandHandler {
 
     public static Function<LaufendesGame, Either<DomainError, DomainEvent>> spielerGewinnePunkt() {
         return laufendesGame -> Either.right(SpielerHatPunktGewonnen(LaufendesGame.incrementSpieler(laufendesGame).punkteSpieler, laufendesGame.punkteGegner));
@@ -42,4 +34,8 @@ public class Laufend2Laufend {
     private static GegnerHatPunktGewonnen GegnerHatPunktGewonnen(final List<Punkt> punkteSpieler, final List<Punkt> punkteGegner) {
         return gegnerHatPunktGewonnen();
     }
+
+
 }
+
+

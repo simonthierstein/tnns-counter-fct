@@ -5,20 +5,14 @@
 package ch.sth.dojo.es.game.trans;
 
 import ch.sth.dojo.es.events.GameErzeugt;
-import ch.sth.dojo.es.game.Game;
-import ch.sth.dojo.es.game.LaufendesGame;
 import ch.sth.dojo.es.game.PreInitializedGame;
 import java.util.function.Function;
 
-public class Pre2Laufend {
+public class Pre2LaufendCommandHandler {
     //cmd
     public static Function<PreInitializedGame, GameErzeugt> erzeugeGame() {
         return x -> GameErzeugt.gameErzeugt();
     }
 
-    //evt
-    public static Function<GameErzeugt, Game> gameErzeugt() {
-        return gameErzeugt -> LaufendesGame.initial();
-    }
-
 }
+
