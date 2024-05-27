@@ -5,9 +5,11 @@ import static ch.sth.dojo.es.cmd.GameCommandHandler.invalidCommandForState;
 
 import ch.sth.dojo.es.DomainError;
 import ch.sth.dojo.es.events.DomainEvent;
+import ch.sth.dojo.es.events.GameErzeugt;
 import ch.sth.dojo.es.evt.GameEventHandler;
 import ch.sth.dojo.es.game.Game;
 import ch.sth.dojo.es.game.LaufendesGame;
+import ch.sth.dojo.es.game.PreInitializedGame;
 import io.vavr.control.Either;
 import java.util.function.Function;
 
@@ -49,5 +51,9 @@ public interface GameCommandHandler {
 
     static Either<DomainError, DomainEvent> invalidCommandForState(final Game prev, final String commandAsString) {
         return Either.left(new DomainError.InvalidCommandForGame(prev, commandAsString));
+    }
+
+    static Function<PreInitializedGame, GameErzeugt> erzeugeGame() {
+        return Pre2LaufendCommandHandler.erzeugeGame();
     }
 }
