@@ -1,10 +1,5 @@
 package ch.sth.dojo.es.evt;
 
-import static io.vavr.API.$;
-import static io.vavr.API.Case;
-import static io.vavr.API.Match;
-import static io.vavr.Predicates.instanceOf;
-
 import ch.sth.dojo.es.DomainError;
 import ch.sth.dojo.es.Util;
 import ch.sth.dojo.es.events.DomainEvent;
@@ -18,19 +13,10 @@ import java.util.function.Function;
 
 public interface GameEventHandler {
     static Function2<Game, DomainEvent, Either<DomainError, Game>> handleEvent() {
-        return (state, event) -> apply(state,
+        return (state, event) -> Game.apply(state,
                 laufendesGame -> handleLaufendesGame(laufendesGame, event),
                 abgeschlossenesGame -> handleAbgeschlossenesGame(abgeschlossenesGame, event),
                 preInitializedGame -> handlePreInitializedGame(preInitializedGame, event));
-    }
-
-    static <T> T apply(Game game, Function<LaufendesGame, T> laufendesGameTFunction, Function<AbgeschlossenesGame, T> abgeschlossenesGameTFunction,
-                       Function<PreInitializedGame, T> preInitializedGameTFunction) {
-        return Match(game).of(
-                Case($(instanceOf(LaufendesGame.class)), laufendesGameTFunction),
-                Case($(instanceOf(AbgeschlossenesGame.class)), abgeschlossenesGameTFunction),
-                Case($(instanceOf(PreInitializedGame.class)), preInitializedGameTFunction)
-        );
     }
 
     static Either<DomainError, Game> handlePreInitializedGame(PreInitializedGame preInitializedGame, DomainEvent event) {

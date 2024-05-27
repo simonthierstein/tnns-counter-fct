@@ -6,7 +6,6 @@ import static ch.sth.dojo.es.cmd.GameCommandHandler.invalidCommandForState;
 import ch.sth.dojo.es.DomainError;
 import ch.sth.dojo.es.events.DomainEvent;
 import ch.sth.dojo.es.events.GameErzeugt;
-import ch.sth.dojo.es.evt.GameEventHandler;
 import ch.sth.dojo.es.game.Game;
 import ch.sth.dojo.es.game.LaufendesGame;
 import ch.sth.dojo.es.game.PreInitializedGame;
@@ -15,7 +14,7 @@ import java.util.function.Function;
 
 public interface GameCommandHandler {
     static Function<Game, Either<DomainError, DomainEvent>> handleSpielerPunktet() {
-        return prev -> GameEventHandler.apply(prev,
+        return prev -> Game.apply(prev,
                 laufendesGameHandleSpielerPunktet(),
                 invalidCommandForState("handleSpielerPunktet"),
                 invalidCommandForState("handleSpielerPunktet")
@@ -23,7 +22,7 @@ public interface GameCommandHandler {
     }
 
     static Function<Game, Either<DomainError, DomainEvent>> handleGegnerPunktet() {
-        return game -> GameEventHandler.apply(game,
+        return game -> Game.apply(game,
                 laufendesGameHandleGegnerPunktet(),
                 invalidCommandForState("handleGegnerPunktet"),
                 invalidCommandForState("handleGegnerPunktet")
