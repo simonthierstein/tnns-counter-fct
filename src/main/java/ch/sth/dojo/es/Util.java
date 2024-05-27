@@ -5,7 +5,6 @@
 package ch.sth.dojo.es;
 
 import ch.sth.dojo.es.events.DomainEvent;
-import ch.sth.dojo.es.game.Game;
 import io.vavr.Function2;
 import io.vavr.control.Either;
 import java.util.function.Function;
@@ -28,14 +27,4 @@ public interface Util {
         return i -> Either.<I, R>left(i).mapLeft(inputFunction);
     }
 
-
-    // TODO sth/27.05.2024 :
-
-    static <I extends DomainEvent, L extends DomainError, R extends Game> Function<I, Either<L, Game>> rightGame(Function<I, R> inputFunction) {
-        return i -> Either.<L, I>right(i).map(inputFunction);
-    }
-
-    static <I extends DomainEvent, L extends DomainError, R extends Game> Function<I, Either<DomainError, R>> leftGame(Function<I, L> inputFunction) {
-        return i -> Either.<I, R>left(i).mapLeft(inputFunction);
-    }
 }

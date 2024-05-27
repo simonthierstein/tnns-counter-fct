@@ -51,17 +51,25 @@ public interface GameEventHandler {
 
     static Either<DomainError, Game> handleLaufendesGame(final LaufendesGame laufendesGame, final DomainEvent event) {
         return DomainEvent.handleEvent(event,
-                Util.rightGame(Laufend2LaufendEventHandler.shpg(laufendesGame)),
-                Util.rightGame(Laufend2LaufendEventHandler.ghpg(laufendesGame)),
-                Util.rightGame(Laufend2AbgeschlossenEventHandler.shgg(laufendesGame)),
-                Util.rightGame(Laufend2AbgeschlossenEventHandler.ghgg(laufendesGame)),
-                Util.leftGame(eventToError(laufendesGame)),
-                Util.leftGame(eventToError(laufendesGame)),
-                Util.leftGame(eventToError(laufendesGame))
+                rightGame(Laufend2LaufendEventHandler.shpg(laufendesGame)),
+                rightGame(Laufend2LaufendEventHandler.ghpg(laufendesGame)),
+                rightGame(Laufend2AbgeschlossenEventHandler.shgg(laufendesGame)),
+                rightGame(Laufend2AbgeschlossenEventHandler.ghgg(laufendesGame)),
+                leftGame(eventToError(laufendesGame)),
+                leftGame(eventToError(laufendesGame)),
+                leftGame(eventToError(laufendesGame))
         );
     }
 
     static <E extends DomainEvent> Function<E, DomainError> eventToError(Game state) {
         return event -> new DomainError.InvalidEventForGame(state, event);
+    }
+
+    static <I extends DomainEvent, L extends DomainError, R extends Game> Function<I, Either<L, Game>> rightGame(Function<I, R> inputFunction) {
+        return i -> Either.<L, I>right(i).map(inputFunction);
+    }
+
+    static <I extends DomainEvent, L extends DomainError, R extends Game> Function<I, Either<DomainError, R>> leftGame(Function<I, L> inputFunction) {
+        return i -> Either.<I, R>left(i).mapLeft(inputFunction);
     }
 }
