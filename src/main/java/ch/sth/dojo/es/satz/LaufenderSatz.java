@@ -7,7 +7,6 @@ package ch.sth.dojo.es.satz;
 import static ch.sth.dojo.es.game.Punkt.punkt;
 
 import ch.sth.dojo.es.game.Punkt;
-import io.vavr.Function2;
 import io.vavr.Predicates;
 import io.vavr.collection.List;
 import io.vavr.control.Option;
@@ -37,10 +36,6 @@ public record LaufenderSatz(List<Punkt> punkteSpieler, List<Punkt> punkteGegner)
 
     LaufenderSatz incrementGegner() {
         return new LaufenderSatz(punkteSpieler, punkteGegner.append(punkt()));
-    }
-
-    <T> T export(Function2<List<Punkt>, List<Punkt>, T> exporter) {
-        return exporter.apply(punkteSpieler, punkteGegner);
     }
 }
 

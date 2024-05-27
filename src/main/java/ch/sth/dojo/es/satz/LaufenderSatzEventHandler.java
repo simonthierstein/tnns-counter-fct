@@ -56,6 +56,6 @@ class LaufenderSatzEventHandler {
     }
 
     private static Function<LaufenderSatz, AbgeschlossenerSatz> toAbgeschlossenerSatz() {
-        return laufenderSatz -> laufenderSatz.export(((pSpieler, pGegner) -> AbgeschlossenerSatz(pSpieler.size(), pGegner.size())));
+        return laufenderSatz -> AbgeschlossenerSatz(laufenderSatz.punkteSpieler().size(), laufenderSatz.punkteGegner().size());
     }
 }
