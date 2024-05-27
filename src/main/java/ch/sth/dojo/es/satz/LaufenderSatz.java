@@ -16,25 +16,25 @@ public record LaufenderSatz(List<Punkt> punkteSpieler, List<Punkt> punkteGegner)
         return new LaufenderSatz(List.empty(), List.empty());
     }
 
-    static boolean passIfSpielerWon(final LaufenderSatz laufenderSatz) {
+    public static boolean passIfSpielerWon(final LaufenderSatz laufenderSatz) {
         return Option.of(laufenderSatz)
                 .filter(Predicates.anyOf(x -> x.punkteSpieler.size() == 6 && x.punkteGegner.size() <= 4,
                         x -> x.punkteSpieler.size() == 7))
                 .isDefined();
     }
 
-    static boolean passIfGegnerWon(final LaufenderSatz laufenderSatz) {
+    public static boolean passIfGegnerWon(final LaufenderSatz laufenderSatz) {
         return Option.of(laufenderSatz)
                 .filter(Predicates.anyOf(x -> x.punkteGegner.size() == 6 && x.punkteSpieler.size() <= 4,
                         x -> x.punkteGegner.size() == 7))
                 .isDefined();
     }
 
-    LaufenderSatz incrementSpieler() {
+    public LaufenderSatz incrementSpieler() {
         return new LaufenderSatz(punkteSpieler.append(punkt()), punkteGegner);
     }
 
-    LaufenderSatz incrementGegner() {
+    public LaufenderSatz incrementGegner() {
         return new LaufenderSatz(punkteSpieler, punkteGegner.append(punkt()));
     }
 }

@@ -2,10 +2,12 @@
  * Copyright (C) Schweizerische Bundesbahnen SBB, 2024.
  */
 
-package ch.sth.dojo.es.satz;
+package ch.sth.dojo.es.evt;
 
 import ch.sth.dojo.es.DomainError;
 import ch.sth.dojo.es.events.DomainEvent;
+import ch.sth.dojo.es.satz.AbgeschlossenerSatz;
+import ch.sth.dojo.es.satz.Satz;
 import io.vavr.control.Either;
 
 class AbgeschlossenerSatzEventHandler {

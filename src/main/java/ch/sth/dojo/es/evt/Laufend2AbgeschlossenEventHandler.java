@@ -2,7 +2,7 @@
  * Copyright (C) Schweizerische Bundesbahnen SBB, 2024.
  */
 
-package ch.sth.dojo.es.game.trans;
+package ch.sth.dojo.es.evt;
 
 import static ch.sth.dojo.es.game.AbgeschlossenesGame.abgeschlossenesGame;
 import static ch.sth.dojo.es.game.Punkt.punkt;

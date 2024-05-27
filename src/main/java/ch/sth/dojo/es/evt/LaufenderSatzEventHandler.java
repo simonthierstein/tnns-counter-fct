@@ -2,16 +2,20 @@
  * Copyright (C) Schweizerische Bundesbahnen SBB, 2024.
  */
 
-package ch.sth.dojo.es.satz;
+package ch.sth.dojo.es.evt;
 
 import static ch.sth.dojo.es.satz.AbgeschlossenerSatz.AbgeschlossenerSatz;
 
 import ch.sth.dojo.es.DomainError;
+import ch.sth.dojo.es.Util;
 import ch.sth.dojo.es.events.DomainEvent;
 import ch.sth.dojo.es.events.GegnerHatGameGewonnen;
 import ch.sth.dojo.es.events.GegnerHatSatzGewonnen;
 import ch.sth.dojo.es.events.SpielerHatGameGewonnen;
 import ch.sth.dojo.es.events.SpielerHatSatzGewonnen;
+import ch.sth.dojo.es.satz.AbgeschlossenerSatz;
+import ch.sth.dojo.es.satz.LaufenderSatz;
+import ch.sth.dojo.es.satz.Satz;
 import io.vavr.Function2;
 import io.vavr.control.Either;
 import java.util.function.Function;
@@ -21,13 +25,13 @@ class LaufenderSatzEventHandler {
     static Either<DomainError, Satz> handleLaufenderSatz(final LaufenderSatz state, final DomainEvent event) {
         return DomainEvent.handleEventF2(
                 event, state,
-                Satz.leftF2(Satz.eventToErrorF2()),
-                Satz.leftF2(Satz.eventToErrorF2()),
-                Satz.rightF2(spielerHatGameGewonnen()),
-                Satz.rightF2(gegnerHatGameGewonnen()),
-                Satz.leftF2(Satz.eventToErrorF2()),
-                Satz.rightF2(spielerHatSatzGewonnen()),
-                Satz.rightF2(gegnerHatSatzGewonnen())
+                Util.leftF2(SatzEventHandler.eventToErrorF2()),
+                Util.leftF2(SatzEventHandler.eventToErrorF2()),
+                Util.rightF2(spielerHatGameGewonnen()),
+                Util.rightF2(gegnerHatGameGewonnen()),
+                Util.leftF2(SatzEventHandler.eventToErrorF2()),
+                Util.rightF2(spielerHatSatzGewonnen()),
+                Util.rightF2(gegnerHatSatzGewonnen())
         );
     }
 

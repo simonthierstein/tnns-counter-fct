@@ -2,9 +2,8 @@
  * Copyright (C) Schweizerische Bundesbahnen SBB, 2024.
  */
 
-package ch.sth.dojo.es.game.trans;
+package ch.sth.dojo.es;
 
-import ch.sth.dojo.es.Unit;
 import ch.sth.dojo.es.game.PreInitializedGame;
 import java.util.function.Function;
 

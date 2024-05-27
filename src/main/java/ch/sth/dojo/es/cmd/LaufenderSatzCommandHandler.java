@@ -2,15 +2,18 @@
  * Copyright (C) Schweizerische Bundesbahnen SBB, 2024.
  */
 
-package ch.sth.dojo.es.satz;
+package ch.sth.dojo.es.cmd;
 
 import ch.sth.dojo.es.DomainError;
 import ch.sth.dojo.es.Routing;
+import ch.sth.dojo.es.Util;
 import ch.sth.dojo.es.events.DomainEvent;
 import ch.sth.dojo.es.events.GegnerHatGameGewonnen;
 import ch.sth.dojo.es.events.GegnerHatSatzGewonnen;
 import ch.sth.dojo.es.events.SpielerHatGameGewonnen;
 import ch.sth.dojo.es.events.SpielerHatSatzGewonnen;
+import ch.sth.dojo.es.satz.LaufenderSatz;
+import ch.sth.dojo.es.satz.Satz;
 import io.vavr.control.Either;
 import java.util.function.Function;
 
@@ -18,13 +21,13 @@ class LaufenderSatzCommandHandler {
     public static Either<DomainError, DomainEvent> handleLaufenderSatzCmd(LaufenderSatz state, DomainEvent event) {
         return DomainEvent.handleEvent(
                 event,
-                Satz.left(Satz.eventToError(state, "handleLaufenderSatzCmd")),
-                Satz.left(Satz.eventToError(state, "handleLaufenderSatzCmd")),
-                Satz.right(x -> spielerGewinneGameCmd(state, x)),
-                Satz.right(x -> gegnerGewinneGameCmd(state, x)),
-                Satz.left(Satz.eventToError(state, "handleLaufenderSatzCmd")),
-                Satz.left(Satz.eventToError(state, "handleLaufenderSatzCmd")),
-                Satz.left(Satz.eventToError(state, "handleLaufenderSatzCmd"))
+                Util.left(Satz.eventToError(state, "handleLaufenderSatzCmd")),
+                Util.left(Satz.eventToError(state, "handleLaufenderSatzCmd")),
+                Util.right(x -> spielerGewinneGameCmd(state, x)),
+                Util.right(x -> gegnerGewinneGameCmd(state, x)),
+                Util.left(Satz.eventToError(state, "handleLaufenderSatzCmd")),
+                Util.left(Satz.eventToError(state, "handleLaufenderSatzCmd")),
+                Util.left(Satz.eventToError(state, "handleLaufenderSatzCmd"))
         );
     }
 
