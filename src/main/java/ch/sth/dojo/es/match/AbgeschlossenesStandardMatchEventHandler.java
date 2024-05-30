@@ -8,8 +8,8 @@ import ch.sth.dojo.es.DomainError;
 import ch.sth.dojo.es.events.DomainEvent;
 import io.vavr.control.Either;
 
-public final class AbgeschlossenesStandardMatch implements StandardMatch {
+public final class AbgeschlossenesStandardMatchEventHandler implements StandardMatch {
     Either<DomainError, StandardMatch> handleEvent(final DomainEvent event) {
-        return null;
+        return Either.left(new DomainError.InvalidEventForMatch());
     }
 }

@@ -7,14 +7,14 @@ import static io.vavr.Predicates.instanceOf;
 
 import java.util.function.Function;
 
-public sealed interface StandardMatch permits AbgeschlossenesStandardMatch, LaufendesStandardMatch {
+public sealed interface StandardMatch permits AbgeschlossenesStandardMatchEventHandler, LaufendesStandardMatchEventHandler {
 
     public static <T> T apply(StandardMatch state,
-                              Function<LaufendesStandardMatch, T> f1,
-                              Function<AbgeschlossenesStandardMatch, T> f2) {
+                              Function<LaufendesStandardMatchEventHandler, T> f1,
+                              Function<AbgeschlossenesStandardMatchEventHandler, T> f2) {
         return Match(state).of(
-                Case($(instanceOf(LaufendesStandardMatch.class)), f1),
-                Case($(instanceOf(AbgeschlossenesStandardMatch.class)), f2)
+                Case($(instanceOf(LaufendesStandardMatchEventHandler.class)), f1),
+                Case($(instanceOf(AbgeschlossenesStandardMatchEventHandler.class)), f2)
         );
     }
 }

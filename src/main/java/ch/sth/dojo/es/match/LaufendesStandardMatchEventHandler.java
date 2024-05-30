@@ -13,7 +13,7 @@ import ch.sth.dojo.es.events.SpielerHatSatzGewonnen;
 import io.vavr.Function2;
 import io.vavr.control.Either;
 
-public final class LaufendesStandardMatch implements StandardMatch {
+public final class LaufendesStandardMatchEventHandler implements StandardMatch {
     Either<DomainError, StandardMatch> handleEvent(final DomainEvent event) {
         return DomainEvent.handleEventF2(event,
                 this,
@@ -27,11 +27,11 @@ public final class LaufendesStandardMatch implements StandardMatch {
         );
     }
 
-    private static Function2<LaufendesStandardMatch, SpielerHatSatzGewonnen, StandardMatch> spielerHatSatzGewonnen() {
+    private static Function2<LaufendesStandardMatchEventHandler, SpielerHatSatzGewonnen, StandardMatch> spielerHatSatzGewonnen() {
         return null;
     }
 
-    private static Function2<LaufendesStandardMatch, GegnerHatSatzGewonnen, StandardMatch> gegnerHatSatzGewonnen() {
+    private static Function2<LaufendesStandardMatchEventHandler, GegnerHatSatzGewonnen, StandardMatch> gegnerHatSatzGewonnen() {
         return null;
     }
 }
