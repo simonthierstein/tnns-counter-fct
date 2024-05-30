@@ -17,4 +17,7 @@ public interface DomainError {
 
     record InvalidCommandForSatz(Satz state, String command) implements DomainError {
     }
+
+    record InvalidEventForMatch() implements DomainError {
+    }
 }
