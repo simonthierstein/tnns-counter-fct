@@ -5,15 +5,16 @@
 package ch.sth.dojo.es.match;
 
 import ch.sth.dojo.es.DomainError;
-import ch.sth.dojo.es.events.DomainEvent;
 import io.vavr.control.Either;
+import io.vavr.control.Option;
 
 public record AbgeschlossenesStandardMatch(Integer punkteSpieler, Integer punkteGegner) implements StandardMatch {
-    public static AbgeschlossenesStandardMatch AbgeschlossenesStandardMatch(final Integer punkteSpieler, final Integer punkteGegner) {
-        return new AbgeschlossenesStandardMatch(punkteSpieler, punkteGegner);
+    public static Either<DomainError, AbgeschlossenesStandardMatch> AbgeschlossenesStandardMatch(final Integer punkteSpieler, final Integer punkteGegner) {
+        return Option.of(punkteSpieler).flatMap(punkteSpieler1 ->
+                        Option.of(punkteGegner).map(punkteGegner1 ->
+                                new AbgeschlossenesStandardMatch(punkteSpieler1, punkteGegner1)))
+                .toEither(new DomainError.InvalidStateForMatch());
     }
 
-    Either<DomainError, StandardMatch> handleEvent(final DomainEvent event) {
-        return Either.left(new DomainError.InvalidEventForMatch());
-    }
 }
+
