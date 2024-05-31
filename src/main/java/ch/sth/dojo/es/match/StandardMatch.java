@@ -9,7 +9,7 @@ import java.util.function.Function;
 
 public sealed interface StandardMatch permits AbgeschlossenesStandardMatch, LaufendesStandardMatch {
 
-    public static <T> T apply(StandardMatch state,
+    static <T> T apply(StandardMatch state,
                               Function<LaufendesStandardMatch, T> f1,
                               Function<AbgeschlossenesStandardMatch, T> f2) {
         return Match(state).of(
@@ -18,7 +18,4 @@ public sealed interface StandardMatch permits AbgeschlossenesStandardMatch, Lauf
         );
     }
 
-    static <T extends StandardMatch> StandardMatch narrow(T in) {
-        return in;
-    }
 }
