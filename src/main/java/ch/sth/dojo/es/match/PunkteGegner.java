@@ -8,15 +8,15 @@ import java.util.function.Predicate;
 
 public record PunkteGegner(Punkte punkte) {
 
-    static Predicate<PunkteGegner> passIfNotWon() {
+    public static Predicate<PunkteGegner> passIfNotWon() {
         return x -> Punkte.lteOne().test(x.punkte);
     }
 
-    Integer current() {
+    public Integer current() {
         return punkte().asInteger();
     }
 
-    PunkteGegner increment() {
+    public PunkteGegner increment() {
         return new PunkteGegner(punkte.increment());
     }
 }

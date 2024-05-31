@@ -20,4 +20,7 @@ public interface DomainError {
 
     record InvalidEventForMatch() implements DomainError {
     }
+
+    record InvalidStateForMatch() implements DomainError {
+    }
 }

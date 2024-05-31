@@ -4,15 +4,15 @@ import java.util.function.Predicate;
 
 public record PunkteSpieler(Punkte punkte) {
 
-    static Predicate<PunkteSpieler> passIfNotWon() {
+    public static Predicate<PunkteSpieler> passIfNotWon() {
         return ps -> Punkte.lteOne().test(ps.punkte);
     }
 
-    int current() {
+    public int current() {
         return punkte.asInteger();
     }
 
-    PunkteSpieler increment() {
+    public PunkteSpieler increment() {
         return new PunkteSpieler(punkte.increment());
     }
 }
