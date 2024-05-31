@@ -27,6 +27,8 @@ public interface GameEventHandler {
                 Util.left(eventToError(preInitializedGame)),
                 Util.right(Pre2LaufendEventHandler.gameErzeugt()),
                 Util.left(eventToError(preInitializedGame)),
+                Util.left(eventToError(preInitializedGame)),
+                Util.left(eventToError(preInitializedGame)),
                 Util.left(eventToError(preInitializedGame))
         );
     }
@@ -41,6 +43,8 @@ public interface GameEventHandler {
                 rightGame(Laufend2LaufendEventHandler.ghpg(laufendesGame)),
                 rightGame(Laufend2AbgeschlossenEventHandler.shgg(laufendesGame)),
                 rightGame(Laufend2AbgeschlossenEventHandler.ghgg(laufendesGame)),
+                leftGame(eventToError(laufendesGame)),
+                leftGame(eventToError(laufendesGame)),
                 leftGame(eventToError(laufendesGame)),
                 leftGame(eventToError(laufendesGame)),
                 leftGame(eventToError(laufendesGame))

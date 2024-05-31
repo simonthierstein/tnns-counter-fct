@@ -4,10 +4,12 @@
 
 package ch.sth.dojo.es.evt.satz;
 
+import static ch.sth.dojo.es.Util.leftF2;
+import static ch.sth.dojo.es.Util.rightF2;
+import static ch.sth.dojo.es.evt.satz.SatzEventHandler.eventToErrorF2;
 import static ch.sth.dojo.es.satz.AbgeschlossenerSatz.AbgeschlossenerSatz;
 
 import ch.sth.dojo.es.DomainError;
-import ch.sth.dojo.es.Util;
 import ch.sth.dojo.es.events.DomainEvent;
 import ch.sth.dojo.es.events.GegnerHatGameGewonnen;
 import ch.sth.dojo.es.events.GegnerHatSatzGewonnen;
@@ -25,13 +27,15 @@ class LaufenderSatzEventHandler {
     static Either<DomainError, Satz> handleLaufenderSatz(final LaufenderSatz state, final DomainEvent event) {
         return DomainEvent.handleEventF2(
                 event, state,
-                Util.leftF2(SatzEventHandler.eventToErrorF2()),
-                Util.leftF2(SatzEventHandler.eventToErrorF2()),
-                Util.rightF2(spielerHatGameGewonnen()),
-                Util.rightF2(gegnerHatGameGewonnen()),
-                Util.leftF2(SatzEventHandler.eventToErrorF2()),
-                Util.rightF2(spielerHatSatzGewonnen()),
-                Util.rightF2(gegnerHatSatzGewonnen())
+                leftF2(eventToErrorF2()),
+                leftF2(eventToErrorF2()),
+                rightF2(spielerHatGameGewonnen()),
+                rightF2(gegnerHatGameGewonnen()),
+                leftF2(eventToErrorF2()),
+                rightF2(spielerHatSatzGewonnen()),
+                rightF2(gegnerHatSatzGewonnen()),
+                leftF2(eventToErrorF2()),
+                leftF2(eventToErrorF2())
         );
     }
 

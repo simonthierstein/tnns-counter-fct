@@ -27,6 +27,8 @@ class LaufenderSatzCommandHandler {
                 Util.right(x -> gegnerGewinneGameCmd(state, x)),
                 Util.left(Satz.eventToError(state, "handleLaufenderSatzCmd")),
                 Util.left(Satz.eventToError(state, "handleLaufenderSatzCmd")),
+                Util.left(Satz.eventToError(state, "handleLaufenderSatzCmd")),
+                Util.left(Satz.eventToError(state, "handleLaufenderSatzCmd")),
                 Util.left(Satz.eventToError(state, "handleLaufenderSatzCmd"))
         );
     }

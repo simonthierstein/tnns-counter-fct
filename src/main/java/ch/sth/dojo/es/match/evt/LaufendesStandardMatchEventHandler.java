@@ -12,7 +12,9 @@ import static ch.sth.dojo.es.match.evt.MatchEventHandler.eventToErrorF2;
 import ch.sth.dojo.es.DomainError;
 import ch.sth.dojo.es.Routing;
 import ch.sth.dojo.es.events.DomainEvent;
+import ch.sth.dojo.es.events.GegnerHatMatchGewonnen;
 import ch.sth.dojo.es.events.GegnerHatSatzGewonnen;
+import ch.sth.dojo.es.events.SpielerHatMatchGewonnen;
 import ch.sth.dojo.es.events.SpielerHatSatzGewonnen;
 import ch.sth.dojo.es.match.LaufendesStandardMatch;
 import ch.sth.dojo.es.match.PunkteGegner;
@@ -32,8 +34,18 @@ public class LaufendesStandardMatchEventHandler {
                 leftF2(eventToErrorF2()),
                 leftF2(eventToErrorF2()),
                 spielerHatSatzGewonnen(),
-                gegnerHatSatzGewonnen()
+                gegnerHatSatzGewonnen(),
+                spielerHatMatchGewonnen(),
+                gegnerHatMatchGewonnen()
         );
+    }
+
+    private static Function2<LaufendesStandardMatch, SpielerHatMatchGewonnen, Either<DomainError, StandardMatch>> spielerHatMatchGewonnen() {
+        return (state, event) -> Either.narrow(AbgeschlossenesStandardMatch(state.punkteSpieler().increment().current(), state.punkteGegner().current()));
+    }
+
+    private static Function2<LaufendesStandardMatch, GegnerHatMatchGewonnen, Either<DomainError, StandardMatch>> gegnerHatMatchGewonnen() {
+        return (state, event) -> Either.narrow(AbgeschlossenesStandardMatch(state.punkteSpieler().current(), state.punkteGegner().increment().current()));
     }
 
     private static Function2<LaufendesStandardMatch, SpielerHatSatzGewonnen, Either<DomainError, StandardMatch>> spielerHatSatzGewonnen() {
