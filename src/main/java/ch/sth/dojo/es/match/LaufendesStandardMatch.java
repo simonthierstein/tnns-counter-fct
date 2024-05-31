@@ -5,7 +5,10 @@
 package ch.sth.dojo.es.match;
 
 
+import static ch.sth.dojo.es.match.AbgeschlossenesStandardMatch.AbgeschlossenesStandardMatch;
+
 import ch.sth.dojo.es.DomainError;
+import ch.sth.dojo.es.Routing;
 import io.vavr.control.Either;
 import io.vavr.control.Option;
 
@@ -18,6 +21,20 @@ public record LaufendesStandardMatch(PunkteSpieler punkteSpieler, PunkteGegner p
                 .toEither(new DomainError.InvalidStateForMatch());
     }
 
+
+    public static Either<DomainError, StandardMatch> incrementSpieler(LaufendesStandardMatch prev) {
+        return Either.narrow(Routing.selection(prev.punkteSpieler().increment(),
+                PunkteSpieler.passIfNotWon(),
+                nextPt -> LaufendesStandardMatch(nextPt, prev.punkteGegner()),
+                nextPt -> AbgeschlossenesStandardMatch(nextPt.current(), prev.punkteGegner().current())));
+    }
+
+    public static Either<DomainError, StandardMatch> incrementGegner(LaufendesStandardMatch prev) {
+        return Either.narrow(Routing.selection(prev.punkteGegner().increment(),
+                PunkteGegner.passIfNotWon(),
+                nextPt -> LaufendesStandardMatch(prev.punkteSpieler(), nextPt),
+                nextPt -> AbgeschlossenesStandardMatch(prev.punkteSpieler().current(), nextPt.current())));
+    }
 }
 
 
