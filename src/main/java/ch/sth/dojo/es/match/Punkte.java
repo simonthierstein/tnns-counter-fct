@@ -19,6 +19,10 @@ public class Punkte {
         return new Punkte(punkts);
     }
 
+    public static Punkte zero() {
+        return new Punkte(List.empty());
+    }
+
     static Predicate<Punkte> lteOne() {
         return pt -> pt.punkts.size() <= 1;
     }

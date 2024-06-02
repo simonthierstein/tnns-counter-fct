@@ -25,12 +25,18 @@ public interface Game {
     }
 
 
-    static <T> T apply(Game game, Function<LaufendesGame, T> laufendesGameTFunction, Function<AbgeschlossenesGame, T> abgeschlossenesGameTFunction,
+    static <T> T apply(Game game,
+                       Function<LaufendesGame, T> laufendesGameTFunction,
+                       Function<AbgeschlossenesGame, T> abgeschlossenesGameTFunction,
                        Function<PreInitializedGame, T> preInitializedGameTFunction) {
         return Match(game).of(
                 Case($(instanceOf(LaufendesGame.class)), laufendesGameTFunction),
                 Case($(instanceOf(AbgeschlossenesGame.class)), abgeschlossenesGameTFunction),
                 Case($(instanceOf(PreInitializedGame.class)), preInitializedGameTFunction)
         );
+    }
+
+    static Game zero() {
+        return LaufendesGame.initial();
     }
 }

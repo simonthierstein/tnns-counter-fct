@@ -18,4 +18,7 @@ public sealed interface StandardMatch permits AbgeschlossenesStandardMatch, Lauf
         );
     }
 
+    static StandardMatch zero() {
+        return LaufendesStandardMatch.zero();
+    }
 }

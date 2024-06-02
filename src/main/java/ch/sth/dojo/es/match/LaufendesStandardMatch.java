@@ -35,6 +35,10 @@ public record LaufendesStandardMatch(PunkteSpieler punkteSpieler, PunkteGegner p
                 nextPt -> LaufendesStandardMatch(prev.punkteSpieler(), nextPt),
                 nextPt -> AbgeschlossenesStandardMatch(prev.punkteSpieler().current(), nextPt.current())));
     }
+
+    static StandardMatch zero() {
+        return new LaufendesStandardMatch(new PunkteSpieler(Punkte.zero()), new PunkteGegner(Punkte.zero()));
+    }
 }
 
 
