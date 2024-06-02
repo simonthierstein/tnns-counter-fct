@@ -6,5 +6,5 @@ package ch.sth.dojo.es.scoring;
 
 import ch.sth.dojo.es.satz.Satz;
 
-public record CurrentSet(Satz current) {
+public record CurrentSatz(Satz current) {
 }

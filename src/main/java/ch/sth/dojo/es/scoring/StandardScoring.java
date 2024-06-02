@@ -6,5 +6,5 @@ package ch.sth.dojo.es.scoring;
 
 import ch.sth.dojo.es.match.StandardMatch;
 
-public record StandardScoring(CurrentGame currentGame, CurrentSet currentSet, StandardMatch match) {
+public record StandardScoring(CurrentGame currentGame, CurrentSatz currentSatz, StandardMatch match) {
 }
