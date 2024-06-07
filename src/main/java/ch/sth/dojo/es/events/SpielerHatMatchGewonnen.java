@@ -5,7 +5,7 @@
 package ch.sth.dojo.es.events;
 
 public record SpielerHatMatchGewonnen() implements DomainEvent {
-    public static SpielerHatMatchGewonnen spielerHatSatzGewonnen() {
+    public static SpielerHatMatchGewonnen spielerHatMatchGewonnen() {
         return new SpielerHatMatchGewonnen();
     }
 }

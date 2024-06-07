@@ -16,7 +16,20 @@ import io.vavr.control.Either;
 public interface StandardScoringEventHandler {
 
     static Either<DomainError, StandardScoring> handleEvent2(StandardScoring state, DomainEvent event) {
-        return Either.right(state);
+        var res = DomainEvent.handleEventF2(event, state,
+                (statex, eventx) -> statex,
+                (statex, eventx) -> statex,
+                (statex, eventx) -> statex,
+                (statex, eventx) -> statex,
+                (statex, eventx) -> statex,
+                (statex, eventx) -> statex,
+                (statex, eventx) -> statex,
+                (statex, eventx) -> statex,
+                (statex, eventx) -> statex
+        );
+
+
+        return Either.right(res);
     }
 
     static Either<DomainError, StandardScoring> handleEvent(StandardScoring state, DomainEvent event) {
