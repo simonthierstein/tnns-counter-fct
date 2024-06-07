@@ -9,8 +9,11 @@ import static ch.sth.dojo.es.match.AbgeschlossenesStandardMatch.AbgeschlossenesS
 
 import ch.sth.dojo.es.DomainError;
 import ch.sth.dojo.es.Routing;
+import io.vavr.Tuple;
+import io.vavr.Tuple2;
 import io.vavr.control.Either;
 import io.vavr.control.Option;
+import java.util.function.Function;
 
 public record LaufendesStandardMatch(PunkteSpieler punkteSpieler, PunkteGegner punkteGegner) implements StandardMatch {
 
@@ -39,6 +42,11 @@ public record LaufendesStandardMatch(PunkteSpieler punkteSpieler, PunkteGegner p
     static StandardMatch zero() {
         return new LaufendesStandardMatch(new PunkteSpieler(Punkte.zero()), new PunkteGegner(Punkte.zero()));
     }
+
+    public <T, U> Tuple2<T, U> eval(Function<PunkteSpieler, T> sp, Function<PunkteGegner, U> ge) {
+        return Tuple.of(punkteSpieler, punkteGegner).map(sp, ge);
+    }
+
 }
 
 

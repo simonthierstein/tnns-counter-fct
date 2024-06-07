@@ -45,6 +45,8 @@ class MatchCommandHandlerTest {
                 .flatMap(event1 -> MatchEventHandler.handleEvent(state, event1))
                 .flatMap(state1 -> MatchCommandHandler.gegnerGewinneSatzCommand(state1)
                         .map(x -> Tuple.of(state1, x)))
+                .flatMap(t2 -> t2.apply(MatchEventHandler::handleEvent))
+                .flatMap(state2 -> MatchCommandHandler.gegnerGewinneSatzCommand(state2).map(evt -> Tuple.of(state2, evt)))
                 .flatMap(t2 -> t2.apply(MatchEventHandler::handleEvent));
 
         assertThat(eith.isRight()).isTrue();

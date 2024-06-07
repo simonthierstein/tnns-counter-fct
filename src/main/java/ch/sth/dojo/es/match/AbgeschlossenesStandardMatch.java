@@ -5,6 +5,8 @@
 package ch.sth.dojo.es.match;
 
 import ch.sth.dojo.es.DomainError;
+import io.vavr.Function2;
+import io.vavr.Tuple;
 import io.vavr.control.Either;
 import io.vavr.control.Option;
 
@@ -14,6 +16,11 @@ public record AbgeschlossenesStandardMatch(Integer punkteSpieler, Integer punkte
                         Option.of(punkteGegner).map(punkteGegner1 ->
                                 new AbgeschlossenesStandardMatch(punkteSpieler1, punkteGegner1)))
                 .toEither(new DomainError.InvalidStateForMatch());
+    }
+
+
+    public <T> T eval(Function2<Integer, Integer, T> sp) {
+        return Tuple.of(punkteSpieler, punkteGegner).apply(sp);
     }
 
 }

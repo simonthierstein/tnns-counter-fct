@@ -7,6 +7,9 @@ import ch.sth.dojo.es.game.AbgeschlossenesGame;
 import ch.sth.dojo.es.game.Game;
 import ch.sth.dojo.es.game.LaufendesGame;
 import ch.sth.dojo.es.game.Punkt;
+import ch.sth.dojo.es.match.PunkteGegner;
+import ch.sth.dojo.es.match.PunkteSpieler;
+import ch.sth.dojo.es.match.StandardMatch;
 import ch.sth.dojo.es.satz.Satz;
 import ch.sth.dojo.es.scoring.StandardScoring;
 import ch.sth.dojo.es.scoring.evt.StandardScoringEventHandler;
@@ -46,11 +49,24 @@ class StandardScoringCommandHandlerTest {
 
         final Tuple2 gameScore = standardScorings.fold(err -> Tuple.of(0, 0), succ -> evalGameScore(succ));
         final Tuple2 satzScore = standardScorings.fold(err -> Tuple.of(0, 0), succ -> evalSatzScore(succ));
+        final Tuple2 matchScore = standardScorings.fold(err -> Tuple.of(0, 0), succ -> evalMatchScore(succ));
 
 
-        assertThat(gameScore).isEqualTo(Tuple.of(2, 0));
-        assertThat(satzScore).isEqualTo(Tuple.of(2, 0));
+        assertThat(gameScore).isEqualTo(Tuple.of(0, 0));
+        assertThat(satzScore).isEqualTo(Tuple.of(1, 0));
+        assertThat(matchScore).isEqualTo(Tuple.of(0, 0));
 
+    }
+
+    private static Tuple2<Integer, Integer> evalMatchScore(final StandardScoring succ) {
+        return StandardMatch.apply(succ.match(),
+                laufendesStandardMatch -> laufendesStandardMatch.eval(PunkteSpieler::current, PunkteGegner::current),
+                abgeschl -> abgeschl.eval(Tuple::of)
+        );
+    }
+
+    private static Tuple2<Integer, Integer> trewtrew(final PunkteSpieler sp, final PunkteGegner ge) {
+        return Tuple.of(sp.current(), ge.current());
     }
 
     private static Tuple2<Integer, Integer> evalSatzScore(final StandardScoring succ) {
