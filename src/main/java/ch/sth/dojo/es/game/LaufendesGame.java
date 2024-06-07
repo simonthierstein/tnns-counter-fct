@@ -6,6 +6,7 @@ package ch.sth.dojo.es.game;
 
 import static ch.sth.dojo.es.game.Punkt.punkt;
 
+import io.vavr.Function2;
 import io.vavr.collection.List;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
@@ -15,8 +16,8 @@ import lombok.ToString;
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @EqualsAndHashCode @ToString
 public class LaufendesGame implements Game {
-   public final List<Punkt> punkteSpieler;
-   public final List<Punkt> punkteGegner;
+    public final List<Punkt> punkteSpieler;
+    public final List<Punkt> punkteGegner;
 
     public static LaufendesGame laufendesGame(final List<Punkt> punkteSpieler, final List<Punkt> punkteGegner) {
         return new LaufendesGame(punkteSpieler, punkteGegner);
@@ -32,6 +33,11 @@ public class LaufendesGame implements Game {
 
     public static LaufendesGame incrementGegner(LaufendesGame prev) {
         return new LaufendesGame(increment(prev.punkteSpieler), prev.punkteGegner);
+    }
+
+    public static <T> T eval(LaufendesGame state,
+                             Function2<List<Punkt>, List<Punkt>, T> evalFct) {
+        return evalFct.apply(state.punkteSpieler, state.punkteGegner);
     }
 
     private static List<Punkt> increment(final List<Punkt> prev) {

@@ -7,4 +7,7 @@ package ch.sth.dojo.es.scoring;
 import ch.sth.dojo.es.game.Game;
 
 public record CurrentGame(Game current) {
+    static CurrentGame zero() {
+        return new CurrentGame(Game.zero());
+    }
 }

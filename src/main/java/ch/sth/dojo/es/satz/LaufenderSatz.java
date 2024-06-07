@@ -8,8 +8,11 @@ import static ch.sth.dojo.es.game.Punkt.punkt;
 
 import ch.sth.dojo.es.game.Punkt;
 import io.vavr.Predicates;
+import io.vavr.Tuple;
+import io.vavr.Tuple2;
 import io.vavr.collection.List;
 import io.vavr.control.Option;
+import java.util.function.Function;
 
 public record LaufenderSatz(List<Punkt> punkteSpieler, List<Punkt> punkteGegner) implements Satz {
     static LaufenderSatz zero() {
@@ -36,6 +39,13 @@ public record LaufenderSatz(List<Punkt> punkteSpieler, List<Punkt> punkteGegner)
 
     public LaufenderSatz incrementGegner() {
         return new LaufenderSatz(punkteSpieler, punkteGegner.append(punkt()));
+    }
+
+    public <T, U> Tuple2<T, U> eval(
+            Function<List<Punkt>, T> spielerEval,
+            Function<List<Punkt>, U> gegnerEval) {
+        return Tuple.of(punkteSpieler, punkteGegner)
+                .map(spielerEval, gegnerEval);
     }
 }
 

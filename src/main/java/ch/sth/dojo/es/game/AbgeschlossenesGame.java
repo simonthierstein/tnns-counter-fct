@@ -4,12 +4,8 @@
 
 package ch.sth.dojo.es.game;
 
-import ch.sth.dojo.es.DomainError;
-import ch.sth.dojo.es.events.DomainEvent;
 import io.vavr.Function2;
 import io.vavr.collection.List;
-import io.vavr.control.Either;
-import java.util.function.Function;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
@@ -25,4 +21,9 @@ public class AbgeschlossenesGame implements Game {
         return new AbgeschlossenesGame(punkteSpieler, punkteGegner);
     }
 
+
+    public static <T> T eval(AbgeschlossenesGame state,
+                             Function2<List<Punkt>, List<Punkt>, T> evalFct) {
+        return evalFct.apply(state.punkteSpieler, state.punkteGegner);
+    }
 }

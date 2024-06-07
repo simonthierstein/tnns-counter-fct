@@ -7,4 +7,7 @@ package ch.sth.dojo.es.scoring;
 import ch.sth.dojo.es.satz.Satz;
 
 public record CurrentSatz(Satz current) {
+    static CurrentSatz zero() {
+        return new CurrentSatz(Satz.zero());
+    }
 }

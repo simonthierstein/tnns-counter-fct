@@ -14,14 +14,14 @@ import java.util.function.Function;
 
 public final class MatchCommandHandler {
 
-    static Either<DomainError, DomainEvent> spielerGewinneSatzCommand(StandardMatch state) {
+    public static Either<DomainError, DomainEvent> spielerGewinneSatzCommand(StandardMatch state) {
         return StandardMatch.apply(state,
                 spielerGewinneSatz(),
                 invalidStateForMatch()
         );
     }
 
-    static Either<DomainError, DomainEvent> gegnerGewinneSatzCommand(StandardMatch state) {
+    public static Either<DomainError, DomainEvent> gegnerGewinneSatzCommand(StandardMatch state) {
         return StandardMatch.apply(state,
                 gegnerGewinneSatz(),
                 invalidStateForMatch()
