@@ -6,6 +6,7 @@ package ch.sth.dojo.es.match;
 
 import ch.sth.dojo.es.game.Punkt;
 import io.vavr.collection.List;
+import io.vavr.control.Option;
 import java.util.function.Predicate;
 
 public class Punkte {
@@ -27,11 +28,26 @@ public class Punkte {
         return pt -> pt.punkts.size() <= 1;
     }
 
+    static Option<Punkte> ofInteger(Integer anz) {
+        return Option.of(anz)
+                .map(x -> List.range(0, x).foldLeft(
+                        List.<Punkt>empty(), (acc, item) -> acc.append(Punkt.punkt())))
+                .map(Punkte::new);
+    }
+
     int asInteger() {
         return punkts.size();
     }
 
     Punkte increment() {
         return new Punkte(punkts.append(Punkt.punkt()));
+    }
+
+    boolean inRange(final int fromInclusive, final int toInclusive) {
+        return punkts.size() >= fromInclusive && punkts.size() <= toInclusive;
+    }
+
+    static Predicate<Punkte> passIfInRange(final int fromInclusive, final int toInclusive) {
+        return punkte -> punkte.inRange(fromInclusive, toInclusive);
     }
 }

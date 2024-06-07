@@ -33,6 +33,23 @@ public record LaufenderSatz(List<Punkt> punkteSpieler, List<Punkt> punkteGegner)
                 .isDefined();
     }
 
+    public static Option<Satz> fromInteger(Integer punkteSpieler, Integer punkteGegner) {
+        return Option.of(punkteSpieler)
+                .flatMap(punkteSpieler1 -> Option.of(punkteGegner)
+                        .flatMap(punkteGegner1 -> erstelleValiderLaufenderSatz(punkteSpieler1, punkteGegner1)));
+    }
+
+    private static Option<LaufenderSatz> erstelleValiderLaufenderSatz(final Integer punkteSpieler, final Integer punkteGegner) {
+        return Option.of(Tuple.of(punkteSpieler, punkteGegner))
+                .filter(Predicates.allOf(t2 -> t2._1 <= 6, t2 -> t2._2 <= 6, t2 -> t2._1 >= 0, t2 -> t2._2 >= 0))
+                .map(t2 -> t2.map(LaufenderSatz::toPunkte, LaufenderSatz::toPunkte))
+                .map(t2 -> t2.apply(LaufenderSatz::new));
+    }
+
+    private static List<Punkt> toPunkte(final Integer anzahl) {
+        return List.range(0, anzahl).map(x -> punkt());
+    }
+
     public static Satz laufenderSatz(List<Punkt> punkteSpieler, List<Punkt> punkteGegner) {
         return new LaufenderSatz(punkteSpieler, punkteGegner);
     }

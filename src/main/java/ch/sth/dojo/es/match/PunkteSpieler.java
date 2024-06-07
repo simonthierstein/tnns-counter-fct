@@ -1,5 +1,6 @@
 package ch.sth.dojo.es.match;
 
+import io.vavr.control.Option;
 import java.util.function.Predicate;
 
 public record PunkteSpieler(Punkte punkte) {
@@ -10,6 +11,13 @@ public record PunkteSpieler(Punkte punkte) {
 
     public static PunkteSpieler punkteSpieler(final Punkte punkte) {
         return new PunkteSpieler(punkte);
+    }
+
+    public static Option<PunkteSpieler> fromInteger(final Integer anzPunkte) {
+        return Option.of(anzPunkte)
+                .flatMap(Punkte::ofInteger)
+                .filter(Punkte.passIfInRange(0, 2))
+                .map(PunkteSpieler::new);
     }
 
     public int current() {

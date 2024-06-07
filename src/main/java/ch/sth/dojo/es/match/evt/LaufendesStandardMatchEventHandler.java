@@ -5,7 +5,7 @@
 package ch.sth.dojo.es.match.evt;
 
 import static ch.sth.dojo.es.Util.leftF2;
-import static ch.sth.dojo.es.match.AbgeschlossenesStandardMatch.AbgeschlossenesStandardMatch;
+import static ch.sth.dojo.es.match.AbgeschlossenesStandardMatch.abgeschlossenesStandardMatch;
 import static ch.sth.dojo.es.match.LaufendesStandardMatch.incrementGegner;
 import static ch.sth.dojo.es.match.LaufendesStandardMatch.incrementSpieler;
 import static ch.sth.dojo.es.match.evt.MatchEventHandler.eventToErrorF2;
@@ -39,11 +39,11 @@ public class LaufendesStandardMatchEventHandler {
     }
 
     private static Function2<LaufendesStandardMatch, SpielerHatMatchGewonnen, Either<DomainError, StandardMatch>> spielerHatMatchGewonnen() {
-        return (state, event) -> Either.narrow(AbgeschlossenesStandardMatch(state.punkteSpieler().increment().current(), state.punkteGegner().current()));
+        return (state, event) -> Either.narrow(abgeschlossenesStandardMatch(state.punkteSpieler().increment().current(), state.punkteGegner().current()));
     }
 
     private static Function2<LaufendesStandardMatch, GegnerHatMatchGewonnen, Either<DomainError, StandardMatch>> gegnerHatMatchGewonnen() {
-        return (state, event) -> Either.narrow(AbgeschlossenesStandardMatch(state.punkteSpieler().current(), state.punkteGegner().increment().current()));
+        return (state, event) -> Either.narrow(abgeschlossenesStandardMatch(state.punkteSpieler().current(), state.punkteGegner().increment().current()));
     }
 
     private static Function2<LaufendesStandardMatch, SpielerHatSatzGewonnen, Either<DomainError, StandardMatch>> spielerHatSatzGewonnen() {

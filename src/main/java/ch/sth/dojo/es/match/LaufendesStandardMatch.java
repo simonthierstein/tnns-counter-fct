@@ -5,7 +5,7 @@
 package ch.sth.dojo.es.match;
 
 
-import static ch.sth.dojo.es.match.AbgeschlossenesStandardMatch.AbgeschlossenesStandardMatch;
+import static ch.sth.dojo.es.match.AbgeschlossenesStandardMatch.abgeschlossenesStandardMatch;
 
 import ch.sth.dojo.es.DomainError;
 import ch.sth.dojo.es.Routing;
@@ -29,14 +29,14 @@ public record LaufendesStandardMatch(PunkteSpieler punkteSpieler, PunkteGegner p
         return Either.narrow(Routing.selection(prev.punkteSpieler().increment(),
                 PunkteSpieler.passIfNotWon(),
                 nextPt -> laufendesStandardMatch(nextPt, prev.punkteGegner()),
-                nextPt -> AbgeschlossenesStandardMatch(nextPt.current(), prev.punkteGegner().current())));
+                nextPt -> abgeschlossenesStandardMatch(nextPt.current(), prev.punkteGegner().current())));
     }
 
     public static Either<DomainError, StandardMatch> incrementGegner(LaufendesStandardMatch prev) {
         return Either.narrow(Routing.selection(prev.punkteGegner().increment(),
                 PunkteGegner.passIfNotWon(),
                 nextPt -> laufendesStandardMatch(prev.punkteSpieler(), nextPt),
-                nextPt -> AbgeschlossenesStandardMatch(prev.punkteSpieler().current(), nextPt.current())));
+                nextPt -> abgeschlossenesStandardMatch(prev.punkteSpieler().current(), nextPt.current())));
     }
 
     static StandardMatch zero() {
