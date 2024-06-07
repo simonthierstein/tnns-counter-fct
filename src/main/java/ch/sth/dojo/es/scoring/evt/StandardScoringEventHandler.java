@@ -15,6 +15,9 @@ import io.vavr.control.Either;
 
 public interface StandardScoringEventHandler {
 
+    static Either<DomainError, StandardScoring> handleEvent2(StandardScoring state, DomainEvent event) {
+        return null;
+    }
     static Either<DomainError, StandardScoring> handleEvent(StandardScoring state, DomainEvent event) {
         return GameEventHandler.handleEvent()
                 .apply(state.currentGame().current(), event)// TODO sth/07.06.2024 : handle Left() of "...hatSatzGewonnen"
