@@ -33,6 +33,10 @@ public record LaufenderSatz(List<Punkt> punkteSpieler, List<Punkt> punkteGegner)
                 .isDefined();
     }
 
+    public static Satz laufenderSatz(List<Punkt> punkteSpieler, List<Punkt> punkteGegner) {
+        return new LaufenderSatz(punkteSpieler, punkteGegner);
+    }
+
     public LaufenderSatz incrementSpieler() {
         return new LaufenderSatz(punkteSpieler.append(punkt()), punkteGegner);
     }

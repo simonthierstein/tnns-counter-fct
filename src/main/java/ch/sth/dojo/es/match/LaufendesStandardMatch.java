@@ -17,7 +17,7 @@ import java.util.function.Function;
 
 public record LaufendesStandardMatch(PunkteSpieler punkteSpieler, PunkteGegner punkteGegner) implements StandardMatch {
 
-    public static Either<DomainError, LaufendesStandardMatch> LaufendesStandardMatch(PunkteSpieler punkteSpieler, PunkteGegner punkteGegner) {
+    public static Either<DomainError, LaufendesStandardMatch> laufendesStandardMatch(PunkteSpieler punkteSpieler, PunkteGegner punkteGegner) {
         return Option.of(punkteSpieler)
                 .flatMap(punkteSpieler1 -> Option.of(punkteGegner)
                         .map(punkteGegner1 -> new LaufendesStandardMatch(punkteSpieler1, punkteGegner1)))
@@ -28,14 +28,14 @@ public record LaufendesStandardMatch(PunkteSpieler punkteSpieler, PunkteGegner p
     public static Either<DomainError, StandardMatch> incrementSpieler(LaufendesStandardMatch prev) {
         return Either.narrow(Routing.selection(prev.punkteSpieler().increment(),
                 PunkteSpieler.passIfNotWon(),
-                nextPt -> LaufendesStandardMatch(nextPt, prev.punkteGegner()),
+                nextPt -> laufendesStandardMatch(nextPt, prev.punkteGegner()),
                 nextPt -> AbgeschlossenesStandardMatch(nextPt.current(), prev.punkteGegner().current())));
     }
 
     public static Either<DomainError, StandardMatch> incrementGegner(LaufendesStandardMatch prev) {
         return Either.narrow(Routing.selection(prev.punkteGegner().increment(),
                 PunkteGegner.passIfNotWon(),
-                nextPt -> LaufendesStandardMatch(prev.punkteSpieler(), nextPt),
+                nextPt -> laufendesStandardMatch(prev.punkteSpieler(), nextPt),
                 nextPt -> AbgeschlossenesStandardMatch(prev.punkteSpieler().current(), nextPt.current())));
     }
 

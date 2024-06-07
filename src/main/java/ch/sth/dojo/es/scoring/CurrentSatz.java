@@ -10,4 +10,8 @@ public record CurrentSatz(Satz current) {
     static CurrentSatz zero() {
         return new CurrentSatz(Satz.zero());
     }
+
+    public static CurrentSatz currentSatz(Satz current) {
+        return new CurrentSatz(current);
+    }
 }

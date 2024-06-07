@@ -1,6 +1,6 @@
 package ch.sth.dojo.es.match.cmd;
 
-import static ch.sth.dojo.es.match.LaufendesStandardMatch.LaufendesStandardMatch;
+import static ch.sth.dojo.es.match.LaufendesStandardMatch.laufendesStandardMatch;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 import ch.sth.dojo.es.DomainError;
@@ -21,7 +21,7 @@ class MatchCommandHandlerTest {
 
     @Test
     void spielerGewinneSatzCommand() {
-        final LaufendesStandardMatch state = LaufendesStandardMatch(new PunkteSpieler(Punkte.punkte(List.empty())),
+        final LaufendesStandardMatch state = laufendesStandardMatch(new PunkteSpieler(Punkte.punkte(List.empty())),
                 new PunkteGegner(Punkte.punkte(List.empty()))).get();
         final Either<DomainError, DomainEvent> domainEvents = MatchCommandHandler.spielerGewinneSatzCommand(state);
 
@@ -37,7 +37,7 @@ class MatchCommandHandlerTest {
 
     @Test
     void gegnerGewinneSatzCommand() {
-        final LaufendesStandardMatch state = LaufendesStandardMatch(new PunkteSpieler(Punkte.punkte(List.empty())),
+        final LaufendesStandardMatch state = laufendesStandardMatch(new PunkteSpieler(Punkte.punkte(List.empty())),
                 new PunkteGegner(Punkte.punkte(List.empty()))).get();
         final Either<DomainError, DomainEvent> domainEvents = MatchCommandHandler.spielerGewinneSatzCommand(state);
 

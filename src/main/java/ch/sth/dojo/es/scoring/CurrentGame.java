@@ -10,4 +10,9 @@ public record CurrentGame(Game current) {
     static CurrentGame zero() {
         return new CurrentGame(Game.zero());
     }
+
+    public static CurrentGame currentGame(Game current) {
+        return new CurrentGame(current);
+    }
+
 }
