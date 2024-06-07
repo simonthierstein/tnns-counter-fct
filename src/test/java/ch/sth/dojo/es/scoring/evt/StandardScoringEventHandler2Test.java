@@ -15,7 +15,13 @@ class StandardScoringEventHandler2Test {
 
         final Either<DomainError, StandardScoring> result = StandardScoringEventHandler.handleEvent2(state(), event());
 
-        assertThat(result).isNotNull();
+        assertThat(result)
+                .isNotNull()
+                .isInstanceOf(Either.Right.class)
+                .isNotEqualTo(Either.right(state()));
+
+        assertThat(result.get()).isNotNull();
+
 
     }
 
