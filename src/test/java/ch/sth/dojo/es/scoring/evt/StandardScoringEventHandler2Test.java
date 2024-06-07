@@ -2,6 +2,8 @@ package ch.sth.dojo.es.scoring.evt;
 
 import static ch.sth.dojo.es.game.LaufendesGame.laufendesGame;
 import static ch.sth.dojo.es.match.LaufendesStandardMatch.laufendesStandardMatch;
+import static ch.sth.dojo.es.match.PunkteGegner.punkteGegner;
+import static ch.sth.dojo.es.match.PunkteSpieler.punkteSpieler;
 import static ch.sth.dojo.es.satz.LaufenderSatz.laufenderSatz;
 import static ch.sth.dojo.es.scoring.CurrentGame.currentGame;
 import static ch.sth.dojo.es.scoring.CurrentSatz.currentSatz;
@@ -12,6 +14,7 @@ import ch.sth.dojo.es.DomainError;
 import ch.sth.dojo.es.events.DomainEvent;
 import ch.sth.dojo.es.events.SpielerHatMatchGewonnen;
 import ch.sth.dojo.es.game.Punkt;
+import ch.sth.dojo.es.match.Punkte;
 import ch.sth.dojo.es.match.PunkteGegner;
 import ch.sth.dojo.es.match.PunkteSpieler;
 import ch.sth.dojo.es.scoring.StandardScoring;
@@ -46,11 +49,11 @@ class StandardScoringEventHandler2Test {
     }
 
     private PunkteGegner gegnerMatch0() {
-        return null;
+        return punkteGegner(Punkte.punkte(List.empty()));
     }
 
     private PunkteSpieler spielerMatch1() {
-        return null;
+        return punkteSpieler(Punkte.punkte(List.of(Punkt.punkt())));
     }
 
     private List<Punkt> gegnerSatz0() {

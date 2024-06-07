@@ -8,6 +8,10 @@ public record PunkteSpieler(Punkte punkte) {
         return ps -> Punkte.lteOne().test(ps.punkte);
     }
 
+    public static PunkteSpieler punkteSpieler(final Punkte punkte) {
+        return new PunkteSpieler(punkte);
+    }
+
     public int current() {
         return punkte.asInteger();
     }

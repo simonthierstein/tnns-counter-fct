@@ -12,6 +12,10 @@ public record PunkteGegner(Punkte punkte) {
         return x -> Punkte.lteOne().test(x.punkte);
     }
 
+    public static PunkteGegner punkteGegner(final Punkte value) {
+        return new PunkteGegner(value);
+    }
+
     public Integer current() {
         return punkte().asInteger();
     }
