@@ -17,7 +17,7 @@ public interface StandardScoringEventHandler {
 
     static Either<DomainError, StandardScoring> handleEvent(StandardScoring state, DomainEvent event) {
         return GameEventHandler.handleEvent()
-                .apply(state.currentGame().current(), event)
+                .apply(state.currentGame().current(), event)// TODO sth/07.06.2024 : handle Left() of "...hatSatzGewonnen"
                 .flatMap(game -> Game.apply(game,
                         laufendesGame -> Either.right(new StandardScoring(new CurrentGame(laufendesGame), state.currentSatz(), state.match())),
                         abgeschlossenesGame -> SatzEventHandler.handleEvent(state.currentSatz().current(), event)

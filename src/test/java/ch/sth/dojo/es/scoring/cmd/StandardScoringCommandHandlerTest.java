@@ -24,28 +24,12 @@ import org.junit.jupiter.api.Test;
 class StandardScoringCommandHandlerTest {
 
     @Test
-    void fdsafdsa() {
+    void spielerGewinntGame() {
         final StandardScoring s0 = emptyState();
-        final Either<DomainError, StandardScoring> standardScorings = StandardScoringCommandHandler
-                .spielerGewinnePunkt(s0)
-                .flatMap(event ->
-                        StandardScoringEventHandler
-                                .handleEvent(s0, event))
-                .flatMap(next -> StandardScoringCommandHandler
-                        .spielerGewinnePunkt(next)
-                        .flatMap(event ->
-                                StandardScoringEventHandler
-                                        .handleEvent(next, event)))
-                .flatMap(next -> StandardScoringCommandHandler
-                        .spielerGewinnePunkt(next)
-                        .flatMap(event ->
-                                StandardScoringEventHandler
-                                        .handleEvent(next, event)))
-                .flatMap(next -> StandardScoringCommandHandler
-                        .spielerGewinnePunkt(next)
-                        .flatMap(event ->
-                                StandardScoringEventHandler
-                                        .handleEvent(next, event)));
+        final Either<DomainError, StandardScoring> standardScorings = execSpielerGewinnePunkt(s0)
+                .flatMap(next -> execSpielerGewinnePunkt(next))
+                .flatMap(next -> execSpielerGewinnePunkt(next))
+                .flatMap(next -> execSpielerGewinnePunkt(next));
 
         final Tuple2 gameScore = standardScorings.fold(err -> Tuple.of(0, 0), succ -> evalGameScore(succ));
         final Tuple2 satzScore = standardScorings.fold(err -> Tuple.of(0, 0), succ -> evalSatzScore(succ));
@@ -56,6 +40,59 @@ class StandardScoringCommandHandlerTest {
         assertThat(satzScore).isEqualTo(Tuple.of(1, 0));
         assertThat(matchScore).isEqualTo(Tuple.of(0, 0));
 
+    }
+
+    @Test
+    void gegnerGewinntGame() {
+        final StandardScoring s0 = emptyState();
+        final Either<DomainError, StandardScoring> standardScorings = execGegnerGewinnePunkt(s0)
+                .flatMap(next -> execGegnerGewinnePunkt(next))
+                .flatMap(next -> execGegnerGewinnePunkt(next))
+                .flatMap(next -> execGegnerGewinnePunkt(next));
+
+        final Tuple2 gameScore = standardScorings.fold(err -> Tuple.of(0, 0), succ -> evalGameScore(succ));
+        final Tuple2 satzScore = standardScorings.fold(err -> Tuple.of(0, 0), succ -> evalSatzScore(succ));
+        final Tuple2 matchScore = standardScorings.fold(err -> Tuple.of(0, 0), succ -> evalMatchScore(succ));
+
+
+        assertThat(gameScore).isEqualTo(Tuple.of(0, 0));
+        assertThat(satzScore).isEqualTo(Tuple.of(0, 1));
+        assertThat(matchScore).isEqualTo(Tuple.of(0, 0));
+
+    }
+
+    @Test
+    void gegnerGewinntSatz() {
+        final StandardScoring s0 = emptyState();
+
+        final Either<DomainError, StandardScoring> result = List.range(0, 24)
+                .foldLeft(execGegnerGewinnePunkt(s0), (xs, x) -> xs.flatMap(next -> execGegnerGewinnePunkt(next)));
+
+        final Tuple2 gameScore = result.fold(err -> Tuple.of(0, 0), succ -> evalGameScore(succ));
+        final Tuple2 satzScore = result.fold(err -> Tuple.of(0, 0), succ -> evalSatzScore(succ));
+        final Tuple2 matchScore = result.fold(err -> Tuple.of(0, 0), succ -> evalMatchScore(succ));
+
+
+        assertThat(gameScore).isEqualTo(Tuple.of(0, 0));
+        assertThat(satzScore).isEqualTo(Tuple.of(0, 0));
+        assertThat(matchScore).isEqualTo(Tuple.of(0, 1));
+
+    }
+
+    private static Either<DomainError, StandardScoring> execSpielerGewinnePunkt(final StandardScoring next) {
+        return StandardScoringCommandHandler
+                .spielerGewinnePunkt(next)
+                .flatMap(event ->
+                        StandardScoringEventHandler
+                                .handleEvent(next, event));
+    }
+
+    private static Either<DomainError, StandardScoring> execGegnerGewinnePunkt(final StandardScoring next) {
+        return StandardScoringCommandHandler
+                .gegnerGewinnePunkt(next)
+                .flatMap(event ->
+                        StandardScoringEventHandler
+                                .handleEvent(next, event));
     }
 
     private static Tuple2<Integer, Integer> evalMatchScore(final StandardScoring succ) {

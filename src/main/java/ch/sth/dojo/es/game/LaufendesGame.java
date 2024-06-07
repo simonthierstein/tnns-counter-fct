@@ -32,7 +32,7 @@ public class LaufendesGame implements Game {
     }
 
     public static LaufendesGame incrementGegner(LaufendesGame prev) {
-        return new LaufendesGame(increment(prev.punkteSpieler), prev.punkteGegner);
+        return new LaufendesGame(prev.punkteSpieler, increment(prev.punkteGegner));
     }
 
     public static <T> T eval(LaufendesGame state,
