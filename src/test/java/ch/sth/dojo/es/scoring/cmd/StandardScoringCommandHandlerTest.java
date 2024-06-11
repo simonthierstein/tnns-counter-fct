@@ -55,7 +55,7 @@ class StandardScoringCommandHandlerTest {
         final Tuple2 matchScore = standardScorings.fold(err -> Tuple.of(0, 0), succ -> evalMatchScore(succ));
 
 
-        assertThat(gameScore).isEqualTo(Tuple.of(0, 4));
+        assertThat(gameScore).isEqualTo(Tuple.of(0, 0));
         assertThat(satzScore).isEqualTo(Tuple.of(0, 1));
         assertThat(matchScore).isEqualTo(Tuple.of(0, 0));
 
@@ -63,10 +63,13 @@ class StandardScoringCommandHandlerTest {
 
     @Test
     void gegnerGewinntSatz() {
+
+        List.range(0, 24).forEach(System.out::println);
+
         final StandardScoring s0 = emptyState();
 
         final Either<DomainError, StandardScoring> result = List.range(0, 24)
-                .foldLeft(execGegnerGewinnePunkt(s0), (xs, x) -> xs.flatMap(next -> execGegnerGewinnePunkt(next)));
+                .foldLeft(Either.right(s0), (xs, x) -> xs.flatMap(next -> execGegnerGewinnePunkt(next)));
 
         final Tuple2 gameScore = result.fold(err -> Tuple.of(0, 0), succ -> evalGameScore(succ));
         final Tuple2 satzScore = result.fold(err -> Tuple.of(0, 0), succ -> evalSatzScore(succ));
@@ -84,7 +87,8 @@ class StandardScoringCommandHandlerTest {
                 .spielerGewinnePunkt(next)
                 .flatMap(event ->
                         StandardScoringEventHandler
-                                .handleEvent(next, event));
+                                .handleEvent(next, event))
+                .map(StandardScoring::prepareNext);
     }
 
     private static Either<DomainError, StandardScoring> execGegnerGewinnePunkt(final StandardScoring next) {
@@ -92,7 +96,8 @@ class StandardScoringCommandHandlerTest {
                 .gegnerGewinnePunkt(next)
                 .flatMap(event ->
                         StandardScoringEventHandler
-                                .handleEvent(next, event));
+                                .handleEvent(next, event))
+                .map(StandardScoring::prepareNext);
     }
 
     private static Tuple2<Integer, Integer> evalMatchScore(final StandardScoring succ) {

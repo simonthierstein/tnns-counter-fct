@@ -43,4 +43,8 @@ public interface Game {
     static List<Punkt> toPunkte(Integer integer) {
         return List.range(0, integer).map(x -> Punkt.punkt());
     }
+
+    static Game prepareNext(Game game) {
+        return apply(game, lg -> lg, ag -> LaufendesGame.initial(), preInitializedGame -> preInitializedGame);
+    }
 }

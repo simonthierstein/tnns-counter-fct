@@ -36,5 +36,9 @@ public interface Satz {
                 Case($(instanceOf(AbgeschlossenerSatz.class)), f2)
         );
     }
+
+    static Satz prepareNext(Satz satz) {
+        return apply(satz, laufenderSatz -> laufenderSatz, abgeschlossenerSatz -> LaufenderSatz.zero());
+    }
 }
 
