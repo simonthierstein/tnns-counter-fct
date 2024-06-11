@@ -52,7 +52,7 @@ class LaufenderSatzEventHandler {
     }
 
     private static Function2<LaufenderSatz, SpielerHatMatchGewonnen, Satz> spielerHatMatchGewonnen() {
-        return (state, event) -> toAbgeschlossenerSatz().apply(state);
+        return (state, event) -> toAbgeschlossenerSatz().apply(state);// TODO sth/11.06.2024 : increment!
     }
 
     private static Function2<LaufenderSatz, GegnerHatMatchGewonnen, Satz> gegnerHatMatchGewonnen() {
