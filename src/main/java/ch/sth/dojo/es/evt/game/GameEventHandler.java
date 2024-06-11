@@ -44,10 +44,11 @@ public interface GameEventHandler {
                 rightGame(Laufend2AbgeschlossenEventHandler.shgg(laufendesGame)),
                 rightGame(Laufend2AbgeschlossenEventHandler.ghgg(laufendesGame)),
                 leftGame(eventToError(laufendesGame)),
-                leftGame(eventToError(laufendesGame)),
-                leftGame(eventToError(laufendesGame)),
-                leftGame(eventToError(laufendesGame)),
-                leftGame(eventToError(laufendesGame))
+                rightGame(Laufend2AbgeschlossenEventHandler.shsg(laufendesGame)),
+                rightGame(Laufend2AbgeschlossenEventHandler.ghsg(laufendesGame)),
+                rightGame(Laufend2AbgeschlossenEventHandler.shmg(laufendesGame)),
+                rightGame(Laufend2AbgeschlossenEventHandler.ghmg(laufendesGame))
+
         );
     }
 

@@ -52,6 +52,10 @@ public class LaufendesGame implements Game {
         return laufendesGame(List.empty(), List.empty()).get();
     }
 
+    public static Option<AbgeschlossenesGame> transition(LaufendesGame prev) {
+        return AbgeschlossenesGame.validatedAbgeschlossenesGame(prev.punkteSpieler, prev.punkteGegner);
+    }
+
     public static LaufendesGame incrementSpieler(LaufendesGame prev) {
         return new LaufendesGame(increment(prev.punkteSpieler), prev.punkteGegner);
     }
