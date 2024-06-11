@@ -55,7 +55,7 @@ class StandardScoringCommandHandlerTest {
         final Tuple2 matchScore = standardScorings.fold(err -> Tuple.of(0, 0), succ -> evalMatchScore(succ));
 
 
-        assertThat(gameScore).isEqualTo(Tuple.of(0, 0));
+        assertThat(gameScore).isEqualTo(Tuple.of(0, 4));
         assertThat(satzScore).isEqualTo(Tuple.of(0, 1));
         assertThat(matchScore).isEqualTo(Tuple.of(0, 0));
 

@@ -13,9 +13,11 @@ import ch.sth.dojo.es.DomainError;
 import ch.sth.dojo.es.events.DomainEvent;
 import ch.sth.dojo.es.events.GegnerHatGameGewonnen;
 import ch.sth.dojo.es.events.GegnerHatMatchGewonnen;
+import ch.sth.dojo.es.events.GegnerHatPunktGewonnen;
 import ch.sth.dojo.es.events.GegnerHatSatzGewonnen;
 import ch.sth.dojo.es.events.SpielerHatGameGewonnen;
 import ch.sth.dojo.es.events.SpielerHatMatchGewonnen;
+import ch.sth.dojo.es.events.SpielerHatPunktGewonnen;
 import ch.sth.dojo.es.events.SpielerHatSatzGewonnen;
 import ch.sth.dojo.es.satz.AbgeschlossenerSatz;
 import ch.sth.dojo.es.satz.LaufenderSatz;
@@ -29,8 +31,8 @@ class LaufenderSatzEventHandler {
     static Either<DomainError, Satz> handleLaufenderSatz(final LaufenderSatz state, final DomainEvent event) {
         return DomainEvent.handleEventF2(
                 event, state,
-                leftF2(eventToErrorF2()),
-                leftF2(eventToErrorF2()),
+                rightF2(spielerHatPunktGewonnen()),
+                rightF2(gegnerHatPunktGewonnen()),
                 rightF2(spielerHatGameGewonnen()),
                 rightF2(gegnerHatGameGewonnen()),
                 leftF2(eventToErrorF2()),
@@ -39,6 +41,14 @@ class LaufenderSatzEventHandler {
                 rightF2(spielerHatMatchGewonnen()),
                 rightF2(gegnerHatMatchGewonnen())
         );
+    }
+
+    private static Function2<LaufenderSatz, GegnerHatPunktGewonnen, Satz> gegnerHatPunktGewonnen() {
+        return (state, event) -> state;
+    }
+
+    private static Function2<LaufenderSatz, SpielerHatPunktGewonnen, Satz> spielerHatPunktGewonnen() {
+        return (state, event) -> state;
     }
 
     private static Function2<LaufenderSatz, SpielerHatMatchGewonnen, Satz> spielerHatMatchGewonnen() {

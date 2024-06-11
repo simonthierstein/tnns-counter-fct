@@ -29,7 +29,7 @@ class StandardScoringEventHandler2Test {
     @Test
     void handleMatchGewonnenSpieler() {
 
-        final Either<DomainError, StandardScoring> result = StandardScoringEventHandler.handleEvent2(preSpielerGewinntMatchState(),
+        final Either<DomainError, StandardScoring> result = StandardScoringEventHandler.handleEvent(preSpielerGewinntMatchState(),
                 spielerHatMatchGewonnenEvent());
 
         assertThat(result)
@@ -46,7 +46,7 @@ class StandardScoringEventHandler2Test {
 
     @Test
     void handleSpielerHatGameGewonnen_ok() {
-        final Either<DomainError, StandardScoring> standardScorings = StandardScoringEventHandler.handleEvent2(preSpielerGewinntGameState(),
+        final Either<DomainError, StandardScoring> standardScorings = StandardScoringEventHandler.handleEvent(preSpielerGewinntGameState(),
                 spielerHatGameGewonnenEvent());
 
         standardScorings
@@ -60,7 +60,7 @@ class StandardScoringEventHandler2Test {
 
     @Test
     void handleGegnerHatGameGewonnen_ok() {
-        final Either<DomainError, StandardScoring> standardScorings = StandardScoringEventHandler.handleEvent2(preGegnerGewinntGameState(),
+        final Either<DomainError, StandardScoring> standardScorings = StandardScoringEventHandler.handleEvent(preGegnerGewinntGameState(),
                 gegnerHatGameGewonnenEvent());
 
         standardScorings
