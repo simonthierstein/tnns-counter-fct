@@ -9,6 +9,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import ch.sth.dojo.es.DomainError;
 import ch.sth.dojo.es.events.DomainEvent;
 import ch.sth.dojo.es.events.GegnerHatGameGewonnen;
+import ch.sth.dojo.es.events.GegnerHatSatzGewonnen;
 import ch.sth.dojo.es.events.SpielerHatGameGewonnen;
 import ch.sth.dojo.es.events.SpielerHatMatchGewonnen;
 import ch.sth.dojo.es.game.AbgeschlossenesGame;
@@ -72,6 +73,31 @@ class StandardScoringEventHandler2Test {
 
     }
 
+    @Test
+    void handleGegnerHatSatzGewonnen_ok() {
+        final Either<DomainError, StandardScoring> standardScorings = StandardScoringEventHandler.handleEvent(preGegnerGewinntSatzState(),
+                gegnerHatSatzGewonnenEvent());
+
+        standardScorings
+                .peek(standardScoring -> assertThat(standardScoring.currentGame().current()).isInstanceOf(AbgeschlossenesGame.class)
+                        .isEqualTo(AbgeschlossenesGame.fromInteger(0, 4).get()))
+                .peek(standardScoring -> assertThat(standardScoring.currentSatz().current()).isEqualTo(AbgeschlossenerSatz.fromInteger(4, 6).get()))
+                .peek(standardScoring -> assertThat(standardScoring.match()).isEqualTo(matchSpieler0Gegner1()));
+
+        assertThat(standardScorings.isRight()).isTrue();
+
+    }
+
+    private static StandardScoring preGegnerGewinntSatzState() {
+        return standardScoring(currentGame(LaufendesGame.laufendesGame(0, 3).get()),
+                currentSatz(LaufenderSatz.fromInteger(4, 5).get()),
+                matchSpieler0Gegner0());
+    }
+
+    private static DomainEvent gegnerHatSatzGewonnenEvent() {
+        return GegnerHatSatzGewonnen.gegnerHatSatzGewonnen();
+    }
+
     private static DomainEvent gegnerHatGameGewonnenEvent() {
         return GegnerHatGameGewonnen.gegnerHatGameGewonnen();
     }
@@ -84,7 +110,7 @@ class StandardScoringEventHandler2Test {
     }
 
     private static LaufendesStandardMatch anyMatchState() {
-        return laufendesStandardMatch(spielerMatch1(), gegnerMatch0()).get();
+        return matchSpieler1Gegner0();
     }
 
     private static Integer gegner40() {
@@ -119,8 +145,28 @@ class StandardScoringEventHandler2Test {
         final StandardScoring standardScoring = standardScoring(currentGame(
                         LaufendesGame.laufendesGame(spieler40(), gegner0()).get()),
                 currentSatz(LaufenderSatz.fromInteger(spielerSatz5(), gegnerSatz0()).get()),
-                laufendesStandardMatch(spielerMatch1(), gegnerMatch0()).get());
+                matchSpieler1Gegner0());
         return standardScoring;
+    }
+
+    private static LaufendesStandardMatch matchSpieler0Gegner0() {
+        return laufendesStandardMatch(spielerMatch0(), gegnerMatch0()).get();
+    }
+
+    private static LaufendesStandardMatch matchSpieler0Gegner1() {
+        return laufendesStandardMatch(spielerMatch0(), gegnerMatch1()).get();
+    }
+
+    private static PunkteGegner gegnerMatch1() {
+        return PunkteGegner.fromInteger(1).get();
+    }
+
+    private static PunkteSpieler spielerMatch0() {
+        return PunkteSpieler.zero();
+    }
+
+    private static LaufendesStandardMatch matchSpieler1Gegner0() {
+        return laufendesStandardMatch(spielerMatch1(), gegnerMatch0()).get();
     }
 
     private static PunkteGegner gegnerMatch0() {

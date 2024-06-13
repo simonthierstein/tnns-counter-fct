@@ -13,6 +13,10 @@ public record PunkteSpieler(Punkte punkte) {
         return new PunkteSpieler(punkte);
     }
 
+    public static PunkteSpieler zero() {
+        return new PunkteSpieler(Punkte.zero());
+    }
+
     public static Option<PunkteSpieler> fromInteger(final Integer anzPunkte) {
         return Option.of(anzPunkte)
                 .flatMap(Punkte::ofInteger)

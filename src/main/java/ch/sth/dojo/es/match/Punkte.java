@@ -9,12 +9,7 @@ import io.vavr.collection.List;
 import io.vavr.control.Option;
 import java.util.function.Predicate;
 
-public class Punkte {
-    private final List<Punkt> punkts;
-
-    private Punkte(final List<Punkt> punkts) {
-        this.punkts = punkts;
-    }
+public record Punkte(List<Punkt> punkts) {
 
     public static Punkte punkte(final List<Punkt> punkts) {
         return new Punkte(punkts);
