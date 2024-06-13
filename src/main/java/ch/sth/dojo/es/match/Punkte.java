@@ -30,19 +30,19 @@ public record Punkte(List<Punkt> punkts) {
                 .map(Punkte::new);
     }
 
-    int asInteger() {
-        return punkts.size();
+    static int asInteger(Punkte punkte) {
+        return punkte.punkts.size();
     }
 
-    Punkte increment() {
-        return new Punkte(punkts.append(Punkt.punkt()));
+    static Punkte increment(Punkte punkte) {
+        return new Punkte(punkte.punkts.append(Punkt.punkt()));
     }
 
-    boolean inRange(final int fromInclusive, final int toInclusive) {
-        return punkts.size() >= fromInclusive && punkts.size() <= toInclusive;
+    static boolean inRange(Punkte punkte, final int fromInclusive, final int toInclusive) {
+        return punkte.punkts.size() >= fromInclusive && punkte.punkts.size() <= toInclusive;
     }
 
     static Predicate<Punkte> passIfInRange(final int fromInclusive, final int toInclusive) {
-        return punkte -> punkte.inRange(fromInclusive, toInclusive);
+        return punkte -> inRange(punkte, fromInclusive, toInclusive);
     }
 }

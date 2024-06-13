@@ -29,14 +29,14 @@ public record LaufendesStandardMatch(PunkteSpieler punkteSpieler, PunkteGegner p
         return Either.narrow(Routing.selection(prev.punkteSpieler().increment(),
                 PunkteSpieler.passIfNotWon(),
                 nextPt -> laufendesStandardMatch(nextPt, prev.punkteGegner()),
-                nextPt -> abgeschlossenesStandardMatch(nextPt.current(), prev.punkteGegner().current())));
+                nextPt -> abgeschlossenesStandardMatch(nextPt.evalToInt(), prev.punkteGegner().current())));
     }
 
     public static Either<DomainError, StandardMatch> incrementGegner(LaufendesStandardMatch prev) {
         return Either.narrow(Routing.selection(prev.punkteGegner().increment(),
                 PunkteGegner.passIfNotWon(),
                 nextPt -> laufendesStandardMatch(prev.punkteSpieler(), nextPt),
-                nextPt -> abgeschlossenesStandardMatch(prev.punkteSpieler().current(), nextPt.current())));
+                nextPt -> abgeschlossenesStandardMatch(prev.punkteSpieler().evalToInt(), nextPt.current())));
     }
 
     static StandardMatch zero() {

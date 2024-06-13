@@ -102,13 +102,13 @@ class StandardScoringCommandHandlerTest {
 
     private static Tuple2<Integer, Integer> evalMatchScore(final StandardScoring succ) {
         return StandardMatch.apply(succ.match(),
-                laufendesStandardMatch -> laufendesStandardMatch.eval(PunkteSpieler::current, PunkteGegner::current),
+                laufendesStandardMatch -> laufendesStandardMatch.eval(PunkteSpieler::evalToInt, PunkteGegner::current),
                 abgeschl -> abgeschl.eval(Tuple::of)
         );
     }
 
     private static Tuple2<Integer, Integer> trewtrew(final PunkteSpieler sp, final PunkteGegner ge) {
-        return Tuple.of(sp.current(), ge.current());
+        return Tuple.of(sp.evalToInt(), ge.current());
     }
 
     private static Tuple2<Integer, Integer> evalSatzScore(final StandardScoring succ) {

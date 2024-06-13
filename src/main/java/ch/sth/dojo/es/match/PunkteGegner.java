@@ -25,10 +25,10 @@ public record PunkteGegner(Punkte punkte) {
     }
 
     public Integer current() {
-        return punkte().asInteger();
+        return Punkte.asInteger(punkte());
     }
 
     public PunkteGegner increment() {
-        return new PunkteGegner(punkte.increment());
+        return new PunkteGegner(Punkte.increment(punkte));
     }
 }

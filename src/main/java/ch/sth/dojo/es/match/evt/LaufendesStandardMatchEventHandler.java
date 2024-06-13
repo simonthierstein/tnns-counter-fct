@@ -59,11 +59,11 @@ public class LaufendesStandardMatchEventHandler {
     }
 
     private static Function2<LaufendesStandardMatch, SpielerHatMatchGewonnen, Either<DomainError, StandardMatch>> spielerHatMatchGewonnen() {
-        return (state, event) -> Either.narrow(abgeschlossenesStandardMatch(state.punkteSpieler().increment().current(), state.punkteGegner().current()));
+        return (state, event) -> Either.narrow(abgeschlossenesStandardMatch(state.punkteSpieler().increment().evalToInt(), state.punkteGegner().current()));
     }
 
     private static Function2<LaufendesStandardMatch, GegnerHatMatchGewonnen, Either<DomainError, StandardMatch>> gegnerHatMatchGewonnen() {
-        return (state, event) -> Either.narrow(abgeschlossenesStandardMatch(state.punkteSpieler().current(), state.punkteGegner().increment().current()));
+        return (state, event) -> Either.narrow(abgeschlossenesStandardMatch(state.punkteSpieler().evalToInt(), state.punkteGegner().increment().current()));
     }
 
     private static Function2<LaufendesStandardMatch, SpielerHatSatzGewonnen, Either<DomainError, StandardMatch>> spielerHatSatzGewonnen() {

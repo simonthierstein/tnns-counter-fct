@@ -1,6 +1,7 @@
 package ch.sth.dojo.es.match;
 
 import io.vavr.control.Option;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 public record PunkteSpieler(Punkte punkte) {
@@ -24,11 +25,15 @@ public record PunkteSpieler(Punkte punkte) {
                 .map(PunkteSpieler::new);
     }
 
-    public int current() {
-        return punkte.asInteger();
+    public <T> T eval(Function<Punkte, T> mapper) {
+        return mapper.apply(punkte);
+    }
+
+    public int evalToInt() {
+        return eval(Punkte::asInteger);
     }
 
     public PunkteSpieler increment() {
-        return new PunkteSpieler(punkte.increment());
+        return new PunkteSpieler(Punkte.increment(punkte));
     }
 }
