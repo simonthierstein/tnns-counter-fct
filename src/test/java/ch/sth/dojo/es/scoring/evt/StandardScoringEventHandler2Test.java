@@ -30,7 +30,6 @@ class StandardScoringEventHandler2Test {
 
     @Test
     void handleMatchGewonnenSpieler() {
-
         final Either<DomainError, StandardScoring> result = StandardScoringEventHandler.handleEvent(preSpielerGewinntMatchState(),
                 spielerHatMatchGewonnenEvent());
 
@@ -39,10 +38,9 @@ class StandardScoringEventHandler2Test {
                 .isInstanceOf(Either.Right.class)
                 .isNotEqualTo(Either.right(scoringZero()));
 
-        assertThat(result.get()).isNotNull()
+        assertThat(result.get())
+                .isNotNull()
                 .isEqualTo(spielerMatchGewonnenState());
-
-
     }
 
 
