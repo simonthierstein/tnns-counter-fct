@@ -5,6 +5,7 @@ import static ch.sth.dojo.es.scoring.CurrentGame.currentGame;
 import static ch.sth.dojo.es.scoring.CurrentSatz.currentSatz;
 import static ch.sth.dojo.es.scoring.StandardScoring.standardScoring;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
 
 import ch.sth.dojo.es.DomainError;
 import ch.sth.dojo.es.events.DomainEvent;
@@ -86,6 +87,11 @@ class StandardScoringEventHandler2Test {
 
         assertThat(standardScorings.isRight()).isTrue();
 
+    }
+
+    @Test
+    void handleTransitionToTiebreak_ok() {
+        fail("not implemented");
     }
 
     private static StandardScoring preGegnerGewinntSatzState() {
