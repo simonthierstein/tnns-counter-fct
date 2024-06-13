@@ -10,6 +10,7 @@ import static ch.sth.dojo.es.evt.satz.SatzEventHandler.eventToErrorF2;
 import static ch.sth.dojo.es.satz.AbgeschlossenerSatz.AbgeschlossenerSatz;
 
 import ch.sth.dojo.es.DomainError;
+import ch.sth.dojo.es.Identity;
 import ch.sth.dojo.es.events.DomainEvent;
 import ch.sth.dojo.es.events.GegnerHatGameGewonnen;
 import ch.sth.dojo.es.events.GegnerHatMatchGewonnen;
@@ -52,13 +53,12 @@ class LaufenderSatzEventHandler {
     }
 
     private static Function2<LaufenderSatz, SpielerHatMatchGewonnen, Satz> spielerHatMatchGewonnen() {
-        return (state, event) -> toAbgeschlossenerSatz().apply(state);// TODO sth/11.06.2024 : increment!
+        return (state, event) -> toAbgeschlossenerSatzSpieler().apply(state);
     }
 
     private static Function2<LaufenderSatz, GegnerHatMatchGewonnen, Satz> gegnerHatMatchGewonnen() {
-        return (state, event) -> toAbgeschlossenerSatz().apply(state);
+        return (state1, event1) -> toAbgeschlossenerSatzGegner().apply(state1);
     }
-
     private static Function2<LaufenderSatz, SpielerHatGameGewonnen, Satz> spielerHatGameGewonnen() {
         return (state, event) -> toLaufenderSatzSpieler().apply(state);
     }
@@ -68,11 +68,25 @@ class LaufenderSatzEventHandler {
     }
 
     private static Function2<LaufenderSatz, SpielerHatSatzGewonnen, Satz> spielerHatSatzGewonnen() {
-        return (state, event) -> toAbgeschlossenerSatz().apply(state);
+        return (state, event) -> toAbgeschlossenerSatzSpieler().apply(state);
     }
 
     private static Function2<LaufenderSatz, GegnerHatSatzGewonnen, Satz> gegnerHatSatzGewonnen() {
-        return (state, event) -> toAbgeschlossenerSatz().apply(state);
+        return (state, event) -> toAbgeschlossenerSatzGegner().apply(state);
+    }
+
+    private static Function<LaufenderSatz, AbgeschlossenerSatz> toAbgeschlossenerSatzSpieler() {
+        return state -> Identity.unit(state)
+                .map(LaufenderSatz::incrementSpieler)
+                .map(toAbgeschlossenerSatz())
+                .eval();
+    }
+
+    private static Function<LaufenderSatz, AbgeschlossenerSatz> toAbgeschlossenerSatzGegner() {
+        return state -> Identity.unit(state)
+                .map(LaufenderSatz::incrementGegner)
+                .map(toAbgeschlossenerSatz())
+                .eval();
     }
 
     private static Function<LaufenderSatz, LaufenderSatz> toLaufenderSatzSpieler() {
