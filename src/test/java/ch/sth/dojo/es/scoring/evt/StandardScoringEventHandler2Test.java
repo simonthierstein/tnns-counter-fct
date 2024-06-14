@@ -5,7 +5,6 @@ import static ch.sth.dojo.es.scoring.CurrentGame.currentGame;
 import static ch.sth.dojo.es.scoring.CurrentSatz.currentSatz;
 import static ch.sth.dojo.es.scoring.StandardScoring.standardScoring;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.fail;
 
 import ch.sth.dojo.es.DomainError;
 import ch.sth.dojo.es.events.DomainEvent;
@@ -89,7 +88,16 @@ class StandardScoringEventHandler2Test {
 
     @Test
     void handleTransitionToTiebreak_ok() {
-        fail("not implemented");
+        final Either<DomainError, StandardScoring> standardScorings = StandardScoringEventHandler.handleEvent(preTiebreakState(),
+                spielerHatGameGewonnenEvent());
+
+        assertThat(standardScorings.isRight()).isTrue();
+    }
+
+    private StandardScoring preTiebreakState() {
+        return standardScoring(currentGame(LaufendesGame.laufendesGame(spieler40(), gegner0()).get()),
+                currentSatz(LaufenderSatz.fromInteger(5, 6).get()),
+                anyMatchState());
     }
 
     private static StandardScoring preGegnerGewinntSatzState() {
