@@ -92,6 +92,19 @@ class StandardScoringEventHandler2Test {
                 spielerHatGameGewonnenEvent());
 
         assertThat(standardScorings.isRight()).isTrue();
+        final StandardScoring standardScoring = standardScorings.get();
+
+        assertThat(standardScoring.currentGame().current()).isInstanceOf(AbgeschlossenesGame.class);
+        assertThat(standardScoring.currentSatz().current()).isInstanceOf(LaufenderSatz.class)
+                .isEqualTo(satz6beide());
+
+        final StandardScoring prepNext = StandardScoring.prepareNext(standardScoring);
+
+        
+    }
+
+    private Satz satz6beide() {
+        return LaufenderSatz.fromInteger(6, 6).get();
     }
 
     private StandardScoring preTiebreakState() {
