@@ -12,6 +12,7 @@ import io.vavr.Tuple;
 import io.vavr.collection.List;
 import io.vavr.collection.Traversable;
 import io.vavr.control.Option;
+import java.util.function.Function;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
@@ -53,11 +54,17 @@ public class LaufendesSatzTiebreak implements SatzTiebreak {
     }
 
     public static SatzTiebreak incrementSpieler(LaufendesSatzTiebreak prev) {
-        return new LaufendesSatzTiebreak(increment(prev.punkteSpieler), prev.punkteGegner);
+        final List<Punkt> incremented = increment(prev.punkteSpieler);
+        return AbgeschlossenesSatzTiebreak.abgeschlossenesSatzTiebreak(incremented.size(), prev.punkteGegner.size())
+                .fold(() -> new LaufendesSatzTiebreak(incremented, prev.punkteGegner),
+                        Function.identity());
     }
 
-    public static LaufendesSatzTiebreak incrementGegner(LaufendesSatzTiebreak prev) {
-        return new LaufendesSatzTiebreak(prev.punkteSpieler, increment(prev.punkteGegner));
+    public static SatzTiebreak incrementGegner(LaufendesSatzTiebreak prev) {
+        final List<Punkt> incremented = increment(prev.punkteGegner);
+        return AbgeschlossenesSatzTiebreak.abgeschlossenesSatzTiebreak(prev.punkteSpieler.size(), incremented.size())
+                .fold(() -> new LaufendesSatzTiebreak(prev.punkteSpieler, incremented),
+                        Function.identity());
     }
 
     public static <T> T eval(LaufendesSatzTiebreak state,

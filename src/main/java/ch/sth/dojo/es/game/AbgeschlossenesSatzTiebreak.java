@@ -14,14 +14,14 @@ record AbgeschlossenesSatzTiebreak(Integer punkteSpieler, Integer punkteGegner) 
 
     private static final Predicate<Integer> passIfGteZero = x -> x >= 0;
     private static final Predicate<Integer> passIfGte7 = x -> x >= 7;
-    private static final Predicate<Tuple2<Integer, Integer>> passIfDiffGte2 = t2 -> Math.abs(t2._1 - t2._2) >= 2;
+    private static final Predicate<Tuple2<Integer, Integer>> passIfDiffEq2 = t2 -> Math.abs(t2._1 - t2._2) == 2;
     public static final Predicate<Tuple2<Integer, Integer>> passIfValidAbgeschlossenesTiebreak = Predicates.allOf(
             Predicates.anyOf(
                     x -> passIfGte7.test(x._1),
                     x -> passIfGte7.test(x._2)),
-            passIfDiffGte2);
+            passIfDiffEq2);
 
-    static Option<AbgeschlossenesSatzTiebreak> validatedAbgeschlossenesTiebreak(final Integer punkteSpieler, final Integer punkteGegner) {
+    static Option<AbgeschlossenesSatzTiebreak> abgeschlossenesSatzTiebreak(final Integer punkteSpieler, final Integer punkteGegner) {
         final Option<Integer> spielerOpt = Option.of(punkteSpieler).filter(passIfGteZero);
         final Option<Integer> gegnerOpt = Option.of(punkteGegner).filter(passIfGteZero);
 
