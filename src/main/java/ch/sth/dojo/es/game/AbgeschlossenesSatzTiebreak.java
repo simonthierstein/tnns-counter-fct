@@ -25,7 +25,9 @@ record AbgeschlossenesSatzTiebreak(Integer punkteSpieler, Integer punkteGegner) 
         final Option<Integer> spielerOpt = Option.of(punkteSpieler).filter(passIfGteZero);
         final Option<Integer> gegnerOpt = Option.of(punkteGegner).filter(passIfGteZero);
 
-        return spielerOpt.flatMap(spieler -> gegnerOpt.map(gegner -> Tuple.of(spieler, gegner)))
+        return spielerOpt.flatMap(spieler ->
+                        gegnerOpt.map(gegner ->
+                                Tuple.of(spieler, gegner)))
                 .filter(passIfValidAbgeschlossenesTiebreak)
                 .map(t2 -> t2.apply(AbgeschlossenesSatzTiebreak::new));
     }
