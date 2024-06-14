@@ -9,6 +9,7 @@ import static ch.sth.dojo.es.game.Punkt.punkt;
 import io.vavr.Function2;
 import io.vavr.Predicates;
 import io.vavr.Tuple;
+import io.vavr.Tuple2;
 import io.vavr.collection.List;
 import io.vavr.collection.Traversable;
 import io.vavr.control.Option;
@@ -65,6 +66,10 @@ public class LaufendesSatzTiebreak implements SatzTiebreak {
         return AbgeschlossenesSatzTiebreak.abgeschlossenesSatzTiebreak(prev.punkteSpieler.size(), incremented.size())
                 .fold(() -> new LaufendesSatzTiebreak(prev.punkteSpieler, incremented),
                         Function.identity());
+    }
+
+    public static Tuple2<Integer, Integer> eval(LaufendesSatzTiebreak state) {
+        return eval(state, Tuple::of).map(List::size, List::size);
     }
 
     public static <T> T eval(LaufendesSatzTiebreak state,
