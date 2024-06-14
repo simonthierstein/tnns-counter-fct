@@ -14,6 +14,7 @@ import io.vavr.collection.List;
 import io.vavr.collection.Traversable;
 import io.vavr.control.Option;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,7 @@ import lombok.ToString;
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @EqualsAndHashCode @ToString
 public class LaufendesSatzTiebreak implements SatzTiebreak {
+    private static Predicate<Tuple2<Integer, Integer>> passIfValidLaufendesTiebreak;
     public final List<Punkt> punkteSpieler;
     public final List<Punkt> punkteGegner;
 
@@ -40,11 +42,18 @@ public class LaufendesSatzTiebreak implements SatzTiebreak {
     }
 
     private static Option<LaufendesSatzTiebreak> erstelleValidesLaufendesTiebreak(Integer sp, Integer ge) {
+        passIfValidLaufendesTiebreak = Predicates.allOf(
+                t2 -> t2._1 >= 0,
+                t2 -> t2._2 >= 0,
+                Predicates.anyOf(Predicates.allOf(
+                                t2 -> t2._1 <= 6,
+                                t2 -> t2._2 <= 6
+                        ),
+                        t2 -> t2.apply((ss, gg) -> Math.abs(ss - gg) <= 1)
+                )
+        );
         return Option.of(Tuple.of(sp, ge))
-                .filter(Predicates.allOf(
-                        t2 -> t2._1 >= 0,
-                        t2 -> t2._2 >= 0 // TODO sth/07.06.2024 : validierung zweipunkteabstand
-                ))
+                .filter(passIfValidLaufendesTiebreak)
                 .map(t2 -> t2.map(Game::toPunkte, Game::toPunkte))
                 .map(t2 -> t2.apply(LaufendesSatzTiebreak::new));
     }
