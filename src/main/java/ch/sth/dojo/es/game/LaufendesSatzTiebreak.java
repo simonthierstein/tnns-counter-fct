@@ -4,10 +4,12 @@
 
 package ch.sth.dojo.es.game;
 
+import static ch.sth.dojo.es.game.AbgeschlossenesSatzTiebreak.abgeschlossenesSatzTiebreak;
 import static ch.sth.dojo.es.game.Punkt.punkt;
+import static io.vavr.Predicates.allOf;
+import static io.vavr.Predicates.anyOf;
 
 import io.vavr.Function2;
-import io.vavr.Predicates;
 import io.vavr.Tuple;
 import io.vavr.Tuple2;
 import io.vavr.collection.List;
@@ -23,7 +25,12 @@ import lombok.ToString;
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @EqualsAndHashCode @ToString
 public class LaufendesSatzTiebreak implements SatzTiebreak {
-    private static Predicate<Tuple2<Integer, Integer>> passIfValidLaufendesTiebreak;
+    private static final Predicate<Tuple2<Integer, Integer>> passIfBothScoresGteZero = allOf(t2 -> t2._1 >= 0, t2 -> t2._2 >= 0);
+    private static final Predicate<Tuple2<Integer, Integer>> passIfBothScoresLte6 = allOf(t2 -> t2._1 <= 6, t2 -> t2._2 <= 6);
+    private static final Predicate<Tuple2<Integer, Integer>> passIfDiffLte1 = t2 -> t2.apply((ss, gg) -> Math.abs(ss - gg) <= 1);
+    private static final Predicate<Tuple2<Integer, Integer>> passIfOngoingScore = anyOf(passIfBothScoresLte6, passIfDiffLte1);
+    private static final Predicate<Tuple2<Integer, Integer>> passIfValidLaufendesTiebreak = allOf(passIfBothScoresGteZero, passIfOngoingScore);
+
     public final List<Punkt> punkteSpieler;
     public final List<Punkt> punkteGegner;
 
@@ -42,16 +49,6 @@ public class LaufendesSatzTiebreak implements SatzTiebreak {
     }
 
     private static Option<LaufendesSatzTiebreak> erstelleValidesLaufendesTiebreak(Integer sp, Integer ge) {
-        passIfValidLaufendesTiebreak = Predicates.allOf(
-                t2 -> t2._1 >= 0,
-                t2 -> t2._2 >= 0,
-                Predicates.anyOf(Predicates.allOf(
-                                t2 -> t2._1 <= 6,
-                                t2 -> t2._2 <= 6
-                        ),
-                        t2 -> t2.apply((ss, gg) -> Math.abs(ss - gg) <= 1)
-                )
-        );
         return Option.of(Tuple.of(sp, ge))
                 .filter(passIfValidLaufendesTiebreak)
                 .map(t2 -> t2.map(Game::toPunkte, Game::toPunkte))
@@ -65,20 +62,20 @@ public class LaufendesSatzTiebreak implements SatzTiebreak {
 
     public static SatzTiebreak incrementSpieler(LaufendesSatzTiebreak prev) {
         final List<Punkt> incremented = increment(prev.punkteSpieler);
-        return AbgeschlossenesSatzTiebreak.abgeschlossenesSatzTiebreak(incremented.size(), prev.punkteGegner.size())
-                .fold(() -> new LaufendesSatzTiebreak(incremented, prev.punkteGegner),
-                        Function.identity());
+        return laufendesSatzTiebreak(incremented, prev.punkteGegner)
+                .flatMap(Option::<SatzTiebreak>some)
+                .orElse(() -> abgeschlossenesSatzTiebreak(incremented.size(), prev.punkteGegner.size())).get();
     }
 
     public static SatzTiebreak incrementGegner(LaufendesSatzTiebreak prev) {
         final List<Punkt> incremented = increment(prev.punkteGegner);
-        return AbgeschlossenesSatzTiebreak.abgeschlossenesSatzTiebreak(prev.punkteSpieler.size(), incremented.size())
+        return abgeschlossenesSatzTiebreak(prev.punkteSpieler.size(), incremented.size())
                 .fold(() -> new LaufendesSatzTiebreak(prev.punkteSpieler, incremented),
                         Function.identity());
     }
 
-    public static Tuple2<Integer, Integer> eval(LaufendesSatzTiebreak state) {
-        return eval(state, Tuple::of).map(List::size, List::size);
+    public static Tuple2<List<Punkt>, List<Punkt>> eval(LaufendesSatzTiebreak state) {
+        return eval(state, Tuple::of);
     }
 
     public static <T> T eval(LaufendesSatzTiebreak state,

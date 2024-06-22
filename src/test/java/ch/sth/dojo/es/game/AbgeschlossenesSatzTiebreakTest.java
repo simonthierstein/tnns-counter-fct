@@ -18,5 +18,6 @@ class AbgeschlossenesSatzTiebreakTest {
         assertThat(AbgeschlossenesSatzTiebreak.abgeschlossenesSatzTiebreak(9, 8).isEmpty()).isTrue();
         assertThat(AbgeschlossenesSatzTiebreak.abgeschlossenesSatzTiebreak(10, 8).isDefined()).isTrue();
         assertThat(AbgeschlossenesSatzTiebreak.abgeschlossenesSatzTiebreak(11, 8).isEmpty()).isTrue();
+        assertThat(AbgeschlossenesSatzTiebreak.abgeschlossenesSatzTiebreak(7, 0).isDefined()).isTrue();
     }
 }
