@@ -6,10 +6,10 @@ package ch.sth.dojo.es.scoring.cmd;
 
 import ch.sth.dojo.es.DomainError;
 import ch.sth.dojo.es.Identity;
-import ch.sth.dojo.es.cmd.game.GameCommandHandler;
-import ch.sth.dojo.es.cmd.satz.SatzCommandHandler;
 import ch.sth.dojo.es.events.DomainEvent;
+import ch.sth.dojo.es.game.cmd.GameCommandHandler;
 import ch.sth.dojo.es.match.cmd.MatchCommandHandler;
+import ch.sth.dojo.es.satz.cmd.SatzCommandHandler;
 import ch.sth.dojo.es.scoring.StandardScoring;
 import io.vavr.control.Either;
 

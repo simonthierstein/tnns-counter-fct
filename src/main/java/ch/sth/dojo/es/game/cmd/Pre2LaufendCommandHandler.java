@@ -2,7 +2,7 @@
  * Copyright (C) Schweizerische Bundesbahnen SBB, 2024.
  */
 
-package ch.sth.dojo.es.cmd.game;
+package ch.sth.dojo.es.game.cmd;
 
 import ch.sth.dojo.es.events.GameErzeugt;
 import ch.sth.dojo.es.game.PreInitializedGame;

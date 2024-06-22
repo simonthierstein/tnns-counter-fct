@@ -1,4 +1,4 @@
-package ch.sth.dojo.es.cmd.game;
+package ch.sth.dojo.es.game.cmd;
 
 import static ch.sth.dojo.es.Routing.selective2SplitEither;
 

@@ -5,12 +5,12 @@ import static ch.sth.dojo.es.scoring.CurrentSatz.currentSatz;
 
 import ch.sth.dojo.es.DomainError;
 import ch.sth.dojo.es.events.DomainEvent;
-import ch.sth.dojo.es.evt.game.GameEventHandler;
-import ch.sth.dojo.es.evt.satz.SatzEventHandler;
 import ch.sth.dojo.es.game.Game;
+import ch.sth.dojo.es.game.evt.GameEventHandler;
 import ch.sth.dojo.es.match.StandardMatch;
 import ch.sth.dojo.es.match.evt.MatchEventHandler;
 import ch.sth.dojo.es.satz.Satz;
+import ch.sth.dojo.es.satz.evt.SatzEventHandler;
 import ch.sth.dojo.es.scoring.StandardScoring;
 import io.vavr.control.Either;
 

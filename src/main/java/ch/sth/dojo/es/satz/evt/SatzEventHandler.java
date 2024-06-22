@@ -1,7 +1,7 @@
-package ch.sth.dojo.es.evt.satz;
+package ch.sth.dojo.es.satz.evt;
 
-import static ch.sth.dojo.es.evt.satz.AbgeschlossenerSatzEventHandler.handleAbgeschlossenerSatz;
-import static ch.sth.dojo.es.evt.satz.LaufenderSatzEventHandler.handleLaufenderSatz;
+import static ch.sth.dojo.es.satz.evt.AbgeschlossenerSatzEventHandler.handleAbgeschlossenerSatz;
+import static ch.sth.dojo.es.satz.evt.LaufenderSatzEventHandler.handleLaufenderSatz;
 
 import ch.sth.dojo.es.DomainError;
 import ch.sth.dojo.es.events.DomainEvent;

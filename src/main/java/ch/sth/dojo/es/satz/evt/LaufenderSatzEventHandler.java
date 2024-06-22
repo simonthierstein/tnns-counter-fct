@@ -2,12 +2,12 @@
  * Copyright (C) Schweizerische Bundesbahnen SBB, 2024.
  */
 
-package ch.sth.dojo.es.evt.satz;
+package ch.sth.dojo.es.satz.evt;
 
 import static ch.sth.dojo.es.Util.leftF2;
 import static ch.sth.dojo.es.Util.rightF2;
-import static ch.sth.dojo.es.evt.satz.SatzEventHandler.eventToErrorF2;
 import static ch.sth.dojo.es.satz.AbgeschlossenerSatz.AbgeschlossenerSatz;
+import static ch.sth.dojo.es.satz.evt.SatzEventHandler.eventToErrorF2;
 
 import ch.sth.dojo.es.DomainError;
 import ch.sth.dojo.es.Identity;

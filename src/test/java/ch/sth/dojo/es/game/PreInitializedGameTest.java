@@ -2,7 +2,7 @@ package ch.sth.dojo.es.game;
 
 import static ch.sth.dojo.es.Unit.Unit;
 import static ch.sth.dojo.es.Unit2Pre.createEmpty;
-import static ch.sth.dojo.es.cmd.game.Pre2LaufendCommandHandler.erzeugeGame;
+import static ch.sth.dojo.es.game.cmd.Pre2LaufendCommandHandler.erzeugeGame;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import ch.sth.dojo.es.events.GameErzeugt;
