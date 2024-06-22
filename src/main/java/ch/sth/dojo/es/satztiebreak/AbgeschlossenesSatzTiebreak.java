@@ -2,7 +2,7 @@
  * Copyright (C) Schweizerische Bundesbahnen SBB, 2024.
  */
 
-package ch.sth.dojo.es.game;
+package ch.sth.dojo.es.satztiebreak;
 
 import static io.vavr.Predicates.allOf;
 import static io.vavr.Predicates.anyOf;

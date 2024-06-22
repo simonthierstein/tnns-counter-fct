@@ -1,8 +1,11 @@
 package ch.sth.dojo.es.game;
 
-import static ch.sth.dojo.es.game.LaufendesSatzTiebreak.laufendesSatzTiebreak;
+import static ch.sth.dojo.es.satztiebreak.LaufendesSatzTiebreak.laufendesSatzTiebreak;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import ch.sth.dojo.es.game.satztiebreak.AbgeschlossenesSatzTiebreak;
+import ch.sth.dojo.es.satztiebreak.LaufendesSatzTiebreak;
+import ch.sth.dojo.es.satztiebreak.SatzTiebreak;
 import io.vavr.control.Option;
 import org.junit.jupiter.api.Test;
 

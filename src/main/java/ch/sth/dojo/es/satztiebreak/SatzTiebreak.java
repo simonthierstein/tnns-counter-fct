@@ -1,10 +1,11 @@
-package ch.sth.dojo.es.game;
+package ch.sth.dojo.es.satztiebreak;
 
 import static io.vavr.API.$;
 import static io.vavr.API.Case;
 import static io.vavr.API.Match;
 import static io.vavr.Predicates.instanceOf;
 
+import ch.sth.dojo.es.game.Game;
 import io.vavr.control.Option;
 import java.util.function.Function;
 

@@ -2,13 +2,15 @@
  * Copyright (C) Schweizerische Bundesbahnen SBB, 2024.
  */
 
-package ch.sth.dojo.es.game;
+package ch.sth.dojo.es.satztiebreak;
 
-import static ch.sth.dojo.es.game.AbgeschlossenesSatzTiebreak.abgeschlossenesSatzTiebreak;
 import static ch.sth.dojo.es.game.Punkt.punkt;
+import static ch.sth.dojo.es.satztiebreak.AbgeschlossenesSatzTiebreak.abgeschlossenesSatzTiebreak;
 import static io.vavr.Predicates.allOf;
 import static io.vavr.Predicates.anyOf;
 
+import ch.sth.dojo.es.game.Game;
+import ch.sth.dojo.es.game.Punkt;
 import io.vavr.Function2;
 import io.vavr.Tuple;
 import io.vavr.Tuple2;
