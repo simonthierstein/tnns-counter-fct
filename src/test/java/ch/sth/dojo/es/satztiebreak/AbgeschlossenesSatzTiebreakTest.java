@@ -1,6 +1,7 @@
-package ch.sth.dojo.es.game;
+package ch.sth.dojo.es.satztiebreak;
 
-import ch.sth.dojo.es.game.satztiebreak.AbgeschlossenesSatzTiebreak;
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.junit.jupiter.api.Test;
 
 class AbgeschlossenesSatzTiebreakTest {
