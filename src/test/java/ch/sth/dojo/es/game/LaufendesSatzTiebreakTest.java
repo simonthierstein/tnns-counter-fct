@@ -35,4 +35,19 @@ class LaufendesSatzTiebreakTest {
         assertThat(satzTiebreaks.isDefined()).isTrue();
         assertThat(satzTiebreaks.get()).isInstanceOf(AbgeschlossenesSatzTiebreak.class);
     }
+
+    @Test
+    void scoreGegnerTiebreakGewonnen_ok() {
+        final LaufendesSatzTiebreak zero = LaufendesSatzTiebreak.zero();
+        final Option<SatzTiebreak> satzTiebreaks = SatzTiebreak.incrementGegner(zero)
+                .flatMap(SatzTiebreak::incrementGegner)
+                .flatMap(SatzTiebreak::incrementGegner)
+                .flatMap(SatzTiebreak::incrementGegner)
+                .flatMap(SatzTiebreak::incrementGegner)
+                .flatMap(SatzTiebreak::incrementGegner)
+                .flatMap(SatzTiebreak::incrementGegner);
+
+        assertThat(satzTiebreaks.isDefined()).isTrue();
+        assertThat(satzTiebreaks.get()).isInstanceOf(AbgeschlossenesSatzTiebreak.class);
+    }
 }

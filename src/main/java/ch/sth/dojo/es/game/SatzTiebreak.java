@@ -26,4 +26,11 @@ public interface SatzTiebreak extends Game {
                 prev -> Option.none());
     }
 
+    static Option<SatzTiebreak> incrementGegner(SatzTiebreak state) {
+        return apply(state,
+                prev -> Option.some(LaufendesSatzTiebreak.incrementGegner(prev)),
+                prev -> Option.none());
+    }
+
 }
+
