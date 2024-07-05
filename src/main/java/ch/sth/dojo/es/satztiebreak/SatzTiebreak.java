@@ -11,9 +11,9 @@ import java.util.function.Function;
 
 public interface SatzTiebreak extends Game {
 
-    private static <T> T apply(SatzTiebreak target,
-                               Function<LaufendesSatzTiebreak, T> f1,
-                               Function<AbgeschlossenesSatzTiebreak, T> f2) {
+    static <T> T apply(SatzTiebreak target,
+                       Function<LaufendesSatzTiebreak, T> f1,
+                       Function<AbgeschlossenesSatzTiebreak, T> f2) {
         return Match(target).of(
                 Case($(instanceOf(LaufendesSatzTiebreak.class)), f1),
                 Case($(instanceOf(AbgeschlossenesSatzTiebreak.class)), f2)

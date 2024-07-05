@@ -12,7 +12,7 @@ import io.vavr.Tuple2;
 import io.vavr.control.Option;
 import java.util.function.Predicate;
 
-record AbgeschlossenesSatzTiebreak(Integer punkteSpieler, Integer punkteGegner) implements SatzTiebreak {
+public record AbgeschlossenesSatzTiebreak(Integer punkteSpieler, Integer punkteGegner) implements SatzTiebreak {
 
     private static final Predicate<Integer> passIfGte7 = x -> x >= 7;
     private static final Predicate<Integer> passIfEq7 = x -> x == 7;

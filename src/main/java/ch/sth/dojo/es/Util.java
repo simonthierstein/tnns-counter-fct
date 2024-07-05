@@ -5,8 +5,10 @@
 package ch.sth.dojo.es;
 
 import ch.sth.dojo.es.events.DomainEvent;
+import ch.sth.dojo.es.satztiebreak.SatzTiebreak;
 import io.vavr.Function2;
 import io.vavr.control.Either;
+import io.vavr.control.Option;
 import java.util.function.Function;
 
 public interface Util {
@@ -27,4 +29,7 @@ public interface Util {
         return i -> Either.<I, R>left(i).mapLeft(inputFunction);
     }
 
+    static <T> Function<T, Option<SatzTiebreak>> none() {
+        return x -> Option.none();
+    }
 }
