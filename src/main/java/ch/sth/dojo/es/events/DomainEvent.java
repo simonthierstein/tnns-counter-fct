@@ -6,6 +6,7 @@ import static io.vavr.API.Match;
 import static io.vavr.Predicates.instanceOf;
 
 import io.vavr.Function2;
+import io.vavr.Tuple;
 import java.util.function.Function;
 
 public sealed interface DomainEvent permits GameErzeugt, GegnerHatGameGewonnen, GegnerHatMatchGewonnen, GegnerHatPunktGewonnen, GegnerHatSatzGewonnen,
@@ -56,6 +57,21 @@ public sealed interface DomainEvent permits GameErzeugt, GegnerHatGameGewonnen, 
                 Case($(instanceOf(GegnerHatSatzGewonnen.class)), f7.apply(state)),
                 Case($(instanceOf(SpielerHatMatchGewonnen.class)), f8.apply(state)),
                 Case($(instanceOf(GegnerHatMatchGewonnen.class)), f9.apply(state)));
+    }
+
+    static <S, T> T handleEventF22(final DomainEvent elem, S state,
+                                   Function2<S, SpielerHatPunktGewonnen, T> f1,
+                                   Function2<S, GegnerHatPunktGewonnen, T> f2,
+                                   Function2<S, SpielerHatGameGewonnen, T> f3,
+                                   Function2<S, GegnerHatGameGewonnen, T> f4,
+                                   Function2<S, GameErzeugt, T> f5,
+                                   Function2<S, SpielerHatSatzGewonnen, T> f6,
+                                   Function2<S, GegnerHatSatzGewonnen, T> f7,
+                                   Function2<S, SpielerHatMatchGewonnen, T> f8,
+                                   Function2<S, GegnerHatMatchGewonnen, T> f9
+    ) {
+        return Match(Tuple.of(state, elem)).of(
+                Case($(Match.Pattern2.of(x -> x)), x -> x));
     }
 
 }
