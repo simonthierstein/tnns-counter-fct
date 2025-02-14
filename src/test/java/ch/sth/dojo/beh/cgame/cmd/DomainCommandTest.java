@@ -3,9 +3,9 @@ package ch.sth.dojo.beh.cgame.cmd;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import ch.sth.dojo.beh.DomainProblem;
-import ch.sth.dojo.beh.cgame.domain.game.GegnerPunkteBisGame;
-import ch.sth.dojo.beh.cgame.domain.game.LaufendesCGame;
-import ch.sth.dojo.beh.cgame.domain.game.SpielerPunkteBisGame;
+import ch.sth.dojo.beh.cgame.domain.GegnerPunkteBisGame;
+import ch.sth.dojo.beh.cgame.domain.LaufendesCGame;
+import ch.sth.dojo.beh.cgame.domain.SpielerPunkteBisGame;
 import ch.sth.dojo.beh.evt.DomainEvent;
 import ch.sth.dojo.beh.evt.GegnerGameGewonnen;
 import ch.sth.dojo.beh.evt.GegnerPunktGewonnen;

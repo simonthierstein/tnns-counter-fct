@@ -4,7 +4,7 @@ import static ch.sth.dojo.beh.cgame.cmd.DomainCommand.handleCommand;
 
 import ch.sth.dojo.beh.cgame.cmd.GegnerPunktet;
 import ch.sth.dojo.beh.cgame.cmd.SpielerPunktet;
-import ch.sth.dojo.beh.cgame.domain.game.CGame;
+import ch.sth.dojo.beh.cgame.domain.CGame;
 import ch.sth.dojo.beh.evt.DomainEvent;
 import io.vavr.Function2;
 import io.vavr.control.Either;

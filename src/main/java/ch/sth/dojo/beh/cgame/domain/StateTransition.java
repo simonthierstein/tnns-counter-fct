@@ -2,7 +2,7 @@
  * Copyright (C) Schweizerische Bundesbahnen SBB, 2025.
  */
 
-package ch.sth.dojo.beh.cgame.domain.game;
+package ch.sth.dojo.beh.cgame.domain;
 
 import static io.vavr.control.Either.left;
 import static io.vavr.control.Either.right;

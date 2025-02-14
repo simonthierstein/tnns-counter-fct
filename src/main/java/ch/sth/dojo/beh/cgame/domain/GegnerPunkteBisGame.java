@@ -1,4 +1,4 @@
-package ch.sth.dojo.beh.cgame.domain.game;
+package ch.sth.dojo.beh.cgame.domain;
 
 import java.util.function.Function;
 import java.util.function.Predicate;

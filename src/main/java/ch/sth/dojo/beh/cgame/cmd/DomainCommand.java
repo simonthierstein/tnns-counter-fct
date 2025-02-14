@@ -6,7 +6,7 @@ import static io.vavr.API.Match;
 import static io.vavr.Predicates.instanceOf;
 
 import ch.sth.dojo.beh.DomainProblem;
-import ch.sth.dojo.beh.cgame.domain.game.CGame;
+import ch.sth.dojo.beh.cgame.domain.CGame;
 import ch.sth.dojo.beh.evt.DomainEvent;
 import io.vavr.control.Either;
 

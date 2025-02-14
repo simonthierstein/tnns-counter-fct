@@ -2,7 +2,7 @@
  * Copyright (C) Schweizerische Bundesbahnen SBB, 2025.
  */
 
-package ch.sth.dojo.beh.cgame.domain.game;
+package ch.sth.dojo.beh.cgame.domain;
 
 import io.vavr.Tuple;
 import io.vavr.Tuple2;

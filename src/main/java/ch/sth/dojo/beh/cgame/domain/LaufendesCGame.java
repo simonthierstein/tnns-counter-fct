@@ -1,4 +1,4 @@
-package ch.sth.dojo.beh.cgame.domain.game;
+package ch.sth.dojo.beh.cgame.domain;
 
 import ch.sth.dojo.beh.DomainProblem;
 import io.vavr.Function2;

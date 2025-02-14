@@ -7,8 +7,8 @@ package ch.sth.dojo.beh.cgame.cmd;
 import static ch.sth.dojo.beh.Condition.condition;
 
 import ch.sth.dojo.beh.DomainProblem;
-import ch.sth.dojo.beh.cgame.domain.game.CGame;
-import ch.sth.dojo.beh.cgame.domain.game.LaufendesCGame;
+import ch.sth.dojo.beh.cgame.domain.CGame;
+import ch.sth.dojo.beh.cgame.domain.LaufendesCGame;
 import ch.sth.dojo.beh.evt.DomainEvent;
 import ch.sth.dojo.beh.evt.SpielerGameGewonnen;
 import ch.sth.dojo.beh.evt.SpielerPunktGewonnen;

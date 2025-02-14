@@ -1,4 +1,4 @@
-package ch.sth.dojo.beh.cgame.domain.game;
+package ch.sth.dojo.beh.cgame.domain;
 
 import static io.vavr.API.$;
 import static io.vavr.API.Case;

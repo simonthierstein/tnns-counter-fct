@@ -7,12 +7,12 @@ package ch.sth.dojo.beh.cgame.evt;
 import static io.vavr.control.Either.right;
 
 import ch.sth.dojo.beh.DomainProblem;
-import ch.sth.dojo.beh.cgame.domain.game.CGame;
-import ch.sth.dojo.beh.cgame.domain.game.GegnerPunkteBisGame;
-import ch.sth.dojo.beh.cgame.domain.game.Gewinner;
-import ch.sth.dojo.beh.cgame.domain.game.LaufendesCGame;
-import ch.sth.dojo.beh.cgame.domain.game.SpielerPunkteBisGame;
-import ch.sth.dojo.beh.cgame.domain.game.Verlierer;
+import ch.sth.dojo.beh.cgame.domain.CGame;
+import ch.sth.dojo.beh.cgame.domain.GegnerPunkteBisGame;
+import ch.sth.dojo.beh.cgame.domain.Gewinner;
+import ch.sth.dojo.beh.cgame.domain.LaufendesCGame;
+import ch.sth.dojo.beh.cgame.domain.SpielerPunkteBisGame;
+import ch.sth.dojo.beh.cgame.domain.Verlierer;
 import ch.sth.dojo.beh.evt.SpielerDomainEvent;
 import ch.sth.dojo.beh.evt.SpielerGameGewonnen;
 import ch.sth.dojo.beh.evt.SpielerPunktGewonnen;
