@@ -14,7 +14,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
-class EventHandlerSpielerTest {
+class CSatzCGameEventHandlerSpielerTest {
 
     @DisplayName("Scoring 😎")
     @ParameterizedTest(name = "spieler punktet {0} - {1}")
@@ -23,7 +23,7 @@ class EventHandlerSpielerTest {
         "2,4", "2,3"
     })
     void handleEvent(Integer spielerValue, Integer gegnerValue) {
-        final Either<DomainProblem, CGame> cGames = EventHandler.handleEvent(createStandardState(spielerValue, gegnerValue), new SpielerPunktGewonnen());
+        final Either<DomainProblem, CGame> cGames = CGameEventHandler.handleEvent(createStandardState(spielerValue, gegnerValue), new SpielerPunktGewonnen());
 
         assertThat(cGames.isRight()).isTrue();
         assertThat(cGames.map(LaufendesCGame.class::cast))
@@ -37,7 +37,7 @@ class EventHandlerSpielerTest {
         "2,2,1,3", "3,1,2,2"
     })
     void punktGewonnenInfluenced(Integer spielerValue, Integer gegnerValue, Integer expSpielerValue, Integer expGegnerValue) {
-        final Either<DomainProblem, CGame> cGames = EventHandler.handleEvent(createStandardState(spielerValue, gegnerValue), new SpielerPunktGewonnen());
+        final Either<DomainProblem, CGame> cGames = CGameEventHandler.handleEvent(createStandardState(spielerValue, gegnerValue), new SpielerPunktGewonnen());
 
         assertThat(cGames.isRight()).isTrue();
         assertThat(cGames.map(LaufendesCGame.class::cast))
@@ -53,7 +53,7 @@ class EventHandlerSpielerTest {
         "1,3"
     })
     void gameGewonnen(Integer spielerValue, Integer gegnerValue) {
-        final Either<DomainProblem, CGame> cGames = EventHandler.handleEvent(createStandardState(spielerValue, gegnerValue), new SpielerGameGewonnen());
+        final Either<DomainProblem, CGame> cGames = CGameEventHandler.handleEvent(createStandardState(spielerValue, gegnerValue), new SpielerGameGewonnen());
 
         assertThat(cGames.isRight()).isTrue();
         assertThat(cGames.map(LaufendesCGame.class::cast))
@@ -69,7 +69,7 @@ class EventHandlerSpielerTest {
         "1,3"
     })
     void gameGewonnenWrongEvent(Integer spielerValue, Integer gegnerValue) {
-        final Either<DomainProblem, CGame> cGames = EventHandler.handleEvent(createStandardState(spielerValue, gegnerValue), new SpielerPunktGewonnen());
+        final Either<DomainProblem, CGame> cGames = CGameEventHandler.handleEvent(createStandardState(spielerValue, gegnerValue), new SpielerPunktGewonnen());
 
         assertThat(cGames.isRight()).isFalse();
     }

@@ -19,7 +19,7 @@ import ch.sth.dojo.beh.evt.GegnerGameGewonnen;
 import ch.sth.dojo.beh.evt.GegnerPunktGewonnen;
 import io.vavr.control.Either;
 
-public interface GegnerEventHandler {
+interface GegnerEventHandler {
 
     static Either<DomainProblem, CGame> handleGegnerEvent(LaufendesCGame state, GegnerDomainEvent event) {
         return switch (event) {
