@@ -12,14 +12,13 @@ import ch.sth.dojo.beh.cgame.domain.CGame;
 import ch.sth.dojo.beh.cgame.evt.CGameEventHandler;
 import ch.sth.dojo.beh.csatz.domain.AbgeschlossenerCSatz;
 import ch.sth.dojo.beh.csatz.domain.CSatz;
+import ch.sth.dojo.beh.csatz.domain.GegnerPunkteSatz;
 import ch.sth.dojo.beh.csatz.domain.LaufenderCSatz;
+import ch.sth.dojo.beh.csatz.domain.SpielerPunkteSatz;
 import ch.sth.dojo.beh.evt.GegnerDomainEvent;
 import ch.sth.dojo.beh.evt.GegnerGameGewonnen;
 import ch.sth.dojo.beh.evt.GegnerPunktGewonnen;
 import ch.sth.dojo.beh.evt.GegnerSatzGewonnen;
-import ch.sth.dojo.beh.shsared.domain.Gewinner;
-import ch.sth.dojo.beh.shsared.domain.GewinnerVerlierer;
-import ch.sth.dojo.beh.shsared.domain.Verlierer;
 import io.vavr.control.Either;
 import java.util.function.Function;
 
@@ -38,7 +37,8 @@ interface GegnerEventHandler {
     }
 
     static CSatz handleEvent(LaufenderCSatz state, GegnerGameGewonnen event) {
-        return state.gameGewonnen(new GewinnerVerlierer(new Gewinner(state.gegnerPunkteSatz().value()), new Verlierer(state.spielerPunkteSatz().value())));
+        return new LaufenderCSatz(new SpielerPunkteSatz(state.spielerPunkteSatz().value()),
+            new GegnerPunkteSatz(state.gegnerPunkteSatz().value() + 1), state.currentGame());
     }
 
     static Either<DomainProblem, CSatz> handleEvent(LaufenderCSatz state, GegnerPunktGewonnen event) {
