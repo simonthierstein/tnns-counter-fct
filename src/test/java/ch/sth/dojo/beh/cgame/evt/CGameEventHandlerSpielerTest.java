@@ -15,7 +15,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
-class CSatzCGameEventHandlerSpielerTest {
+class CGameEventHandlerSpielerTest {
 
     @DisplayName("Scoring 😎")
     @ParameterizedTest(name = "spieler punktet {0} - {1}")
