@@ -4,6 +4,7 @@
 
 package ch.sth.dojo.beh.cgame.evt;
 
+import static io.vavr.control.Either.left;
 import static io.vavr.control.Either.right;
 
 import ch.sth.dojo.beh.DomainProblem;
@@ -15,6 +16,7 @@ import ch.sth.dojo.beh.cgame.domain.SpielerPunkteBisGame;
 import ch.sth.dojo.beh.evt.SpielerDomainEvent;
 import ch.sth.dojo.beh.evt.SpielerGameGewonnen;
 import ch.sth.dojo.beh.evt.SpielerPunktGewonnen;
+import ch.sth.dojo.beh.evt.SpielerSatzGewonnen;
 import ch.sth.dojo.beh.shsared.domain.Gewinner;
 import ch.sth.dojo.beh.shsared.domain.Verlierer;
 import io.vavr.control.Either;
@@ -25,6 +27,7 @@ public interface SpielerEventHandler {
         return switch (event) {
             case SpielerPunktGewonnen evt -> handleEvent(state, evt);
             case SpielerGameGewonnen evt -> right(handleEvent(state, evt));
+            case SpielerSatzGewonnen evt -> left(DomainProblem.eventNotValid);
         };
     }
 
