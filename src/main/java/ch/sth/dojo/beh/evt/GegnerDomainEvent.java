@@ -14,7 +14,7 @@ import ch.sth.dojo.beh.domain.Game;
 import ch.sth.dojo.beh.state.StateHandler;
 import io.vavr.control.Either;
 
-public sealed interface GegnerDomainEvent extends DomainEvent permits GegnerPunktGewonnen, GegnerGameGewonnen {
+public sealed interface GegnerDomainEvent extends DomainEvent permits GegnerPunktGewonnen, GegnerGameGewonnen, GegnerSatzGewonnen {
 
     static Either<DomainProblem, Game> handleEvent(GegnerDomainEvent evt, Game prev) {
         return Match(evt).of(
