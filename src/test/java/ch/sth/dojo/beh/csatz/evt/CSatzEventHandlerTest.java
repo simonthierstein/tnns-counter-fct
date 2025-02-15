@@ -80,7 +80,8 @@ class CSatzEventHandlerTest {
         "5,2",
         "5,3",
         "5,4",
-        "6,5"})
+        "6,5",
+        "6,6"})
     void handleSpielerSatzGewonnenEvent(Integer left, Integer right) {
         var prev = new LaufenderCSatz(new SpielerPunkteSatz(left), new GegnerPunkteSatz(right), LaufendesCGame.zero());
         var res = CSatzEventHandler.handleEvent(prev, new SpielerSatzGewonnen());
@@ -97,7 +98,8 @@ class CSatzEventHandlerTest {
         "5,2",
         "5,3",
         "5,4",
-        "6,5"})
+        "6,5",
+        "6,6"})
     void handleGegnerSatzGewonnenEvent(Integer left, Integer right) {
         var prev = new LaufenderCSatz(new SpielerPunkteSatz(right), new GegnerPunkteSatz(left), LaufendesCGame.zero());
         var res = CSatzEventHandler.handleEvent(prev, new GegnerSatzGewonnen());
@@ -105,9 +107,6 @@ class CSatzEventHandlerTest {
         assertThat(res.isRight()).isTrue();
         assertThat(res.get()).isInstanceOf(AbgeschlossenerCSatz.class);
     }
-
-
-
 
 }
 
