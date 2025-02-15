@@ -15,7 +15,7 @@ public record LaufendesCGame(SpielerPunkteBisGame spielerPunkteBisGame, GegnerPu
     public static Predicate<LaufendesCGame> passIfGegnerOnePunktBisCGame = game -> GegnerPunkteBisGame.passIfOnePunktBisGame.test(game.gegnerPunkteBisGame);
     public static Predicate<LaufendesCGame> passIfSpielerOnePunktBisCGame = game -> SpielerPunkteBisGame.passIfOnePunktBisGame.test(game.spielerPunkteBisGame);
 
-    public static CGame zero() {
+    public static LaufendesCGame zero() {
         return new LaufendesCGame(SpielerPunkteBisGame.zero(), GegnerPunkteBisGame.zero());
     }
 
