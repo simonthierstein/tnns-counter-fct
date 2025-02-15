@@ -1,6 +1,10 @@
 package ch.sth.dojo.beh.cgame.domain;
 
 import ch.sth.dojo.beh.DomainProblem;
+import ch.sth.dojo.beh.shsared.domain.Gewinner;
+import ch.sth.dojo.beh.shsared.domain.GewinnerVerlierer;
+import ch.sth.dojo.beh.shsared.domain.StateTransition;
+import ch.sth.dojo.beh.shsared.domain.Verlierer;
 import io.vavr.Function2;
 import io.vavr.control.Either;
 import java.util.function.Function;
@@ -20,7 +24,7 @@ public record LaufendesCGame(SpielerPunkteBisGame spielerPunkteBisGame, GegnerPu
         final Function<GewinnerVerlierer, CGame> tuple2CGameFunction = t2 -> cgameCreator.tupled().apply(t2.tupled());
 
         return Either.<DomainProblem, GewinnerVerlierer>right(GewinnerVerlierer.of(gewinner, verlierer))
-            .flatMap(StateTransition.apply())
+            .flatMap(StateTransition.apply(CGameStateTransitions.stateTransitions))
             .map(tuple2CGameFunction);
     }
 }

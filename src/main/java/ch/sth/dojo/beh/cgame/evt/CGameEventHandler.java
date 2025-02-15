@@ -1,6 +1,6 @@
 package ch.sth.dojo.beh.cgame.evt;
 
-import static ch.sth.dojo.beh.DomainProblem.InvalidEvent;
+import static ch.sth.dojo.beh.DomainProblem.invalidEvent;
 import static io.vavr.control.Either.left;
 
 import ch.sth.dojo.beh.DomainProblem;
@@ -17,7 +17,7 @@ public interface CGameEventHandler {
         return switch (event) {
             case SpielerDomainEvent evt -> SpielerEventHandler.handleSpielerEvent(state, evt);
             case GegnerDomainEvent evt -> GegnerEventHandler.handleGegnerEvent(state, evt);
-            default -> left(InvalidEvent);
+            default -> left(invalidEvent);
         };
     }
 

@@ -10,13 +10,13 @@ import ch.sth.dojo.beh.DomainProblem;
 import ch.sth.dojo.beh.cgame.domain.AbgeschlossenesCGame;
 import ch.sth.dojo.beh.cgame.domain.CGame;
 import ch.sth.dojo.beh.cgame.domain.GegnerPunkteBisGame;
-import ch.sth.dojo.beh.cgame.domain.Gewinner;
 import ch.sth.dojo.beh.cgame.domain.LaufendesCGame;
 import ch.sth.dojo.beh.cgame.domain.SpielerPunkteBisGame;
-import ch.sth.dojo.beh.cgame.domain.Verlierer;
 import ch.sth.dojo.beh.evt.GegnerDomainEvent;
 import ch.sth.dojo.beh.evt.GegnerGameGewonnen;
 import ch.sth.dojo.beh.evt.GegnerPunktGewonnen;
+import ch.sth.dojo.beh.shsared.domain.Gewinner;
+import ch.sth.dojo.beh.shsared.domain.Verlierer;
 import io.vavr.control.Either;
 
 interface GegnerEventHandler {

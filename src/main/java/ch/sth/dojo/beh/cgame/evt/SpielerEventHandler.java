@@ -7,15 +7,16 @@ package ch.sth.dojo.beh.cgame.evt;
 import static io.vavr.control.Either.right;
 
 import ch.sth.dojo.beh.DomainProblem;
+import ch.sth.dojo.beh.cgame.domain.AbgeschlossenesCGame;
 import ch.sth.dojo.beh.cgame.domain.CGame;
 import ch.sth.dojo.beh.cgame.domain.GegnerPunkteBisGame;
-import ch.sth.dojo.beh.cgame.domain.Gewinner;
 import ch.sth.dojo.beh.cgame.domain.LaufendesCGame;
 import ch.sth.dojo.beh.cgame.domain.SpielerPunkteBisGame;
-import ch.sth.dojo.beh.cgame.domain.Verlierer;
 import ch.sth.dojo.beh.evt.SpielerDomainEvent;
 import ch.sth.dojo.beh.evt.SpielerGameGewonnen;
 import ch.sth.dojo.beh.evt.SpielerPunktGewonnen;
+import ch.sth.dojo.beh.shsared.domain.Gewinner;
+import ch.sth.dojo.beh.shsared.domain.Verlierer;
 import io.vavr.control.Either;
 
 public interface SpielerEventHandler {
@@ -33,6 +34,6 @@ public interface SpielerEventHandler {
     }
 
     static CGame handleEvent(LaufendesCGame state, SpielerGameGewonnen event) {
-        return new LaufendesCGame(new SpielerPunkteBisGame(0), state.gegnerPunkteBisGame());
+        return new AbgeschlossenesCGame();
     }
 }

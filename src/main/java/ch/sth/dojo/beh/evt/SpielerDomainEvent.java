@@ -15,7 +15,7 @@ import ch.sth.dojo.beh.state.StateHandler;
 import io.vavr.control.Either;
 import java.util.function.Function;
 
-public sealed interface SpielerDomainEvent extends DomainEvent permits SpielerPunktGewonnen, SpielerGameGewonnen {
+public sealed interface SpielerDomainEvent extends DomainEvent permits SpielerPunktGewonnen, SpielerGameGewonnen, SpielerSatzGewonnen {
 
     static <T> T apply(SpielerDomainEvent evt,
         Function<SpielerPunktGewonnen, T> spielerPunktGewonnenTFunction,

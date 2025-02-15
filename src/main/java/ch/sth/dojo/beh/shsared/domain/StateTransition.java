@@ -2,7 +2,7 @@
  * Copyright (C) Schweizerische Bundesbahnen SBB, 2025.
  */
 
-package ch.sth.dojo.beh.cgame.domain;
+package ch.sth.dojo.beh.shsared.domain;
 
 import static io.vavr.control.Either.left;
 import static io.vavr.control.Either.right;
@@ -15,16 +15,10 @@ import java.util.function.Predicate;
 
 public record StateTransition(Predicate<GewinnerVerlierer> condition, Function<GewinnerVerlierer, GewinnerVerlierer> transition) {
 
-    static List<StateTransition> stateTransitions = List.of(
-        new StateTransition(GewinnerVerlierer.deuce30AllCondition, GewinnerVerlierer.deuce30AllTransition),
-        new StateTransition(GewinnerVerlierer.breakpointCondition, GewinnerVerlierer.breakpointTransition),
-        new StateTransition(GewinnerVerlierer.standardCondition, GewinnerVerlierer.standardTransition)
-    );
-
-    static Function<GewinnerVerlierer, Either<DomainProblem, GewinnerVerlierer>> apply() {
+    public static Function<GewinnerVerlierer, Either<DomainProblem, GewinnerVerlierer>> apply(List<StateTransition> stateTransitions) {
         return prev ->
             stateTransitions.filter(tuple -> tuple.condition.test(prev))
-                .foldLeft(left(DomainProblem.InvalidEvent),
+                .foldLeft(left(DomainProblem.invalidEvent),
                     (acc, it) -> right(it.transition.apply(prev)));
     }
 }

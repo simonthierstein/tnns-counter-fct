@@ -4,6 +4,6 @@
 
 package ch.sth.dojo.beh.csatz.domain;
 
-record GegnerPunkteBisSatz(Integer value) {
+public record AbgeschlossenerCSatz() implements CSatz {
 
 }

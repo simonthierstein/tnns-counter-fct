@@ -1,4 +1,4 @@
-package ch.sth.dojo.beh.cgame.domain;
+package ch.sth.dojo.beh.shsared.domain;
 
 public record Verlierer(Integer value) {
 

@@ -4,35 +4,36 @@
 
 package ch.sth.dojo.beh.csatz.evt;
 
+import static io.vavr.control.Either.left;
 import static io.vavr.control.Either.right;
 
 import ch.sth.dojo.beh.DomainProblem;
-import ch.sth.dojo.beh.cgame.domain.CGame;
-import ch.sth.dojo.beh.cgame.domain.GegnerPunkteBisGame;
-import ch.sth.dojo.beh.cgame.domain.Gewinner;
-import ch.sth.dojo.beh.cgame.domain.LaufendesCGame;
-import ch.sth.dojo.beh.cgame.domain.SpielerPunkteBisGame;
-import ch.sth.dojo.beh.cgame.domain.Verlierer;
+import ch.sth.dojo.beh.csatz.domain.AbgeschlossenerCSatz;
+import ch.sth.dojo.beh.csatz.domain.CSatz;
+import ch.sth.dojo.beh.csatz.domain.LaufenderCSatz;
+import ch.sth.dojo.beh.csatz.domain.SpielerPunkteSatz;
 import ch.sth.dojo.beh.evt.SpielerDomainEvent;
 import ch.sth.dojo.beh.evt.SpielerGameGewonnen;
 import ch.sth.dojo.beh.evt.SpielerPunktGewonnen;
+import ch.sth.dojo.beh.evt.SpielerSatzGewonnen;
 import io.vavr.control.Either;
 
-public interface SpielerEventHandler {
+interface SpielerEventHandler {
 
-    static Either<DomainProblem, CGame> handleSpielerEvent(LaufendesCGame state, SpielerDomainEvent event) {
+    static Either<DomainProblem, CSatz> handleSpielerEvent(LaufenderCSatz state, SpielerDomainEvent event) {
         return switch (event) {
-            case SpielerPunktGewonnen evt -> handleEvent(state, evt);
+            case SpielerPunktGewonnen evt -> left(DomainProblem.eventNotValid);
             case SpielerGameGewonnen evt -> right(handleEvent(state, evt));
+            case SpielerSatzGewonnen evt -> right(handleEvent(state, evt));
         };
     }
 
-    static Either<DomainProblem, CGame> handleEvent(LaufendesCGame state, SpielerPunktGewonnen event) {
-        return LaufendesCGame.punktGewonnen(state, new Gewinner(state.spielerPunkteBisGame().value()), new Verlierer(state.gegnerPunkteBisGame().value()),
-            (gewinner, verlierer) -> new LaufendesCGame(new SpielerPunkteBisGame(gewinner.value()), new GegnerPunkteBisGame(verlierer.value())));
+    private static CSatz handleEvent(LaufenderCSatz state, SpielerGameGewonnen event) {
+        return new LaufenderCSatz(new SpielerPunkteSatz(state.spielerPunkteSatz().value() + 1),
+            state.gegnerPunkteSatz(), state.currentGame());
     }
 
-    static CGame handleEvent(LaufendesCGame state, SpielerGameGewonnen event) {
-        return new LaufendesCGame(new SpielerPunkteBisGame(0), state.gegnerPunkteBisGame());
+    private static CSatz handleEvent(LaufenderCSatz state, SpielerSatzGewonnen event) {
+        return new AbgeschlossenerCSatz();
     }
 }
