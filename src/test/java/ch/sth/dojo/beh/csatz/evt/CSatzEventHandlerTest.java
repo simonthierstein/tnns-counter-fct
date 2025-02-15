@@ -8,6 +8,7 @@ import ch.sth.dojo.beh.csatz.domain.GegnerPunkteSatz;
 import ch.sth.dojo.beh.csatz.domain.LaufenderCSatz;
 import ch.sth.dojo.beh.csatz.domain.SpielerPunkteSatz;
 import ch.sth.dojo.beh.evt.GegnerGameGewonnen;
+import ch.sth.dojo.beh.evt.GegnerSatzGewonnen;
 import ch.sth.dojo.beh.evt.SpielerGameGewonnen;
 import ch.sth.dojo.beh.evt.SpielerSatzGewonnen;
 import io.vavr.collection.List;
@@ -19,6 +20,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.ArgumentsProvider;
 import org.junit.jupiter.params.provider.ArgumentsSource;
+import org.junit.jupiter.params.provider.CsvSource;
 
 class CSatzEventHandlerTest {
 
@@ -70,10 +72,35 @@ class CSatzEventHandlerTest {
             .isEqualTo(new LaufenderCSatz(new SpielerPunkteSatz(5), new GegnerPunkteSatz(6), LaufendesCGame.zero()));
     }
 
-    @Test
-    void handleSpielerSatzGewonnenEvent() {
-        var prev = new LaufenderCSatz(new SpielerPunkteSatz(5), new GegnerPunkteSatz(4), LaufendesCGame.zero());
+    @DisplayName("Spieler Satz gewonnen: {0} - {1}")
+    @ParameterizedTest
+    @CsvSource({
+        "5,0",
+        "5,1",
+        "5,2",
+        "5,3",
+        "5,4",
+        "6,5"})
+    void handleSpielerSatzGewonnenEvent(Integer left, Integer right) {
+        var prev = new LaufenderCSatz(new SpielerPunkteSatz(left), new GegnerPunkteSatz(right), LaufendesCGame.zero());
         var res = CSatzEventHandler.handleEvent(prev, new SpielerSatzGewonnen());
+
+        assertThat(res.isRight()).isTrue();
+        assertThat(res.get()).isInstanceOf(AbgeschlossenerCSatz.class);
+    }
+
+    @DisplayName("Gegner Satz gewonnen: {0} - {1}")
+    @ParameterizedTest
+    @CsvSource({
+        "5,0",
+        "5,1",
+        "5,2",
+        "5,3",
+        "5,4",
+        "6,5"})
+    void handleGegnerSatzGewonnenEvent(Integer left, Integer right) {
+        var prev = new LaufenderCSatz(new SpielerPunkteSatz(right), new GegnerPunkteSatz(left), LaufendesCGame.zero());
+        var res = CSatzEventHandler.handleEvent(prev, new GegnerSatzGewonnen());
 
         assertThat(res.isRight()).isTrue();
         assertThat(res.get()).isInstanceOf(AbgeschlossenerCSatz.class);
