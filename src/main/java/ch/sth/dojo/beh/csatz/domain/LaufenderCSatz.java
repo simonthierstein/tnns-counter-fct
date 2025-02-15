@@ -21,7 +21,7 @@ public record LaufenderCSatz(SpielerPunkteSatz spielerPunkteSatz, GegnerPunkteSa
     }
 
     public SpielerPunkteBisSatz spielerPunkteBisSatz() {
-        Match(Tuple.of(spielerPunkteSatz, gegnerPunkteSatz)).of(
+        return Match(Tuple.of(spielerPunkteSatz, gegnerPunkteSatz)).of(
             Case($(standardCondition), x -> new SpielerPunkteBisSatz((6 - x._1.value()))),
             Case($(standardCondition), x -> new SpielerPunkteBisSatz((6 - x._1.value())))
         );
