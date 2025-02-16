@@ -29,7 +29,7 @@ interface SpielerEventHandler {
 
     private static CSatz handleEvent(LaufenderCSatz state, SpielerGameGewonnen event) {
         return new LaufenderCSatz(new SpielerPunkteSatz(state.spielerPunkteSatz().value() + 1),
-            state.gegnerPunkteSatz(), state.currentGame());
+            state.gegnerPunkteSatz());
     }
 
     private static CSatz handleEvent(LaufenderCSatz state, SpielerSatzGewonnen event) {

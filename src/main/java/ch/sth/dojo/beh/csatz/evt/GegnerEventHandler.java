@@ -34,7 +34,7 @@ interface GegnerEventHandler {
 
     static CSatz handleEvent(LaufenderCSatz state, GegnerGameGewonnen event) {
         return new LaufenderCSatz(new SpielerPunkteSatz(state.spielerPunkteSatz().value()),
-            new GegnerPunkteSatz(state.gegnerPunkteSatz().value() + 1), state.currentGame());
+            new GegnerPunkteSatz(state.gegnerPunkteSatz().value() + 1));
     }
 
 }

@@ -2,7 +2,6 @@ package ch.sth.dojo.beh.csatz.evt;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import ch.sth.dojo.beh.cgame.domain.LaufendesCGame;
 import ch.sth.dojo.beh.csatz.domain.AbgeschlossenerCSatz;
 import ch.sth.dojo.beh.csatz.domain.GegnerPunkteSatz;
 import ch.sth.dojo.beh.csatz.domain.LaufenderCSatz;
@@ -28,7 +27,7 @@ class CSatzEventHandlerTest {
     @ParameterizedTest
     @ArgumentsSource(SatzScoreProvider.class)
     void handleGegnerGameGewonnenEvent(Integer left, Integer right) {
-        var prev = new LaufenderCSatz(new SpielerPunkteSatz(left), new GegnerPunkteSatz(right), LaufendesCGame.zero());
+        var prev = new LaufenderCSatz(new SpielerPunkteSatz(left), new GegnerPunkteSatz(right));
         var res = CSatzEventHandler.handleEvent(prev, new GegnerGameGewonnen());
 
         assertThat(res.isRight()).isTrue();
@@ -39,7 +38,7 @@ class CSatzEventHandlerTest {
     @ParameterizedTest
     @ArgumentsSource(SatzScoreProvider.class)
     void handleSpielerGameGewonnenEvent(Integer left, Integer right) {
-        var prev = new LaufenderCSatz(new SpielerPunkteSatz(left), new GegnerPunkteSatz(right), LaufendesCGame.zero());
+        var prev = new LaufenderCSatz(new SpielerPunkteSatz(left), new GegnerPunkteSatz(right));
         var res = CSatzEventHandler.handleEvent(prev, new SpielerGameGewonnen());
 
         assertThat(res.isRight()).isTrue();
@@ -48,7 +47,7 @@ class CSatzEventHandlerTest {
 
     @Test
     void handleSpielerGameGewonnenEvent5_5() {
-        var prev = new LaufenderCSatz(new SpielerPunkteSatz(5), new GegnerPunkteSatz(5), LaufendesCGame.zero());
+        var prev = new LaufenderCSatz(new SpielerPunkteSatz(5), new GegnerPunkteSatz(5));
         var res = CSatzEventHandler.handleEvent(prev, new SpielerGameGewonnen());
 
         assertThat(res.isRight()).isTrue();
@@ -56,12 +55,12 @@ class CSatzEventHandlerTest {
         assertThat(res
             .map(LaufenderCSatz.class::cast)
             .get())
-            .isEqualTo(new LaufenderCSatz(new SpielerPunkteSatz(6), new GegnerPunkteSatz(5), LaufendesCGame.zero()));
+            .isEqualTo(new LaufenderCSatz(new SpielerPunkteSatz(6), new GegnerPunkteSatz(5)));
     }
 
     @Test
     void handleGegnerGameGewonnenEvent5_5() {
-        var prev = new LaufenderCSatz(new SpielerPunkteSatz(5), new GegnerPunkteSatz(5), LaufendesCGame.zero());
+        var prev = new LaufenderCSatz(new SpielerPunkteSatz(5), new GegnerPunkteSatz(5));
         var res = CSatzEventHandler.handleEvent(prev, new GegnerGameGewonnen());
 
         assertThat(res.isRight()).isTrue();
@@ -69,7 +68,7 @@ class CSatzEventHandlerTest {
         assertThat(res
             .map(LaufenderCSatz.class::cast)
             .get())
-            .isEqualTo(new LaufenderCSatz(new SpielerPunkteSatz(5), new GegnerPunkteSatz(6), LaufendesCGame.zero()));
+            .isEqualTo(new LaufenderCSatz(new SpielerPunkteSatz(5), new GegnerPunkteSatz(6)));
     }
 
     @DisplayName("Spieler Satz gewonnen: {0} - {1}")
@@ -83,7 +82,7 @@ class CSatzEventHandlerTest {
         "6,5",
         "6,6"})
     void handleSpielerSatzGewonnenEvent(Integer left, Integer right) {
-        var prev = new LaufenderCSatz(new SpielerPunkteSatz(left), new GegnerPunkteSatz(right), LaufendesCGame.zero());
+        var prev = new LaufenderCSatz(new SpielerPunkteSatz(left), new GegnerPunkteSatz(right));
         var res = CSatzEventHandler.handleEvent(prev, new SpielerSatzGewonnen());
 
         assertThat(res.isRight()).isTrue();
@@ -101,7 +100,7 @@ class CSatzEventHandlerTest {
         "6,5",
         "6,6"})
     void handleGegnerSatzGewonnenEvent(Integer left, Integer right) {
-        var prev = new LaufenderCSatz(new SpielerPunkteSatz(right), new GegnerPunkteSatz(left), LaufendesCGame.zero());
+        var prev = new LaufenderCSatz(new SpielerPunkteSatz(right), new GegnerPunkteSatz(left));
         var res = CSatzEventHandler.handleEvent(prev, new GegnerSatzGewonnen());
 
         assertThat(res.isRight()).isTrue();
