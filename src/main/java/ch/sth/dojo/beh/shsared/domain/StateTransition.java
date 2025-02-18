@@ -4,7 +4,6 @@
 
 package ch.sth.dojo.beh.shsared.domain;
 
-import static io.vavr.control.Either.left;
 import static io.vavr.control.Either.right;
 
 import ch.sth.dojo.beh.DomainProblem;
@@ -18,7 +17,7 @@ public record StateTransition(Predicate<GewinnerVerlierer> condition, Function<G
     public static Function<GewinnerVerlierer, Either<DomainProblem, GewinnerVerlierer>> apply(List<StateTransition> stateTransitions) {
         return prev ->
             stateTransitions.filter(tuple -> tuple.condition.test(prev))
-                .foldLeft(left(DomainProblem.invalidEvent),
+                .foldLeft(right(GewinnerVerlierer.zero()),
                     (acc, it) -> right(it.transition.apply(prev)));
     }
 }
