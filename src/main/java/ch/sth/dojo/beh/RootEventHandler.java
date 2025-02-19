@@ -27,11 +27,11 @@ public interface RootEventHandler {
     static Either<DomainProblem, Tuple2<CSatz, CGame>> handleEvent(Tuple2<CSatz, CGame> prev, DomainEvent event) {
         return switch (event) {
             case GameGestartet gameGestartet -> Either.right(prev);
-            case GegnerGameGewonnen gegnerGameGewonnen -> gegnerGameGewonnen(prev, gegnerGameGewonnen);
             case GegnerPunktGewonnen gegnerPunktGewonnen -> gegnerPunktGewonnen(prev, gegnerPunktGewonnen);
+            case GegnerGameGewonnen gegnerGameGewonnen -> gegnerGameGewonnen(prev, gegnerGameGewonnen);
             case GegnerSatzGewonnen gegnerSatzGewonnen -> gegnerSatzGewonnen(prev, gegnerSatzGewonnen);
-            case SpielerGameGewonnen spielerGameGewonnen -> spielerGameGewonnenf(prev, spielerGameGewonnen);
             case SpielerPunktGewonnen spielerPunktGewonnen -> spielerPunktGewonnenEvt(prev, spielerPunktGewonnen);
+            case SpielerGameGewonnen spielerGameGewonnen -> spielerGameGewonnenf(prev, spielerGameGewonnen);
             case SpielerSatzGewonnen spielerSatzGewonnen -> spielerSatzGewonnenEvt(prev, spielerSatzGewonnen);
 
         };
