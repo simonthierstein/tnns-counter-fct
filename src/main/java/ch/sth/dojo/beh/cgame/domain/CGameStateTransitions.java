@@ -4,12 +4,12 @@
 
 package ch.sth.dojo.beh.cgame.domain;
 
-import static ch.sth.dojo.beh.shsared.domain.GewinnerVerlierer.of;
+import static ch.sth.dojo.beh.shared.domain.GewinnerVerlierer.of;
 
-import ch.sth.dojo.beh.shsared.domain.Gewinner;
-import ch.sth.dojo.beh.shsared.domain.GewinnerVerlierer;
-import ch.sth.dojo.beh.shsared.domain.StateTransition;
-import ch.sth.dojo.beh.shsared.domain.Verlierer;
+import ch.sth.dojo.beh.shared.domain.Gewinner;
+import ch.sth.dojo.beh.shared.domain.GewinnerVerlierer;
+import ch.sth.dojo.beh.shared.domain.StateTransition;
+import ch.sth.dojo.beh.shared.domain.Verlierer;
 import io.vavr.collection.List;
 import java.util.function.Function;
 import java.util.function.Predicate;

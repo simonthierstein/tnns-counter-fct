@@ -16,8 +16,8 @@ import ch.sth.dojo.beh.evt.GegnerDomainEvent;
 import ch.sth.dojo.beh.evt.GegnerGameGewonnen;
 import ch.sth.dojo.beh.evt.GegnerPunktGewonnen;
 import ch.sth.dojo.beh.evt.GegnerSatzGewonnen;
-import ch.sth.dojo.beh.shsared.domain.Gewinner;
-import ch.sth.dojo.beh.shsared.domain.Verlierer;
+import ch.sth.dojo.beh.shared.domain.Gewinner;
+import ch.sth.dojo.beh.shared.domain.Verlierer;
 import io.vavr.control.Either;
 
 interface GegnerEventHandler {

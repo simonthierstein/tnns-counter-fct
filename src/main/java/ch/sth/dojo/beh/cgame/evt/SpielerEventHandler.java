@@ -16,8 +16,8 @@ import ch.sth.dojo.beh.evt.SpielerDomainEvent;
 import ch.sth.dojo.beh.evt.SpielerGameGewonnen;
 import ch.sth.dojo.beh.evt.SpielerPunktGewonnen;
 import ch.sth.dojo.beh.evt.SpielerSatzGewonnen;
-import ch.sth.dojo.beh.shsared.domain.Gewinner;
-import ch.sth.dojo.beh.shsared.domain.Verlierer;
+import ch.sth.dojo.beh.shared.domain.Gewinner;
+import ch.sth.dojo.beh.shared.domain.Verlierer;
 import io.vavr.control.Either;
 
 public interface SpielerEventHandler {

@@ -4,7 +4,7 @@
 
 package ch.sth.dojo.beh.csatz.domain;
 
-import ch.sth.dojo.beh.shsared.domain.StateTransition;
+import ch.sth.dojo.beh.shared.domain.StateTransition;
 import io.vavr.collection.List;
 
 class CSatzStateTransitions {

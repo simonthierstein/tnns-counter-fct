@@ -4,7 +4,7 @@ import static io.vavr.API.$;
 import static io.vavr.API.Case;
 import static io.vavr.API.Match;
 
-import ch.sth.dojo.beh.shsared.domain.GewinnerVerlierer;
+import ch.sth.dojo.beh.shared.domain.GewinnerVerlierer;
 import io.vavr.Tuple;
 import io.vavr.Tuple2;
 import java.util.function.Predicate;

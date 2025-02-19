@@ -1,10 +1,10 @@
 package ch.sth.dojo.beh.cgame.domain;
 
 import ch.sth.dojo.beh.DomainProblem;
-import ch.sth.dojo.beh.shsared.domain.Gewinner;
-import ch.sth.dojo.beh.shsared.domain.GewinnerVerlierer;
-import ch.sth.dojo.beh.shsared.domain.StateTransition;
-import ch.sth.dojo.beh.shsared.domain.Verlierer;
+import ch.sth.dojo.beh.shared.domain.Gewinner;
+import ch.sth.dojo.beh.shared.domain.GewinnerVerlierer;
+import ch.sth.dojo.beh.shared.domain.StateTransition;
+import ch.sth.dojo.beh.shared.domain.Verlierer;
 import io.vavr.Function2;
 import io.vavr.control.Either;
 import java.util.function.Function;
