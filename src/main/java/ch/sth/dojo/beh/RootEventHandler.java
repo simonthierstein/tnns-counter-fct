@@ -1,10 +1,5 @@
 package ch.sth.dojo.beh;
 
-import static io.vavr.API.$;
-import static io.vavr.API.Case;
-import static io.vavr.API.Match;
-import static io.vavr.Predicates.instanceOf;
-
 import ch.sth.dojo.beh.cgame.domain.CGame;
 import ch.sth.dojo.beh.cgame.evt.CGameEventHandler;
 import ch.sth.dojo.beh.csatz.domain.CSatz;
@@ -41,27 +36,27 @@ public interface RootEventHandler {
     Function2<Tuple2<CSatz, CGame>, CGame, Tuple2<CSatz, CGame>> replaceNextGame = (prev, nextGame) -> prev.map2(x -> nextGame);
 
     static Either<DomainProblem, Tuple2<CSatz, CGame>> spielerSatzGewonnenEvt(Tuple2<CSatz, CGame> prev, SpielerSatzGewonnen event) {
-        return handleSatzEvents(prev._1, event).map(replaceNextSatz.apply(prev));
+        return CSatzEventHandler.handleCSatzEvent(prev._1, event).map(replaceNextSatz.apply(prev));
     }
 
     static Either<DomainProblem, Tuple2<CSatz, CGame>> spielerPunktGewonnenEvt(Tuple2<CSatz, CGame> prev, SpielerPunktGewonnen event) {
-        return handleGameEvents(prev._2, event).map(replaceNextGame.apply(prev));
+        return CGameEventHandler.handleCGameEvent(prev._2, event).map(replaceNextGame.apply(prev));
     }
 
     static Either<DomainProblem, Tuple2<CSatz, CGame>> spielerGameGewonnenf(Tuple2<CSatz, CGame> prev, SpielerGameGewonnen event) {
-        return eithers2Tuple(handleGameEvents(prev._2, event), handleSatzEvents(prev._1, event));
+        return eithers2Tuple(CGameEventHandler.handleCGameEvent(prev._2, event), CSatzEventHandler.handleCSatzEvent(prev._1, event));
     }
 
     private static Either<DomainProblem, Tuple2<CSatz, CGame>> gegnerSatzGewonnen(final Tuple2<CSatz, CGame> prev, final GegnerSatzGewonnen event) {
-        return handleSatzEvents(prev._1, event).map(replaceNextSatz.apply(prev));
+        return CSatzEventHandler.handleCSatzEvent(prev._1, event).map(replaceNextSatz.apply(prev));
     }
 
     private static Either<DomainProblem, Tuple2<CSatz, CGame>> gegnerPunktGewonnen(final Tuple2<CSatz, CGame> prev, final GegnerPunktGewonnen event) {
-        return handleGameEvents(prev._2, event).map(replaceNextGame.apply(prev));
+        return CGameEventHandler.handleCGameEvent(prev._2, event).map(replaceNextGame.apply(prev));
     }
 
     private static Either<DomainProblem, Tuple2<CSatz, CGame>> gegnerGameGewonnen(final Tuple2<CSatz, CGame> prev, final GegnerGameGewonnen event) {
-        return eithers2Tuple(handleGameEvents(prev._2, event), handleSatzEvents(prev._1, event));
+        return eithers2Tuple(CGameEventHandler.handleCGameEvent(prev._2, event), CSatzEventHandler.handleCSatzEvent(prev._1, event));
     }
 
     private static Either<DomainProblem, Tuple2<CSatz, CGame>> eithers2Tuple(final Either<DomainProblem, CGame> game, final Either<DomainProblem, CSatz> satz) {
@@ -70,35 +65,5 @@ public interface RootEventHandler {
                 nextSatz -> Tuple.of(nextSatz, nextGame)));
     }
 
-    private static Either<DomainProblem, CSatz> handleSatzEvents(final CSatz prev, final DomainEvent event) {
-        return Match(event).of(
-            Case($(instanceOf(SpielerGameGewonnen.class)), routeToSatz().apply(prev)),
-            Case($(instanceOf(GegnerGameGewonnen.class)), routeToSatz().apply(prev)),
-            Case($(instanceOf(SpielerSatzGewonnen.class)), routeToSatz().apply(prev)),
-            Case($(instanceOf(GegnerSatzGewonnen.class)), routeToSatz().apply(prev))
-        );
-    }
-
-    private static Either<DomainProblem, CGame> handleGameEvents(final CGame prev, final DomainEvent event) {
-        return Match(event).of(
-            Case($(instanceOf(SpielerPunktGewonnen.class)), routeToGame().apply(prev)),
-            Case($(instanceOf(GegnerPunktGewonnen.class)), routeToGame().apply(prev)),
-            Case($(instanceOf(GegnerGameGewonnen.class)), routeToGame().apply(prev)),
-            Case($(instanceOf(SpielerGameGewonnen.class)), routeToGame().apply(prev))
-        );
-    }
-
-    static Function2<CGame, DomainEvent, Either<DomainProblem, CGame>> routeToGame() {
-        return (prev, event) -> prev.apply(
-            laufendesCGame -> CGameEventHandler.handleEvent(laufendesCGame, event),
-            abgeschlossenesCGame -> Either.<DomainProblem, CGame>left(DomainProblem.eventNotValid));
-    }
-
-    static Function2<CSatz, DomainEvent, Either<DomainProblem, CSatz>> routeToSatz() {
-        return (prev, event) -> CSatz.apply(
-            prev,
-            laufenderCSatz -> CSatzEventHandler.handleEvent(laufenderCSatz, event),
-            abgeschlossenerCSatz -> Either.<DomainProblem, CSatz>left(DomainProblem.eventNotValid));
-    }
 }
 
