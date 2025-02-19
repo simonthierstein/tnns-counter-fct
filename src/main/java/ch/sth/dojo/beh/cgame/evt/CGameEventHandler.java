@@ -15,9 +15,11 @@ import ch.sth.dojo.beh.evt.DomainEvent;
 import ch.sth.dojo.beh.evt.GegnerDomainEvent;
 import ch.sth.dojo.beh.evt.GegnerGameGewonnen;
 import ch.sth.dojo.beh.evt.GegnerPunktGewonnen;
+import ch.sth.dojo.beh.evt.GegnerSatzGewonnen;
 import ch.sth.dojo.beh.evt.SpielerDomainEvent;
 import ch.sth.dojo.beh.evt.SpielerGameGewonnen;
 import ch.sth.dojo.beh.evt.SpielerPunktGewonnen;
+import ch.sth.dojo.beh.evt.SpielerSatzGewonnen;
 import io.vavr.control.Either;
 import java.util.function.Function;
 
@@ -29,9 +31,11 @@ public interface CGameEventHandler {
     ) {
         return Match(event).of(
             Case($(instanceOf(SpielerPunktGewonnen.class)), prev.apply(laufendesCGameTFunction, abgeschlossenesCGameTFunction)),
+            Case($(instanceOf(SpielerGameGewonnen.class)), prev.apply(laufendesCGameTFunction, abgeschlossenesCGameTFunction)),
+            Case($(instanceOf(SpielerSatzGewonnen.class)), prev.apply(laufendesCGameTFunction, abgeschlossenesCGameTFunction)),
             Case($(instanceOf(GegnerPunktGewonnen.class)), prev.apply(laufendesCGameTFunction, abgeschlossenesCGameTFunction)),
             Case($(instanceOf(GegnerGameGewonnen.class)), prev.apply(laufendesCGameTFunction, abgeschlossenesCGameTFunction)),
-            Case($(instanceOf(SpielerGameGewonnen.class)), prev.apply(laufendesCGameTFunction, abgeschlossenesCGameTFunction))
+            Case($(instanceOf(GegnerSatzGewonnen.class)), prev.apply(laufendesCGameTFunction, abgeschlossenesCGameTFunction))
         );
     }
 
@@ -39,7 +43,7 @@ public interface CGameEventHandler {
         return apply(state,
             event,
             laufendesCGame -> CGameEventHandler.handleEvent(laufendesCGame, event),
-            abgeschlossenesCGame -> Either.<DomainProblem, CGame>left(DomainProblem.eventNotValid));
+            abgeschlossenesCGame -> Either.left(DomainProblem.eventNotValid));
     }
 
 
