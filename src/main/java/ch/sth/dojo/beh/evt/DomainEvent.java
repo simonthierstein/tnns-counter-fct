@@ -18,5 +18,8 @@ public sealed interface DomainEvent permits GameGestartet, GegnerDomainEvent, Sp
         );
     }
 
+    static <I extends DomainEvent> DomainEvent narrow(I domainEvent) {
+        return domainEvent;
+    }
 }
 

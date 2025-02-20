@@ -17,7 +17,7 @@ public record StateTransition(Predicate<GewinnerVerlierer> condition, Function<G
     public static Function<GewinnerVerlierer, Either<DomainProblem, GewinnerVerlierer>> apply(List<StateTransition> stateTransitions) {
         return prev ->
             stateTransitions.filter(tuple -> tuple.condition.test(prev))
-                .foldLeft(right(GewinnerVerlierer.zero()),
+                .foldLeft(right(GewinnerVerlierer.zero()), // TODO sth/20.02.2025 : !!! bug
                     (acc, it) -> right(it.transition.apply(prev)));
     }
 }

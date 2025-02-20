@@ -14,6 +14,10 @@ public record LaufenderCSatz(SpielerPunkteSatz spielerPunkteSatz, GegnerPunkteSa
     private static final Predicate<Tuple2<SpielerPunkteSatz, GegnerPunkteSatz>> standardCondition =
         x -> x._1.value() <= 4 && x._2.value() <= 4;
 
+    public static LaufenderCSatz zero() {
+        return new LaufenderCSatz(SpielerPunkteSatz.zero(), GegnerPunkteSatz.zero());
+    }
+
     public CSatz gameGewonnen(final GewinnerVerlierer gewinnerVerlierer) {
 
         return null;
@@ -27,5 +31,7 @@ public record LaufenderCSatz(SpielerPunkteSatz spielerPunkteSatz, GegnerPunkteSa
 
     }
 
+    public static final Predicate<LaufenderCSatz> passIfSpielerOneGameBisSatz = in ->
+        in.spielerPunkteSatz().isOne();
 }
 
