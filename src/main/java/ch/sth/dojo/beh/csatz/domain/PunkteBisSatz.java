@@ -4,6 +4,9 @@
 
 package ch.sth.dojo.beh.csatz.domain;
 
-record SpielerPunkteBisSatz(Integer value) {
+record PunkteBisSatz(Integer value) {
 
+    boolean isOne() {
+        return value == 1;
+    }
 }

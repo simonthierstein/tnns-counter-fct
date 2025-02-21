@@ -35,13 +35,13 @@ class DomainCommandTest {
 
     @Test
     void spielerPunktetGame() {
-        final Either<DomainProblem, DomainEvent> domainEvents = DomainCommand.handleCommand(getLaufendesCGame(1, 5), createSpielerPunktet());
+        final Either<DomainProblem, DomainEvent> domainEvents = DomainCommand.handleCommand(laufendesGameWith(1, 5), createSpielerPunktet());
 
         assertThat(domainEvents.isRight()).isTrue();
         assertThat(domainEvents.get()).isInstanceOf(SpielerGameGewonnen.class);
     }
 
-    private static Tuple2<CSatz, CGame> getLaufendesCGame(final int spielerValue, final int gegnerValue) {
+    private static Tuple2<CSatz, CGame> laufendesGameWith(final int spielerValue, final int gegnerValue) {
         return Tuple.of(LaufenderCSatz.zero(), new LaufendesCGame(new SpielerPunkteBisGame(spielerValue), new GegnerPunkteBisGame(gegnerValue)));
     }
 
@@ -55,13 +55,13 @@ class DomainCommandTest {
 
     @Test
     void gegnerPunktetGame() {
-        final Either<DomainProblem, DomainEvent> domainEvents = DomainCommand.handleCommand(getLaufendesCGame(3, 1), createGegnerPunktet());
+        final Either<DomainProblem, DomainEvent> domainEvents = DomainCommand.handleCommand(laufendesGameWith(3, 1), createGegnerPunktet());
 
         assertThat(domainEvents.isRight()).isTrue();
         assertThat(domainEvents.get()).isInstanceOf(GegnerGameGewonnen.class);
     }
 
-    private DomainCommand createGegnerPunktet() {
+    private static DomainCommand createGegnerPunktet() {
         return new GegnerPunktet();
     }
 
