@@ -1,6 +1,6 @@
 package ch.sth.dojo.beh.cgame.evt;
 
-import static ch.sth.dojo.beh.DomainProblem.invalidEvent;
+import static ch.sth.dojo.beh.DomainProblem.eventNotValid;
 import static io.vavr.API.$;
 import static io.vavr.API.Case;
 import static io.vavr.API.Match;
@@ -43,7 +43,7 @@ public interface CGameEventHandler {
         return apply(state,
             event,
             laufendesCGame -> CGameEventHandler.handleEvent(laufendesCGame, event),
-            abgeschlossenesCGame -> Either.left(DomainProblem.eventNotValid));
+            abgeschlossenesCGame -> Either.left(eventNotValid));
     }
 
 
@@ -51,7 +51,7 @@ public interface CGameEventHandler {
         return switch (event) {
             case SpielerDomainEvent evt -> SpielerEventHandler.handleSpielerEvent(state, evt);
             case GegnerDomainEvent evt -> GegnerEventHandler.handleGegnerEvent(state, evt);
-            default -> left(invalidEvent);
+            default -> left(eventNotValid);
         };
     }
 

@@ -88,7 +88,7 @@ class CGameEventHandlerGegnerTest {
         final Either<DomainProblem, CGame> cGames = GegnerEventHandler.handleGegnerEvent(createStandardState(spielerValue, gegnerValue), new GegnerPunktGewonnen());
 
         assertThat(cGames.isRight()).isFalse();
-        assertThat(cGames.getLeft()).isEqualTo(DomainProblem.invalidEvent);
+        assertThat(cGames.getLeft()).isEqualTo(DomainProblem.eventNotValid);
     }
 
     @DisplayName("Handle not allowed Event on finished game 😎")
@@ -105,7 +105,7 @@ class CGameEventHandlerGegnerTest {
         final Either<DomainProblem, CGame> cGames = CGameEventHandler.handleEvent(createStandardState(spielerValue, gegnerValue), new SpielerPunktGewonnen());
 
         assertThat(cGames.isRight()).isFalse();
-        assertThat(cGames.getLeft()).isEqualTo(DomainProblem.invalidEvent);
+        assertThat(cGames.getLeft()).isEqualTo(DomainProblem.eventNotValid);
     }
 
     private static LaufendesCGame createStandardState(final int spielerValue, final int gegnerValue) {

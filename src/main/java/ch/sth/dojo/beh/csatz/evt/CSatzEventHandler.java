@@ -1,6 +1,6 @@
 package ch.sth.dojo.beh.csatz.evt;
 
-import static ch.sth.dojo.beh.DomainProblem.invalidEvent;
+import static ch.sth.dojo.beh.DomainProblem.eventNotValid;
 import static io.vavr.API.$;
 import static io.vavr.API.Case;
 import static io.vavr.API.Match;
@@ -35,14 +35,14 @@ public interface CSatzEventHandler {
 
     static Either<DomainProblem, CSatz> handleCSatzEvent(CSatz state, DomainEvent event) {
         return apply(state, event, laufenderCSatz -> CSatzEventHandler.handleEvent(laufenderCSatz, event),
-            abgeschlossenerCSatz -> Either.<DomainProblem, CSatz>left(DomainProblem.eventNotValid));
+            abgeschlossenerCSatz -> Either.<DomainProblem, CSatz>left(eventNotValid));
     }
 
     public static Function2<CSatz, DomainEvent, Either<DomainProblem, CSatz>> routeToSatz() {
         return (prev, event) -> CSatz.apply(
             prev,
             laufenderCSatz -> CSatzEventHandler.handleEvent(laufenderCSatz, event),
-            abgeschlossenerCSatz -> Either.<DomainProblem, CSatz>left(DomainProblem.eventNotValid));
+            abgeschlossenerCSatz -> Either.<DomainProblem, CSatz>left(eventNotValid));
     }
 
 
@@ -50,7 +50,7 @@ public interface CSatzEventHandler {
         return switch (event) {
             case SpielerDomainEvent evt -> SpielerEventHandler.handleSpielerEvent(state, evt);
             case GegnerDomainEvent evt -> GegnerEventHandler.handleGegnerEvent(state, evt);
-            default -> left(invalidEvent);
+            default -> left(eventNotValid);
         };
     }
 
