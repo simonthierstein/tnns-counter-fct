@@ -5,7 +5,6 @@ import static io.vavr.API.Case;
 import static io.vavr.API.Match;
 
 import ch.sth.dojo.beh.FunctionUtils;
-import ch.sth.dojo.beh.shared.domain.GewinnerVerlierer;
 import io.vavr.Predicates;
 import io.vavr.Tuple;
 import io.vavr.Tuple2;
@@ -33,11 +32,6 @@ public record LaufenderCSatz(SpielerPunkteSatz spielerPunkteSatz, GegnerPunkteSa
 
     public static LaufenderCSatz zero() {
         return new LaufenderCSatz(SpielerPunkteSatz.zero(), GegnerPunkteSatz.zero());
-    }
-
-    public CSatz gameGewonnen(final GewinnerVerlierer gewinnerVerlierer) {
-
-        return null;
     }
 
     private PunkteBisSatz punkteBisSatz(final Function<Tuple2<SpielerPunkteSatz, GegnerPunkteSatz>, PunkteBisSatz> punkteBisSatzTransition) {
