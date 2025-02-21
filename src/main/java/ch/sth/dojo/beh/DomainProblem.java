@@ -9,7 +9,7 @@ public interface DomainProblem {
     DomainProblem satzPunktNotValid = new SatzPunktNotValid();
     DomainProblem eventNotValid = new EventNotValid();
     DomainProblem transitionNotValid = new TransitionNotValid();
-    DomainProblem invalidValue = new InvalidValue();
+    DomainProblem valueNotValid = new ValueNotValid();
 
     record SpielerPunktetFehlgeschlagen() implements DomainProblem {
 
@@ -39,7 +39,7 @@ public interface DomainProblem {
 
     }
 
-    record InvalidValue() implements DomainProblem {
+    record ValueNotValid() implements DomainProblem {
 
     }
 

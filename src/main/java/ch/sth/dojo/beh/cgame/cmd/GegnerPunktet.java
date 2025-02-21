@@ -25,6 +25,6 @@ public record GegnerPunktet() implements DomainCommand {
             x -> new GegnerPunktGewonnen());
 
         return Either.<DomainProblem, CGame>right(state._2) // TODO sth/20.02.2025 :
-            .flatMap(prev -> prev.apply(lgFct.andThen(Either::right), x -> Either.left(DomainProblem.invalidValue)));
+            .flatMap(prev -> prev.apply(lgFct.andThen(Either::right), x -> Either.left(DomainProblem.valueNotValid)));
     }
 }

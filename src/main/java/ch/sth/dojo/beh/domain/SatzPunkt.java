@@ -46,7 +46,7 @@ public record SatzPunkt(Integer value) {
         return Option.of(value)
             .filter(passIfInSatzRange)
             .map(SatzPunkt::new)
-            .toEither(DomainProblem.invalidValue);
+            .toEither(DomainProblem.valueNotValid);
     }
 
     SatzPunkt inc() {

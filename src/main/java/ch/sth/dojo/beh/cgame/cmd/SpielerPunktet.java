@@ -47,7 +47,7 @@ public record SpielerPunktet() implements DomainCommand {
     private static Either<DomainProblem, DomainEvent> applyToCSatz(CSatz satz) {
         return CSatz.apply(satz,
             laufenderCSatz -> right(applyToLaufenderSatz(laufenderCSatz)),
-            x -> left(DomainProblem.invalidValue));
+            x -> left(DomainProblem.valueNotValid));
     }
 
     private static DomainEvent applyToLaufenderSatz(final LaufenderCSatz laufenderCSatz) {
@@ -58,7 +58,7 @@ public record SpielerPunktet() implements DomainCommand {
 
     private static Either<DomainProblem, DomainEvent> applyToAbgeschlossenesCGame(AbgeschlossenesCGame abgeschlossenesCGame) {
         // satz fertig ? error : SpielerPunktet
-        return left(DomainProblem.invalidValue); // TODO sth/20.02.2025 : satz handling
+        return left(DomainProblem.valueNotValid); // TODO sth/20.02.2025 : satz handling
     }
 
 }
