@@ -4,7 +4,9 @@ import static io.vavr.API.$;
 import static io.vavr.API.Case;
 import static io.vavr.API.Match;
 
+import ch.sth.dojo.beh.FunctionUtils;
 import ch.sth.dojo.beh.shared.domain.GewinnerVerlierer;
+import io.vavr.Predicates;
 import io.vavr.Tuple;
 import io.vavr.Tuple2;
 import java.util.function.Function;
@@ -18,16 +20,16 @@ public record LaufenderCSatz(SpielerPunkteSatz spielerPunkteSatz, GegnerPunkteSa
         in.punkteBisSatz(spielerPunkteBisSatzTransition).isOne();
     public static final Predicate<LaufenderCSatz> passIfGegnerOneGameBisSatz = in ->
         in.punkteBisSatz(gegnerPunkteBisSatzTransition).isOne();
+
     private static final Predicate<Tuple2<SpielerPunkteSatz, GegnerPunkteSatz>> standardCondition =
-        x -> x._1.value() <= 4 && x._2.value() <= 4
-            || x._1.value() == 5 && x._2.value() <= 4
-            || x._1.value() <= 4 && x._2.value() == 5
-            || x._1.value() == 6 && x._2.value() <= 5
-            || x._1.value() <= 5 && x._2.value() == 6;
+        Predicates.anyOf(FunctionUtils.untuple(SpielerPunkteSatz.lte4, GegnerPunkteSatz.lte4),
+            FunctionUtils.untuple(SpielerPunkteSatz.eq5, GegnerPunkteSatz.lte4),
+            FunctionUtils.untuple(SpielerPunkteSatz.lte4, GegnerPunkteSatz.eq5),
+            FunctionUtils.untuple(SpielerPunkteSatz.eq6, GegnerPunkteSatz.lte5),
+            FunctionUtils.untuple(SpielerPunkteSatz.lte5, GegnerPunkteSatz.eq6)
+        );
     private static final Predicate<Tuple2<SpielerPunkteSatz, GegnerPunkteSatz>> sixAll =
-        x -> x._1.value() == 6 && x._2.value() == 6;
-
-
+        FunctionUtils.untuple(SpielerPunkteSatz.eq6, GegnerPunkteSatz.eq6);
 
     public static LaufenderCSatz zero() {
         return new LaufenderCSatz(SpielerPunkteSatz.zero(), GegnerPunkteSatz.zero());
