@@ -1,5 +1,7 @@
 package ch.sth.dojo.beh.csatz.domain;
 
+import ch.sth.dojo.beh.DomainProblem;
+import io.vavr.control.Either;
 import java.util.function.Predicate;
 
 public record GegnerPunkteSatz(Integer value) {
@@ -13,7 +15,7 @@ public record GegnerPunkteSatz(Integer value) {
         return new GegnerPunkteSatz(0);
     }
 
-    boolean isOne() {
-        return value == 1;
+    static Either<DomainProblem, GegnerPunkteSatz> GegnerPunkteSatz(Integer punkte) {
+        return PunkteSatz.PunkteSatz(punkte, GegnerPunkteSatz::new);
     }
 }

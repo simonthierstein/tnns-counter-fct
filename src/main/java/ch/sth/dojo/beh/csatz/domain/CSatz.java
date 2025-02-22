@@ -5,6 +5,9 @@ import static io.vavr.API.Case;
 import static io.vavr.API.Match;
 import static io.vavr.Predicates.instanceOf;
 
+import ch.sth.dojo.beh.DomainProblem;
+import io.vavr.control.Either;
+import io.vavr.control.Option;
 import java.util.function.Function;
 
 public interface CSatz {
@@ -20,5 +23,13 @@ public interface CSatz {
 
     static CSatz zero() {
         return LaufenderCSatz.zero();
+    }
+
+    static Either<DomainProblem, CSatz> of(Integer spieler, Integer gegner) {
+        var spielerEith = Option.of(spieler).toEither(DomainProblem.nullValueNotValid).flatMap(SpielerPunkteSatz::SpielerPunkteSatz);
+        var gegnerEith = Option.of(gegner).toEither(DomainProblem.nullValueNotValid).flatMap(GegnerPunkteSatz::GegnerPunkteSatz);
+
+        return spielerEith.flatMap(spielerx ->
+            gegnerEith.map(gegnerx -> new LaufenderCSatz(spielerx, gegnerx)));
     }
 }

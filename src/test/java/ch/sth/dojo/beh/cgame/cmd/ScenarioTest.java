@@ -31,9 +31,11 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 class ScenarioTest {
 
-    @ParameterizedTest
+    @ParameterizedTest(name = "Spieler gewinnt game mit gegner score {0}🥸")
     @ValueSource(strings = {"00", "15", "30"})
     void spielerGewinntGame_standard(String other) {
+
+        // TODO sth/22.02.2025 : deklarativer mit command abfolge
 
         final Tuple2<CSatz, CGame> prev = SatzGameTupleWith();
         final DomainCommand gegnerPunktetCommand = GegnerPunktetWith();
@@ -58,13 +60,16 @@ class ScenarioTest {
 
         assertThat(result.isRight()).isTrue();
         result.forEach(t -> assertAll(
-            () -> assertThat(t._1).isInstanceOf(LaufenderCSatz.class),
-            () -> assertThat(t._2).isInstanceOf(AbgeschlossenesCGame.class),
+            () -> assertThat(t._1).isEqualTo(SatzWith(1, 0)),
             () -> assertThat(t._2).isEqualTo(new AbgeschlossenesCGame())
         ));
 
         System.out.println(other);
 
+    }
+
+    private static CSatz SatzWith(final int spieler, final int gegner) {
+        return CSatz.of(spieler, gegner).get();
     }
 
     private static Function<Tuple2<CSatz, CGame>, Either<DomainProblem, Tuple2<CSatz, CGame>>> gegnerPunktetStateTransfer(final DomainCommand command) {
