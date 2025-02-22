@@ -19,6 +19,10 @@ public record LaufendesCGame(SpielerPunkteBisGame spielerPunkteBisGame, GegnerPu
         return new LaufendesCGame(SpielerPunkteBisGame.zero(), GegnerPunkteBisGame.zero());
     }
 
+    public static LaufendesCGame LaufendesCGame(final SpielerPunkteBisGame spielerPunkteBisGame, final GegnerPunkteBisGame gegnerPunkteBisGame) {
+        return new LaufendesCGame(spielerPunkteBisGame, gegnerPunkteBisGame);
+    }
+
     public static Either<DomainProblem, CGame> punktGewonnen(final CGame state, final Gewinner gewinner, final Verlierer verlierer,
         Function2<Gewinner, Verlierer, CGame> cgameCreator) {
         final Function<GewinnerVerlierer, CGame> tuple2CGameFunction = t2 -> cgameCreator.tupled().apply(t2.tupled());

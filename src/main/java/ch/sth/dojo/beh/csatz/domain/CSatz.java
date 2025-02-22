@@ -17,4 +17,8 @@ public interface CSatz {
             Case($(instanceOf(AbgeschlossenerCSatz.class)), abgeschlossenerCSatzTFunction)
         );
     }
+
+    static CSatz zero() {
+        return LaufenderCSatz.zero();
+    }
 }
