@@ -24,8 +24,12 @@ public final class CGameStateTransitions {
         t2.gewinner().value() == 3 && t2.verlierer().value() == 1;
     private static final Function<GewinnerVerlierer, GewinnerVerlierer> breakpointTransition =
         t2 -> of(new Gewinner(2), new Verlierer(2));
+    private static final Predicate<GewinnerVerlierer> thirtyToXCondition = t2 ->
+        t2.gewinner().value() == 2 && t2.verlierer().value() >= 3;
+    private static final Function<GewinnerVerlierer, GewinnerVerlierer> thirtyToXTransition = t2 ->
+        of(new Gewinner(1), new Verlierer(t2.verlierer().value() + 1));
     private static final Predicate<GewinnerVerlierer> standardCondition = t2 ->
-        (t2.gewinner().value() >= 2 && t2.verlierer().value() >= 3)
+        (t2.gewinner().value() >= 3 && t2.verlierer().value() >= 3)
             || (t2.gewinner().value() >= 3 && t2.verlierer().value() == 2)
             || (t2.gewinner().value() >= 4 && t2.verlierer().value() == 1);
     private static final Function<GewinnerVerlierer, GewinnerVerlierer> standardTransition =
@@ -34,6 +38,7 @@ public final class CGameStateTransitions {
     static List<StateTransition> stateTransitions = List.of(
         new StateTransition(deuce30AllCondition, deuce30AllTransition),
         new StateTransition(breakpointCondition, breakpointTransition),
+        new StateTransition(thirtyToXCondition, thirtyToXTransition),
         new StateTransition(standardCondition, standardTransition)
     );
 }

@@ -26,7 +26,7 @@ import io.vavr.Function1;
 import io.vavr.Function2;
 import io.vavr.Tuple;
 import io.vavr.Tuple2;
-import io.vavr.Tuple4;
+import io.vavr.Tuple6;
 import io.vavr.collection.List;
 import io.vavr.control.Either;
 import io.vavr.control.Option;
@@ -75,24 +75,53 @@ class ScenarioTest {
 
     }
 
+    //    @ParameterizedTest
+    //    @CsvSource(
+    //        {"SpielerPunktet, 00-00, SpielerPunktGewonnen, 15-00"}
+    //    )
+    //    void protptype(String cmd, String prev, String evt, String next) {
+    //        final Tuple4<String, String, String, String> tupled = Tuple.of(cmd, prev, evt, next);
+    //        var fdsa = tupled.map(parseCommand(), parseState(), parseEvent(), parseState())
+    //
+    //
+    //        final Either<String, State> states = applyCommand(fdsa);
+    //
+    //        assertThat(states.isRight())
+    //            .withFailMessage(states::getLeft)
+    //            .isTrue();
+    //
+    //    }
 
     @ParameterizedTest
     @CsvSource(
-        {"SpielerPunktet, 00-00, SpielerPunktGewonnen, 15-00"}
+        {
+            "SpielerPunktet, 40-00, 4-1, SpielerGameGewonnen, GAME, 5-1",
+            "SpielerPunktet, 30-00, 4-1, SpielerPunktGewonnen, 40-00, 4-1"
+        }
     )
-    void scenario1_spielerGewinntGame_laufenderSatz(String cmd, String prev, String evt, String next) {
-        final String[] split = prev.split("-");
-        System.out.println(Arrays.stream(split).reduce((x, y) -> String.format("%s,%s", x, y)));
-        final Tuple4<String, String, String, String> tupled = Tuple.of(cmd, prev, evt, next);
-        var fdsa = tupled.map(parseCommand(), parseState(), parseEvent(), parseState())
+    void scenario1_spielerGewinntGame_laufenderSatz(String cmd, String prevGame, String prevSatz, String evt, String nextGame, String nextSatz) {
+        final Tuple6<String, String, String, String, String, String> tupled = Tuple.of(cmd, prevGame, prevSatz, evt, nextGame, nextSatz);
+        var psc = tupled.map(parseCommand(), parseState(), parseSatzState(), parseEvent(), parseState(), parseSatzState())
+            .apply((domainCommand, game, satz, event, game2, satz2) ->
+                Tuple.of(domainCommand, State.bind.apply(satz, game), event, State.bind.apply(satz2, game2)))
             .apply(PartialScenarioConfig::PartialScenarioConfig);
 
-        final Either<String, State> states = applyCommand(fdsa);
+        final Either<String, State> states = applyCommand(psc);
 
         assertThat(states.isRight())
             .withFailMessage(states::getLeft)
             .isTrue();
 
+    }
+
+    private Function<String, CSatz> parseSatzState() {
+        return input -> Option.some(input)
+            .map(str -> str.split("-"))
+            .map(Arrays::stream)
+            .map(List::ofAll)
+            .map(list -> list.map(Integer::parseInt))
+            .map(list -> CSatz.of(list.get(0), list.get(1)).get())
+            .get();
     }
 
     private Function<String, DomainEvent> parseEvent() {
@@ -103,20 +132,22 @@ class ScenarioTest {
     }
 
     enum EventTag {
-        SpielerPunktGewonnen, GegnerPunktGewonnen;
+        SpielerPunktGewonnen, GegnerPunktGewonnen,
+        SpielerGameGewonnen, GegnerGameGewonnen;
 
         static Function<EventTag, DomainEvent> eventTagToEvent() {
             return eventTag -> Match(eventTag).of(
                 Case($(SpielerPunktGewonnen), new SpielerPunktGewonnen()),
-                Case($(GegnerPunktGewonnen), new SpielerPunktGewonnen())
+                Case($(GegnerPunktGewonnen), new SpielerPunktGewonnen()),
+                Case($(SpielerGameGewonnen), new SpielerGameGewonnen()),
+                Case($(GegnerGameGewonnen), new GegnerGameGewonnen())
             );
         }
     }
 
-    private Function<String, State> parseState() {
+    private Function<String, CGame> parseState() {
         return input -> Option.some(input)
             .map(parseTennisToCommandDomain())
-            .map(game -> Tuple.of(CSatz.zero(), game).apply(State.bind))
             .get();
     }
 
@@ -139,7 +170,8 @@ class ScenarioTest {
             Case($("30-40"), Tuple.of(3, 1).apply(CGame::of)),
             Case($("AD-DA"), Tuple.of(1, 3).apply(CGame::of)),
             Case($("DA-AD"), Tuple.of(1, 3).apply(CGame::of)),
-            Case($("DEUCE"), Tuple.of(2, 2).apply(CGame::of))
+            Case($("DEUCE"), Tuple.of(2, 2).apply(CGame::of)),
+            Case($("GAME"), Either.right(new AbgeschlossenesCGame()))
         ).get();
     }
 
