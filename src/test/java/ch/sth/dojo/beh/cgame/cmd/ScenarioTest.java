@@ -96,7 +96,15 @@ class ScenarioTest {
     @CsvSource(
         {
             "SpielerPunktet, 40-00, 4-1, SpielerGameGewonnen, GAME, 5-1",
-            "SpielerPunktet, 30-00, 4-1, SpielerPunktGewonnen, 40-00, 4-1"
+            "SpielerPunktet, 30-00, 4-1, SpielerPunktGewonnen, 40-00, 4-1",
+            "SpielerPunktet, 30-30, 4-1, SpielerPunktGewonnen, 40-30, 4-1",
+            "SpielerPunktet, AD-DA, 4-1, SpielerGameGewonnen, GAME, 5-1",
+            "SpielerPunktet, 30-40, 4-1, SpielerPunktGewonnen, DEUCE, 4-1",
+            "GegnerPunktet, 00-40, 4-1, GegnerGameGewonnen, GAME, 4-2",
+            "GegnerPunktet, 00-30, 4-1, GegnerPunktGewonnen, 00-40, 4-1",
+            "GegnerPunktet, 30-30, 4-1, GegnerPunktGewonnen, 30-40, 4-1",
+            "GegnerPunktet, DA-AD, 4-1, GegnerGameGewonnen, GAME, 4-2",
+            "GegnerPunktet, 40-30, 4-1, GegnerPunktGewonnen, DEUCE, 4-1"
         }
     )
     void scenario1_spielerGewinntGame_laufenderSatz(String cmd, String prevGame, String prevSatz, String evt, String nextGame, String nextSatz) {
@@ -138,7 +146,7 @@ class ScenarioTest {
         static Function<EventTag, DomainEvent> eventTagToEvent() {
             return eventTag -> Match(eventTag).of(
                 Case($(SpielerPunktGewonnen), new SpielerPunktGewonnen()),
-                Case($(GegnerPunktGewonnen), new SpielerPunktGewonnen()),
+                Case($(GegnerPunktGewonnen), new GegnerPunktGewonnen()),
                 Case($(SpielerGameGewonnen), new SpielerGameGewonnen()),
                 Case($(GegnerGameGewonnen), new GegnerGameGewonnen())
             );
@@ -169,7 +177,7 @@ class ScenarioTest {
             Case($("15-40"), Tuple.of(4, 1).apply(CGame::of)),
             Case($("30-40"), Tuple.of(3, 1).apply(CGame::of)),
             Case($("AD-DA"), Tuple.of(1, 3).apply(CGame::of)),
-            Case($("DA-AD"), Tuple.of(1, 3).apply(CGame::of)),
+            Case($("DA-AD"), Tuple.of(3, 1).apply(CGame::of)),
             Case($("DEUCE"), Tuple.of(2, 2).apply(CGame::of)),
             Case($("GAME"), Either.right(new AbgeschlossenesCGame()))
         ).get();
