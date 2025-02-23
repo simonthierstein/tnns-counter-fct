@@ -15,15 +15,19 @@ import ch.sth.dojo.beh.cgame.domain.CGame;
 import ch.sth.dojo.beh.cgame.domain.GegnerPunkteBisGame;
 import ch.sth.dojo.beh.cgame.domain.LaufendesCGame;
 import ch.sth.dojo.beh.cgame.domain.SpielerPunkteBisGame;
+import ch.sth.dojo.beh.csatz.domain.AbgeschlossenerCSatz;
 import ch.sth.dojo.beh.csatz.domain.CSatz;
 import ch.sth.dojo.beh.csatz.domain.LaufenderCSatz;
 import ch.sth.dojo.beh.evt.DomainEvent;
 import ch.sth.dojo.beh.evt.GegnerGameGewonnen;
 import ch.sth.dojo.beh.evt.GegnerPunktGewonnen;
+import ch.sth.dojo.beh.evt.GegnerSatzGewonnen;
 import ch.sth.dojo.beh.evt.SpielerGameGewonnen;
 import ch.sth.dojo.beh.evt.SpielerPunktGewonnen;
+import ch.sth.dojo.beh.evt.SpielerSatzGewonnen;
 import io.vavr.Function1;
 import io.vavr.Function2;
+import io.vavr.Predicates;
 import io.vavr.Tuple;
 import io.vavr.Tuple2;
 import io.vavr.Tuple6;
@@ -104,7 +108,9 @@ class ScenarioTest {
             "GegnerPunktet, 00-30, 4-1, GegnerPunktGewonnen, 00-40, 4-1",
             "GegnerPunktet, 30-30, 4-1, GegnerPunktGewonnen, 30-40, 4-1",
             "GegnerPunktet, DA-AD, 4-1, GegnerGameGewonnen, GAME, 4-2",
-            "GegnerPunktet, 40-30, 4-1, GegnerPunktGewonnen, DEUCE, 4-1"
+            "GegnerPunktet, 40-30, 4-1, GegnerPunktGewonnen, DEUCE, 4-1",
+            "SpielerPunktet, 40-00, 5-1, SpielerSatzGewonnen, GAME, SATZ",
+            "GegnerPunktet, 00-40, 5-6, GegnerSatzGewonnen, GAME, SATZ"
         }
     )
     void scenario1_spielerGewinntGame_laufenderSatz(String cmd, String prevGame, String prevSatz, String evt, String nextGame, String nextSatz) {
@@ -124,12 +130,14 @@ class ScenarioTest {
 
     private Function<String, CSatz> parseSatzState() {
         return input -> Option.some(input)
+            .filter(Predicates.not("SATZ"::equals))
+            .toEither(new AbgeschlossenerCSatz())
             .map(str -> str.split("-"))
             .map(Arrays::stream)
             .map(List::ofAll)
             .map(list -> list.map(Integer::parseInt))
             .map(list -> CSatz.of(list.get(0), list.get(1)).get())
-            .get();
+            .fold(Function.identity(), Function.identity());
     }
 
     private Function<String, DomainEvent> parseEvent() {
@@ -141,14 +149,17 @@ class ScenarioTest {
 
     enum EventTag {
         SpielerPunktGewonnen, GegnerPunktGewonnen,
-        SpielerGameGewonnen, GegnerGameGewonnen;
+        SpielerGameGewonnen, GegnerGameGewonnen,
+        SpielerSatzGewonnen, GegnerSatzGewonnen;
 
         static Function<EventTag, DomainEvent> eventTagToEvent() {
             return eventTag -> Match(eventTag).of(
                 Case($(SpielerPunktGewonnen), new SpielerPunktGewonnen()),
                 Case($(GegnerPunktGewonnen), new GegnerPunktGewonnen()),
                 Case($(SpielerGameGewonnen), new SpielerGameGewonnen()),
-                Case($(GegnerGameGewonnen), new GegnerGameGewonnen())
+                Case($(GegnerGameGewonnen), new GegnerGameGewonnen()),
+                Case($(SpielerSatzGewonnen), new SpielerSatzGewonnen()),
+                Case($(GegnerSatzGewonnen), new GegnerSatzGewonnen())
             );
         }
     }

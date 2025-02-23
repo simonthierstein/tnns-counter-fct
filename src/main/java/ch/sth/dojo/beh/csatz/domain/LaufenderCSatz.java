@@ -24,8 +24,8 @@ public record LaufenderCSatz(SpielerPunkteSatz spielerPunkteSatz, GegnerPunkteSa
         Predicates.anyOf(FunctionUtils.untuple(SpielerPunkteSatz.lte4, GegnerPunkteSatz.lte4),
             FunctionUtils.untuple(SpielerPunkteSatz.eq5, GegnerPunkteSatz.lte4),
             FunctionUtils.untuple(SpielerPunkteSatz.lte4, GegnerPunkteSatz.eq5),
-            FunctionUtils.untuple(SpielerPunkteSatz.eq6, GegnerPunkteSatz.lte5),
-            FunctionUtils.untuple(SpielerPunkteSatz.lte5, GegnerPunkteSatz.eq6)
+            FunctionUtils.untuple(SpielerPunkteSatz.eq6, GegnerPunkteSatz.lte5),// TODO sth/23.02.2025 : edge case
+            FunctionUtils.untuple(SpielerPunkteSatz.lte5, GegnerPunkteSatz.eq6) // TODO sth/23.02.2025 : edge case
         );
     private static final Predicate<Tuple2<SpielerPunkteSatz, GegnerPunkteSatz>> sixAll =
         FunctionUtils.untuple(SpielerPunkteSatz.eq6, GegnerPunkteSatz.eq6);
