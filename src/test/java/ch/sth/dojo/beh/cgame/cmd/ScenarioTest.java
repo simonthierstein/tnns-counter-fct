@@ -1,6 +1,7 @@
 package ch.sth.dojo.beh.cgame.cmd;
 
 import static ch.sth.dojo.beh.Condition.condition;
+import static ch.sth.dojo.beh.cgame.cmd.ScenarioTest.EventTag.eventTagToEvent;
 import static io.vavr.API.$;
 import static io.vavr.API.Case;
 import static io.vavr.API.Match;
@@ -74,22 +75,6 @@ class ScenarioTest {
 
     }
 
-    @Test
-    void scenario1_spielerGewinntGame_laufenderSatz() {
-
-        var fdsa1 = PartialScenarioConfig.PartialScenarioConfig(
-            SpielerGegner.SpielerPunktet,
-            State.bind.apply(LaufenderCSatzWith(2, 2), LaufendesCGameWith(4, 4)), new SpielerPunktGewonnen(),
-            State.bind.apply(LaufenderCSatzWith(2, 2), LaufendesCGameWith(3, 4))
-        );
-
-        Either<String, State> result = applyCommand(fdsa1);
-
-        assertThat(result.isRight())
-            .withFailMessage(() -> result.getLeft())
-            .isTrue();
-
-    }
 
     @ParameterizedTest
     @CsvSource(
@@ -99,12 +84,33 @@ class ScenarioTest {
         final String[] split = prev.split("-");
         System.out.println(Arrays.stream(split).reduce((x, y) -> String.format("%s,%s", x, y)));
         final Tuple4<String, String, String, String> tupled = Tuple.of(cmd, prev, evt, next);
-        tupled.map(parseCommand(), parseState(), parseEvent(), parseState());
+        var fdsa = tupled.map(parseCommand(), parseState(), parseEvent(), parseState())
+            .apply(PartialScenarioConfig::PartialScenarioConfig);
+
+        final Either<String, State> states = applyCommand(fdsa);
+
+        assertThat(states.isRight())
+            .withFailMessage(states::getLeft)
+            .isTrue();
 
     }
 
     private Function<String, DomainEvent> parseEvent() {
-        return null;
+        return input -> Option.some(input)
+            .map(EventTag::valueOf)
+            .map(eventTagToEvent())
+            .get();
+    }
+
+    enum EventTag {
+        SpielerPunktGewonnen, GegnerPunktGewonnen;
+
+        static Function<EventTag, DomainEvent> eventTagToEvent() {
+            return eventTag -> Match(eventTag).of(
+                Case($(SpielerPunktGewonnen), new SpielerPunktGewonnen()),
+                Case($(GegnerPunktGewonnen), new SpielerPunktGewonnen())
+            );
+        }
     }
 
     private Function<String, State> parseState() {
@@ -150,7 +156,7 @@ class ScenarioTest {
     private static Either<String, State> applyCommand(final PartialScenarioConfig scenarioConfig) {
         final Tuple2<CSatz, CGame> prevState = PreviousState.tuple1.apply(scenarioConfig.previousState);
         return DomainCommand.handleCommand(prevState,
-                scenarioConfig.action.action == SpielerGegner.SpielerPunktet ? new SpielerPunktet() : new GegnerPunktet())
+                scenarioConfig.action.domainCommand)
             .peek(evt -> assertThat(evt).isEqualTo(scenarioConfig.expectedEvent.event))
             .flatMap(evt -> RootEventHandler.handleEvent(prevState, evt))
             .map(State::untuple)
@@ -163,7 +169,7 @@ class ScenarioTest {
             return new PartialScenarioConfig(action, previousState, event, expectedState);
         }
 
-        static PartialScenarioConfig PartialScenarioConfig(final SpielerGegner action, State previousState, final DomainEvent event, final State expectedState) {
+        static PartialScenarioConfig PartialScenarioConfig(final DomainCommand action, State previousState, final DomainEvent event, final State expectedState) {
             return Tuple.of(action, previousState, event, expectedState)
                 .map(PunkteAction.bind, PreviousState.bind, ExpectedEvent.bind, ExpectedState.bind)
                 .apply(PartialScenarioConfig::new);
@@ -204,9 +210,9 @@ class ScenarioTest {
 
     }
 
-    record PunkteAction(SpielerGegner action) {
+    record PunkteAction(DomainCommand domainCommand) {
 
-        static Function<SpielerGegner, PunkteAction> bind = PunkteAction::new;
+        static Function<DomainCommand, PunkteAction> bind = PunkteAction::new;
 
     }
 
