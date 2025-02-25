@@ -126,7 +126,7 @@ class ScenarioTest {
             .apply(PartialScenarioConfig::PartialScenarioConfig);
 
         var result = applyCommand(psc)
-            .map(state -> PartialScenarioConfig.PartialScenarioConfig(new GegnerPunktet(), state, new GegnerPunktGewonnen(), State.bind.apply(CSatz.of(0, 1).get(), CGame.zero())))
+            .map(state -> PartialScenarioConfig.PartialScenarioConfig(new GegnerPunktet(), state, new GegnerPunktGewonnen(), State.bind.apply(CSatz.of(0, 1).get(), CGame.of(4, 3).get())))
             .flatMap(ScenarioTest::applyCommand);
 
         assertThat(result.isRight())
