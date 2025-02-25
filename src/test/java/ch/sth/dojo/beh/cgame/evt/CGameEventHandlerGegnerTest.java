@@ -21,8 +21,7 @@ class CGameEventHandlerGegnerTest {
     @DisplayName("Scoring 😎")
     @ParameterizedTest(name = "gegner punktet {0} - {1}")
     @CsvSource({"4,4", "4,3", "4,2", "5,1",
-        "3,4", "3,3", "3,2", "4,1",
-        "2,4", "2,3"
+        "3,4", "3,3", "3,2", "4,1"
     })
     void handleEvent(Integer gegnerValue, Integer spielerValue) {
         final Either<DomainProblem, CGame> cGames = GegnerEventHandler.handleGegnerEvent(createStandardState(spielerValue, gegnerValue), new GegnerPunktGewonnen());
@@ -36,7 +35,7 @@ class CGameEventHandlerGegnerTest {
     @DisplayName("CloseGamewin Scoring 😎")
     @ParameterizedTest(name = "spieler punktet {0} - {1}")
     @CsvSource({
-        "2,2,1,3", "3,1,2,2"
+        "2,2,1,3", "3,1,2,2", "2,4,1,5", "2,3,1,4"
     })
     void punktGewonnenInfluenced(Integer gegnerValue, Integer spielerValue, Integer expGegnerValue, Integer expSpielerValue) {
         final Either<DomainProblem, CGame> cGames = GegnerEventHandler.handleGegnerEvent(createStandardState(spielerValue, gegnerValue), new GegnerPunktGewonnen());

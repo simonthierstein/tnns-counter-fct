@@ -79,22 +79,6 @@ class ScenarioTest {
 
     }
 
-    //    @ParameterizedTest
-    //    @CsvSource(
-    //        {"SpielerPunktet, 00-00, SpielerPunktGewonnen, 15-00"}
-    //    )
-    //    void protptype(String cmd, String prev, String evt, String next) {
-    //        final Tuple4<String, String, String, String> tupled = Tuple.of(cmd, prev, evt, next);
-    //        var fdsa = tupled.map(parseCommand(), parseState(), parseEvent(), parseState())
-    //
-    //
-    //        final Either<String, State> states = applyCommand(fdsa);
-    //
-    //        assertThat(states.isRight())
-    //            .withFailMessage(states::getLeft)
-    //            .isTrue();
-    //
-    //    }
 
     @ParameterizedTest
     @CsvSource(
@@ -124,6 +108,29 @@ class ScenarioTest {
 
         assertThat(states.isRight())
             .withFailMessage(states::getLeft)
+            .isTrue();
+
+    }
+
+    @ParameterizedTest
+    @CsvSource(
+        {
+            "GegnerPunktet, 00-40, 0-0, GegnerGameGewonnen, GAME, 0-1"
+        }
+    )
+    void scenario2_spielerGewinntGameUndNaechsterPunkt_laufenderSatz(String cmd, String prevGame, String prevSatz, String evt, String nextGame, String nextSatz) {
+        final Tuple6<String, String, String, String, String, String> tupled = Tuple.of(cmd, prevGame, prevSatz, evt, nextGame, nextSatz);
+        var psc = tupled.map(parseCommand(), parseState(), parseSatzState(), parseEvent(), parseState(), parseSatzState())
+            .apply((domainCommand, game, satz, event, game2, satz2) ->
+                Tuple.of(domainCommand, State.bind.apply(satz, game), event, State.bind.apply(satz2, game2)))
+            .apply(PartialScenarioConfig::PartialScenarioConfig);
+
+        var result = applyCommand(psc)
+            .map(state -> PartialScenarioConfig.PartialScenarioConfig(new GegnerPunktet(), state, new GegnerPunktGewonnen(), State.bind.apply(CSatz.of(0, 1).get(), CGame.zero())))
+            .flatMap(ScenarioTest::applyCommand);
+
+        assertThat(result.isRight())
+            .withFailMessage(result::getLeft)
             .isTrue();
 
     }
@@ -208,7 +215,7 @@ class ScenarioTest {
         final Tuple2<CSatz, CGame> prevState = PreviousState.tuple1.apply(scenarioConfig.previousState);
         return DomainCommand.handleCommand(prevState,
                 scenarioConfig.action.domainCommand)
-            .peek(evt -> assertThat(evt).isEqualTo(scenarioConfig.expectedEvent.event))
+            .peek(evt -> assertThat(evt).withFailMessage("Config failed: %s", scenarioConfig).isEqualTo(scenarioConfig.expectedEvent.event))
             .flatMap(evt -> RootEventHandler.handleEvent(prevState, evt))
             .map(State::untuple)
             .peek(state -> assertThat(state).isEqualTo(scenarioConfig.expectedState.state)).mapLeft(Object::toString);
