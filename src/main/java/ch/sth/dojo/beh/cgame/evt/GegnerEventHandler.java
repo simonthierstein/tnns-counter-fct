@@ -31,7 +31,7 @@ interface GegnerEventHandler {
     }
 
     static CGame handleEvent(LaufendesCGame state, GegnerGameGewonnen event) {
-        return new AbgeschlossenesCGame();
+        return LaufendesCGame.zero();
     }
 
     static AbgeschlossenesCGame handleEvent(LaufendesCGame state, GegnerSatzGewonnen event) {

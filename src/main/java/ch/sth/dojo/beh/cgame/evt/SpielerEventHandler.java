@@ -40,6 +40,6 @@ public interface SpielerEventHandler {
     }
 
     static CGame handleEvent(LaufendesCGame state, SpielerGameGewonnen event) {
-        return new AbgeschlossenesCGame();
+        return LaufendesCGame.zero();
     }
 }

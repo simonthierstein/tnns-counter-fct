@@ -72,7 +72,7 @@ class ScenarioTest {
         assertThat(result.isRight()).isTrue();
         result.forEach(t -> assertAll(
             () -> assertThat(t._1).isEqualTo(SatzWith(1, 0)),
-            () -> assertThat(t._2).isEqualTo(new AbgeschlossenesCGame())
+            () -> assertThat(t._2).isEqualTo(LaufendesCGame.zero())
         ));
 
         System.out.println(other);
@@ -83,15 +83,15 @@ class ScenarioTest {
     @ParameterizedTest
     @CsvSource(
         {
-            "SpielerPunktet, 40-00, 4-1, SpielerGameGewonnen, GAME, 5-1",
+            "SpielerPunktet, 40-00, 4-1, SpielerGameGewonnen, 00-00, 5-1",
             "SpielerPunktet, 30-00, 4-1, SpielerPunktGewonnen, 40-00, 4-1",
             "SpielerPunktet, 30-30, 4-1, SpielerPunktGewonnen, 40-30, 4-1",
-            "SpielerPunktet, AD-DA, 4-1, SpielerGameGewonnen, GAME, 5-1",
+            "SpielerPunktet, AD-DA, 4-1, SpielerGameGewonnen, 00-00, 5-1",
             "SpielerPunktet, 30-40, 4-1, SpielerPunktGewonnen, DEUCE, 4-1",
-            "GegnerPunktet, 00-40, 4-1, GegnerGameGewonnen, GAME, 4-2",
+            "GegnerPunktet, 00-40, 4-1, GegnerGameGewonnen, 00-00, 4-2",
             "GegnerPunktet, 00-30, 4-1, GegnerPunktGewonnen, 00-40, 4-1",
             "GegnerPunktet, 30-30, 4-1, GegnerPunktGewonnen, 30-40, 4-1",
-            "GegnerPunktet, DA-AD, 4-1, GegnerGameGewonnen, GAME, 4-2",
+            "GegnerPunktet, DA-AD, 4-1, GegnerGameGewonnen, 00-00, 4-2",
             "GegnerPunktet, 40-30, 4-1, GegnerPunktGewonnen, DEUCE, 4-1",
             "SpielerPunktet, 40-00, 5-1, SpielerSatzGewonnen, GAME, SATZ",
             "GegnerPunktet, 00-40, 5-6, GegnerSatzGewonnen, GAME, SATZ"
@@ -115,7 +115,7 @@ class ScenarioTest {
     @ParameterizedTest
     @CsvSource(
         {
-            "GegnerPunktet, 00-40, 0-0, GegnerGameGewonnen, GAME, 0-1"
+            "GegnerPunktet, 00-40, 0-0, GegnerGameGewonnen, 00-00, 0-1"
         }
     )
     void scenario2_spielerGewinntGameUndNaechsterPunkt_laufenderSatz(String cmd, String prevGame, String prevSatz, String evt, String nextGame, String nextSatz) {

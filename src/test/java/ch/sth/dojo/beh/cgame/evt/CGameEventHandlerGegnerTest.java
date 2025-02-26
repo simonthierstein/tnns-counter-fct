@@ -3,7 +3,6 @@ package ch.sth.dojo.beh.cgame.evt;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import ch.sth.dojo.beh.DomainProblem;
-import ch.sth.dojo.beh.cgame.domain.AbgeschlossenesCGame;
 import ch.sth.dojo.beh.cgame.domain.CGame;
 import ch.sth.dojo.beh.cgame.domain.GegnerPunkteBisGame;
 import ch.sth.dojo.beh.cgame.domain.LaufendesCGame;
@@ -57,7 +56,7 @@ class CGameEventHandlerGegnerTest {
         final Either<DomainProblem, CGame> cGames = GegnerEventHandler.handleGegnerEvent(createStandardState(spielerValue, gegnerValue), new GegnerGameGewonnen());
 
         assertThat(cGames.isRight()).isTrue();
-        assertThat(cGames.get()).isInstanceOf(AbgeschlossenesCGame.class);
+        assertThat(cGames.get()).isEqualTo(LaufendesCGame.zero());
     }
 
     @DisplayName("Wrong Event Punkt Gewonnen on Game Gewonnen 😎")
