@@ -15,6 +15,7 @@ import ch.sth.dojo.beh.cgame.domain.CGame;
 import ch.sth.dojo.beh.cgame.domain.GegnerPunkteBisGame;
 import ch.sth.dojo.beh.cgame.domain.LaufendesCGame;
 import ch.sth.dojo.beh.cgame.domain.SpielerPunkteBisGame;
+import ch.sth.dojo.beh.cgame.domain.Tiebreak;
 import ch.sth.dojo.beh.csatz.domain.AbgeschlossenerCSatz;
 import ch.sth.dojo.beh.csatz.domain.CSatz;
 import ch.sth.dojo.beh.csatz.domain.LaufenderCSatz;
@@ -137,6 +138,27 @@ class ScenarioTest {
 
     }
 
+    @ParameterizedTest
+    @CsvSource(
+        {
+            "GegnerPunktet, 00-40, 6-5, GegnerGameGewonnen, TB0-0, 6-6"
+        }
+    )
+    void scenario3_punktZumTiebreak_laufenderSatz(String cmd, String prevGame, String prevSatz, String evt, String nextGame, String nextSatz) {
+        final Tuple6<String, String, String, String, String, String> tupled = Tuple.of(cmd, prevGame, prevSatz, evt, nextGame, nextSatz);
+        var psc = tupled.map(parseCommand(), parseState(), parseSatzState(), parseEvent(), parseState(), parseSatzState())
+            .apply((domainCommand, game, satz, event, game2, satz2) ->
+                Tuple.of(domainCommand, State.bind.apply(satz, game), event, State.bind.apply(satz2, game2)))
+            .apply(PartialScenarioConfig::PartialScenarioConfig);
+
+        var result = applyCommand(psc);
+
+        assertThat(result.isRight())
+            .withFailMessage(result::getLeft)
+            .isTrue();
+
+    }
+
     private Function<String, CSatz> parseSatzState() {
         return input -> Option.some(input)
             .filter(Predicates.not("SATZ"::equals))
@@ -199,7 +221,10 @@ class ScenarioTest {
             Case($("AD-DA"), Tuple.of(1, 3).apply(CGame::of)),
             Case($("DA-AD"), Tuple.of(3, 1).apply(CGame::of)),
             Case($("DEUCE"), Tuple.of(2, 2).apply(CGame::of)),
-            Case($("GAME"), Either.right(new AbgeschlossenesCGame()))
+            Case($("GAME"), Either.right(new AbgeschlossenesCGame())),
+            // Tiebreak
+            Case($("TB0-0"), Tuple.of(7, 7).apply(Tiebreak::of))
+
         ).get();
     }
 

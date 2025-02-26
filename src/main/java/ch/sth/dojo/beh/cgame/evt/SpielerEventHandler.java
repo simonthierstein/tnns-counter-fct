@@ -12,6 +12,7 @@ import ch.sth.dojo.beh.cgame.domain.CGame;
 import ch.sth.dojo.beh.cgame.domain.GegnerPunkteBisGame;
 import ch.sth.dojo.beh.cgame.domain.LaufendesCGame;
 import ch.sth.dojo.beh.cgame.domain.SpielerPunkteBisGame;
+import ch.sth.dojo.beh.cgame.domain.Tiebreak;
 import ch.sth.dojo.beh.evt.SpielerDomainEvent;
 import ch.sth.dojo.beh.evt.SpielerGameGewonnen;
 import ch.sth.dojo.beh.evt.SpielerPunktGewonnen;
@@ -30,16 +31,36 @@ public interface SpielerEventHandler {
         };
     }
 
-    static AbgeschlossenesCGame handleEvent(LaufendesCGame state, SpielerSatzGewonnen event) {
+    private static AbgeschlossenesCGame handleEvent(LaufendesCGame state, SpielerSatzGewonnen event) {
         return new AbgeschlossenesCGame();
     }
 
-    static Either<DomainProblem, CGame> handleEvent(LaufendesCGame state, SpielerPunktGewonnen event) {
+    private static Either<DomainProblem, CGame> handleEvent(LaufendesCGame state, SpielerPunktGewonnen event) {
         return LaufendesCGame.punktGewonnen(state, new Gewinner(state.spielerPunkteBisGame().value()), new Verlierer(state.gegnerPunkteBisGame().value()),
             (gewinner, verlierer) -> LaufendesCGame.LaufendesCGame(new SpielerPunkteBisGame(gewinner.value()), new GegnerPunkteBisGame(verlierer.value())));
     }
 
-    static CGame handleEvent(LaufendesCGame state, SpielerGameGewonnen event) {
+    private static CGame handleEvent(LaufendesCGame state, SpielerGameGewonnen event) {
         return LaufendesCGame.zero();
+    }
+
+    static Either<DomainProblem, CGame> handleSpielerTBEvent(Tiebreak state, SpielerDomainEvent event) { // TODO sth/26.02.2025 : refact with non TB Event handler
+        return switch (event) {
+            case SpielerPunktGewonnen evt -> handleEvent(state, evt);
+            case SpielerGameGewonnen evt -> right(handleEvent(state, evt));
+            case SpielerSatzGewonnen evt -> right(handleEvent(state, evt));
+        };
+    }
+
+    private static AbgeschlossenesCGame handleEvent(Tiebreak state, SpielerSatzGewonnen event) {
+        return new AbgeschlossenesCGame();
+    }
+
+    private static CGame handleEvent(Tiebreak state, SpielerGameGewonnen event) {
+        return LaufendesCGame.zero();
+    }
+
+    private static Either<DomainProblem, CGame> handleEvent(Tiebreak state, SpielerPunktGewonnen event) {
+        Tiebreak next = state.spielerPunktGewonnen();
     }
 }
