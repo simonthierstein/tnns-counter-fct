@@ -132,6 +132,8 @@ class ScenarioTest {
         assertThat(result.isRight())
             .withFailMessage(result::getLeft)
             .isTrue();
+        assertThat(result.get().game)
+            .isEqualTo(CGame.of(4, 3).get());
 
     }
 
