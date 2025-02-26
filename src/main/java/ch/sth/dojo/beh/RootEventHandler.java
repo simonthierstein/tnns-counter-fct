@@ -36,7 +36,7 @@ public interface RootEventHandler {
     Function2<Tuple2<CSatz, CGame>, CGame, Tuple2<CSatz, CGame>> replaceNextGame = (prev, nextGame) -> prev.map2(x -> nextGame);
 
     static Either<DomainProblem, Tuple2<CSatz, CGame>> spielerSatzGewonnen(Tuple2<CSatz, CGame> prev, SpielerSatzGewonnen event) {
-        return eithers2Tuple(CGameEventHandler.handleCGameEvent(prev._2, event), CSatzEventHandler.handleCSatzEvent(prev._1, event));
+        return eithers2Tuple(CSatzEventHandler.handleCSatzEvent(prev._1, event), CGameEventHandler.handleCGameEvent(prev._2, event));
     }
 
     static Either<DomainProblem, Tuple2<CSatz, CGame>> spielerPunktGewonnenEvt(Tuple2<CSatz, CGame> prev, SpielerPunktGewonnen event) {
@@ -44,11 +44,11 @@ public interface RootEventHandler {
     }
 
     static Either<DomainProblem, Tuple2<CSatz, CGame>> spielerGameGewonnen(Tuple2<CSatz, CGame> prev, SpielerGameGewonnen event) {
-        return eithers2Tuple(CGameEventHandler.handleCGameEvent(prev._2, event), CSatzEventHandler.handleCSatzEvent(prev._1, event));
+        return eithers2Tuple(CSatzEventHandler.handleCSatzEvent(prev._1, event), CGameEventHandler.handleCGameEvent(prev._2, event));
     }
 
     private static Either<DomainProblem, Tuple2<CSatz, CGame>> gegnerSatzGewonnen(final Tuple2<CSatz, CGame> prev, final GegnerSatzGewonnen event) {
-        return eithers2Tuple(CGameEventHandler.handleCGameEvent(prev._2, event), CSatzEventHandler.handleCSatzEvent(prev._1, event));
+        return eithers2Tuple(CSatzEventHandler.handleCSatzEvent(prev._1, event), CGameEventHandler.handleCGameEvent(prev._2, event));
     }
 
     private static Either<DomainProblem, Tuple2<CSatz, CGame>> gegnerPunktGewonnen(final Tuple2<CSatz, CGame> prev, final GegnerPunktGewonnen event) {
@@ -56,10 +56,10 @@ public interface RootEventHandler {
     }
 
     private static Either<DomainProblem, Tuple2<CSatz, CGame>> gegnerGameGewonnen(final Tuple2<CSatz, CGame> prev, final GegnerGameGewonnen event) {
-        return eithers2Tuple(CGameEventHandler.handleCGameEvent(prev._2, event), CSatzEventHandler.handleCSatzEvent(prev._1, event));
+        return eithers2Tuple(CSatzEventHandler.handleCSatzEvent(prev._1, event), CGameEventHandler.handleCGameEvent(prev._2, event));
     }
 
-    private static Either<DomainProblem, Tuple2<CSatz, CGame>> eithers2Tuple(final Either<DomainProblem, CGame> game, final Either<DomainProblem, CSatz> satz) {
+    private static Either<DomainProblem, Tuple2<CSatz, CGame>> eithers2Tuple(final Either<DomainProblem, CSatz> satz, final Either<DomainProblem, CGame> game) {
         return game.flatMap(
             nextGame -> satz.map(
                 nextSatz -> Tuple.of(nextSatz, nextGame)));
