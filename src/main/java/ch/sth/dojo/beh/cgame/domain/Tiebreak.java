@@ -14,7 +14,7 @@ public record Tiebreak(TiebreakSpielerPunkteBisGame tiebreakSpielerPunkteBisGame
 
     public static final Predicate<Tiebreak> passIfGegnerOnePunktBisSatz = compose(TiebreakPunkteBisGame.eq1, tiebreak -> tiebreak.tiebreakGegnerPunkteBisGame.tiebreakPunkteBisGame());
 
-    public static Predicate<Tiebreak> passIfSpielerOnePunktBisSatz = compose(TiebreakSpielerPunkteBisGame.eq1, Tiebreak::tiebreakSpielerPunkteBisGame);
+    public static final Predicate<Tiebreak> passIfSpielerOnePunktBisSatz = compose(TiebreakSpielerPunkteBisGame.eq1, Tiebreak::tiebreakSpielerPunkteBisGame);
 
     public static Either<DomainProblem, Tiebreak> of(Integer spielerPunkteBisGame, Integer gegnerPunkteBisGame) {
         Either<DomainProblem, TiebreakSpielerPunkteBisGame> spieler = TiebreakSpielerPunkteBisGame.of(spielerPunkteBisGame);
