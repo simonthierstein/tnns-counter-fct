@@ -2,7 +2,7 @@
  * Copyright (C) Schweizerische Bundesbahnen SBB, 2025.
  */
 
-package ch.sth.dojo.beh.cgame.cmd;
+package ch.sth.dojo.beh.cmd;
 
 import static ch.sth.dojo.beh.Condition.condition;
 import static io.vavr.control.Either.left;
@@ -16,36 +16,36 @@ import ch.sth.dojo.beh.cgame.domain.Tiebreak;
 import ch.sth.dojo.beh.csatz.domain.CSatz;
 import ch.sth.dojo.beh.csatz.domain.LaufenderCSatz;
 import ch.sth.dojo.beh.evt.DomainEvent;
-import ch.sth.dojo.beh.evt.GegnerGameGewonnen;
-import ch.sth.dojo.beh.evt.GegnerPunktGewonnen;
-import ch.sth.dojo.beh.evt.GegnerSatzGewonnen;
+import ch.sth.dojo.beh.evt.SpielerGameGewonnen;
+import ch.sth.dojo.beh.evt.SpielerPunktGewonnen;
+import ch.sth.dojo.beh.evt.SpielerSatzGewonnen;
 import io.vavr.Tuple2;
 import io.vavr.control.Either;
 
-public record GegnerPunktet() implements DomainCommand {
+public record SpielerPunktet() implements DomainCommand {
 
-    static Either<DomainProblem, DomainEvent> applyC(Tuple2<CSatz, CGame> state, final GegnerPunktet cmd) {
-        return state.apply(GegnerPunktet::apply);
+    public static Either<DomainProblem, DomainEvent> applyC(Tuple2<CSatz, CGame> state, SpielerPunktet cmd) {
+        return state.apply(SpielerPunktet::apply);
     }
 
     private static Either<DomainProblem, DomainEvent> apply(CSatz cSatz, CGame cGame) {
         return cGame.apply(
             laufendesCGame -> applyToLaufendesCGame(laufendesCGame, cSatz),
-            tiebreak -> right(applyToTiebreak(cSatz, tiebreak)),
+            tiebreak -> applyToTiebreak(tiebreak),
             abgeschlossenesCGame -> applyToAbgeschlossenesCGame(cSatz, abgeschlossenesCGame));
     }
 
-    private static DomainEvent applyToTiebreak(final CSatz cSatz, final Tiebreak tiebreak) {
-        return condition(tiebreak, Tiebreak.passIfGegnerOnePunktBisSatz,
-            x -> new GegnerSatzGewonnen(),
-            x -> new GegnerPunktGewonnen()
-        );
+    private static Either<DomainProblem, DomainEvent> applyToTiebreak(final Tiebreak tiebreak) {
+        return right(condition(tiebreak, Tiebreak.passIfSpielerOnePunktBisSatz,
+            x -> new SpielerSatzGewonnen(),
+            x -> new SpielerPunktGewonnen()
+        ));
     }
 
     private static Either<DomainProblem, DomainEvent> applyToLaufendesCGame(LaufendesCGame laufendesCGame, CSatz satz) {
-        return condition(laufendesCGame, LaufendesCGame.passIfGegnerOnePunktBisCGame,
+        return condition(laufendesCGame, LaufendesCGame.passIfSpielerOnePunktBisCGame,
             game -> applyToCSatz(satz),
-            x -> right(new GegnerPunktGewonnen()));
+            x -> right(new SpielerPunktGewonnen()));
     }
 
     private static Either<DomainProblem, DomainEvent> applyToCSatz(CSatz satz) {
@@ -55,15 +55,15 @@ public record GegnerPunktet() implements DomainCommand {
     }
 
     private static DomainEvent applyToLaufenderSatz(final LaufenderCSatz laufenderCSatz) {
-        return condition(laufenderCSatz, LaufenderCSatz.passIfGegnerOneGameBisSatz,
-            x -> new GegnerSatzGewonnen(),
-            x -> new GegnerGameGewonnen());
+        return condition(laufenderCSatz, LaufenderCSatz.passIfSpielerOneGameBisSatz,
+            x -> new SpielerSatzGewonnen(),
+            x -> new SpielerGameGewonnen());
     }
 
     private static Either<DomainProblem, DomainEvent> applyToAbgeschlossenesCGame(final CSatz prev, AbgeschlossenesCGame abgeschlossenesCGame) {
         return CSatz.apply(prev,
-            laufend -> right(new GegnerPunktGewonnen()),
-            abgeschlossenerCSatz -> left(DomainProblem.valueNotValid)); // TODO sth/21.02.2025 : where is new game instantiated?
+            laufend -> right(new SpielerPunktGewonnen()),
+            abgeschlossenerCSatz -> left(DomainProblem.valueNotValid));
     }
 
 }

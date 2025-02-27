@@ -1,4 +1,4 @@
-package ch.sth.dojo.beh.cgame.cmd;
+package ch.sth.dojo.beh.cmd;
 
 import static io.vavr.API.$;
 import static io.vavr.API.Case;
