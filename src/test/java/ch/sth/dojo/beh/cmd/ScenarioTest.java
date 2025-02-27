@@ -1,7 +1,7 @@
-package ch.sth.dojo.beh.cgame.cmd;
+package ch.sth.dojo.beh.cmd;
 
 import static ch.sth.dojo.beh.Condition.condition;
-import static ch.sth.dojo.beh.cgame.cmd.ScenarioTest.EventTag.eventTagToEvent;
+import static ch.sth.dojo.beh.cmd.ScenarioTest.EventTag.eventTagToEvent;
 import static io.vavr.API.$;
 import static io.vavr.API.Case;
 import static io.vavr.API.Match;
@@ -16,9 +16,6 @@ import ch.sth.dojo.beh.cgame.domain.GegnerPunkteBisGame;
 import ch.sth.dojo.beh.cgame.domain.LaufendesCGame;
 import ch.sth.dojo.beh.cgame.domain.SpielerPunkteBisGame;
 import ch.sth.dojo.beh.cgame.domain.Tiebreak;
-import ch.sth.dojo.beh.cmd.DomainCommand;
-import ch.sth.dojo.beh.cmd.GegnerPunktet;
-import ch.sth.dojo.beh.cmd.SpielerPunktet;
 import ch.sth.dojo.beh.csatz.domain.AbgeschlossenerCSatz;
 import ch.sth.dojo.beh.csatz.domain.CSatz;
 import ch.sth.dojo.beh.csatz.domain.LaufenderCSatz;
