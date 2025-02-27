@@ -21,13 +21,8 @@ import ch.sth.dojo.beh.evt.SpielerPunktGewonnen;
 import ch.sth.dojo.beh.evt.SpielerSatzGewonnen;
 import io.vavr.Tuple2;
 import io.vavr.control.Either;
-import java.util.function.Function;
 
 public record SpielerPunktet() implements DomainCommand {
-
-    public static final Function<LaufendesCGame, DomainEvent> laufendesGame2EventFct = prev -> condition(prev, LaufendesCGame.passIfSpielerOnePunktBisCGame,
-        x -> new SpielerGameGewonnen(),
-        x -> new SpielerPunktGewonnen());
 
     public static Either<DomainProblem, DomainEvent> applyC(Tuple2<CSatz, CGame> state, SpielerPunktet cmd) {
         return state.apply(SpielerPunktet::apply);
@@ -68,7 +63,7 @@ public record SpielerPunktet() implements DomainCommand {
     private static Either<DomainProblem, DomainEvent> applyToAbgeschlossenesCGame(final CSatz prev, AbgeschlossenesCGame abgeschlossenesCGame) {
         return CSatz.apply(prev,
             laufend -> right(new SpielerPunktGewonnen()),
-            abgeschlossenerCSatz -> left(DomainProblem.valueNotValid)); // TODO sth/21.02.2025 : where is new game instantiated?
+            abgeschlossenerCSatz -> left(DomainProblem.valueNotValid));
     }
 
 }
