@@ -44,6 +44,30 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 class ScenarioTest {
 
+    @ParameterizedTest
+    @CsvSource(
+        {
+            "GegnerPunktet, 00-40, 6-5, GegnerGameGewonnen, TB0-0, 6-6",
+            "GegnerPunktet, TB0-6, 6-6, GegnerSatzGewonnen, TB0-7, SATZ",
+            "SpielerPunktet, TB6-6, 6-6, SpielerPunktGewonnen, TB7-6, 6-6",
+            "SpielerPunktet, TB7-6, 6-6, SpielerSatzGewonnen, TB8-6, SATZ"
+        }
+    )
+    void scenario3_punktZumTiebreak_laufenderSatz(String cmd, String prevGame, String prevSatz, String evt, String nextGame, String nextSatz) {
+        final Tuple6<String, String, String, String, String, String> tupled = Tuple.of(cmd, prevGame, prevSatz, evt, nextGame, nextSatz);
+        var psc = tupled.map(parseCommand(), parseState(), parseSatzState(), parseEvent(), parseState(), parseSatzState())
+            .apply((domainCommand, game, satz, event, game2, satz2) ->
+                Tuple.of(domainCommand, State.bind.apply(satz, game), event, State.bind.apply(satz2, game2)))
+            .apply(PartialScenarioConfig::PartialScenarioConfig);
+
+        var result = applyCommand(psc);
+
+        assertThat(result.isRight())
+            .withFailMessage(result::getLeft)
+            .isTrue();
+
+    }
+
     @ParameterizedTest(name = "Spieler gewinnt game mit gegner score {0}🥸")
     @ValueSource(strings = {"00", "15", "30"})
     void spielerGewinntGame_standard(String other) {
@@ -79,7 +103,6 @@ class ScenarioTest {
         System.out.println(other);
 
     }
-
 
     @ParameterizedTest
     @CsvSource(
@@ -135,27 +158,6 @@ class ScenarioTest {
             .isTrue();
         assertThat(result.get().game)
             .isEqualTo(CGame.of(4, 3).get());
-
-    }
-
-    @ParameterizedTest
-    @CsvSource(
-        {
-            "GegnerPunktet, 00-40, 6-5, GegnerGameGewonnen, TB0-0, 6-6"
-        }
-    )
-    void scenario3_punktZumTiebreak_laufenderSatz(String cmd, String prevGame, String prevSatz, String evt, String nextGame, String nextSatz) {
-        final Tuple6<String, String, String, String, String, String> tupled = Tuple.of(cmd, prevGame, prevSatz, evt, nextGame, nextSatz);
-        var psc = tupled.map(parseCommand(), parseState(), parseSatzState(), parseEvent(), parseState(), parseSatzState())
-            .apply((domainCommand, game, satz, event, game2, satz2) ->
-                Tuple.of(domainCommand, State.bind.apply(satz, game), event, State.bind.apply(satz2, game2)))
-            .apply(PartialScenarioConfig::PartialScenarioConfig);
-
-        var result = applyCommand(psc);
-
-        assertThat(result.isRight())
-            .withFailMessage(result::getLeft)
-            .isTrue();
 
     }
 
@@ -223,8 +225,12 @@ class ScenarioTest {
             Case($("DEUCE"), Tuple.of(2, 2).apply(CGame::of)),
             Case($("GAME"), Either.right(new AbgeschlossenesCGame())),
             // Tiebreak
-            Case($("TB0-0"), Tuple.of(7, 7).apply(Tiebreak::of))
-
+            Case($("TB0-0"), Tuple.of(7, 7).apply(Tiebreak::of)),
+            Case($("TB0-6"), Tuple.of(8, 1).apply(Tiebreak::of)),
+            Case($("TB0-7"), Tuple.of(9, 0).apply(Tiebreak::of)),
+            Case($("TB6-6"), Tuple.of(2, 2).apply(Tiebreak::of)),
+            Case($("TB7-6"), Tuple.of(1, 3).apply(Tiebreak::of)),
+            Case($("TB8-6"), Tuple.of(0, 3).apply(Tiebreak::of))
         ).get();
     }
 

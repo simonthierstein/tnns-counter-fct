@@ -3,7 +3,6 @@ package ch.sth.dojo.beh.cgame.domain;
 import static ch.sth.dojo.beh.PredicateUtils.compose;
 import static ch.sth.dojo.beh.PredicateUtils.eq;
 import static ch.sth.dojo.beh.PredicateUtils.gte;
-import static ch.sth.dojo.beh.PredicateUtils.lte;
 
 import ch.sth.dojo.beh.DomainProblem;
 import io.vavr.Predicates;
@@ -17,7 +16,7 @@ public record TiebreakPunkteBisGame(Integer value) {
 
     static Either<DomainProblem, TiebreakPunkteBisGame> of(final Integer punkteBisGame) {
         return Option.of(punkteBisGame)
-            .filter(Predicates.allOf(gte(1), lte(7)))
+            .filter(Predicates.allOf(gte(0)))
             .map(TiebreakPunkteBisGame::new)
             .toEither(DomainProblem.valueNotValid);
     }
@@ -28,5 +27,9 @@ public record TiebreakPunkteBisGame(Integer value) {
 
     TiebreakPunkteBisGame decrement() {
         return new TiebreakPunkteBisGame(value - 1);
+    }
+
+    TiebreakPunkteBisGame increment() {
+        return new TiebreakPunkteBisGame(value + 1);
     }
 }

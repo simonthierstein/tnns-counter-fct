@@ -34,10 +34,10 @@ public record Tiebreak(TiebreakSpielerPunkteBisGame tiebreakSpielerPunkteBisGame
     }
 
     public Tiebreak spielerPunktGewonnen() {
-        return Tiebreak(tiebreakSpielerPunkteBisGame.decrement(), tiebreakGegnerPunkteBisGame);
+        return Tiebreak(tiebreakSpielerPunkteBisGame.decrement(), tiebreakGegnerPunkteBisGame.adaptTo(tiebreakSpielerPunkteBisGame.decrement()));
     }
 
     public Tiebreak gegnerPunktGewonnen() {
-        return Tiebreak(tiebreakSpielerPunkteBisGame, tiebreakGegnerPunkteBisGame.decrement());
+        return Tiebreak(tiebreakSpielerPunkteBisGame.adaptTo(tiebreakGegnerPunkteBisGame.decrement()), tiebreakGegnerPunkteBisGame.decrement());
     }
 }

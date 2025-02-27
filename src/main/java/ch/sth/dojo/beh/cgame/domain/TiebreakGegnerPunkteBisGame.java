@@ -3,6 +3,7 @@ package ch.sth.dojo.beh.cgame.domain;
 import ch.sth.dojo.beh.DomainProblem;
 import ch.sth.dojo.beh.PredicateUtils;
 import io.vavr.control.Either;
+import io.vavr.control.Option;
 import java.util.function.Predicate;
 
 public record TiebreakGegnerPunkteBisGame(TiebreakPunkteBisGame tiebreakPunkteBisGame) {
@@ -20,5 +21,16 @@ public record TiebreakGegnerPunkteBisGame(TiebreakPunkteBisGame tiebreakPunkteBi
 
     TiebreakGegnerPunkteBisGame decrement() {
         return new TiebreakGegnerPunkteBisGame(tiebreakPunkteBisGame.decrement());
+    }
+
+    TiebreakGegnerPunkteBisGame adaptTo(final TiebreakSpielerPunkteBisGame decremented) {
+        return Option.some(decremented)
+            .filter(TiebreakSpielerPunkteBisGame.eq1)
+            .map(x -> increment())
+            .getOrElse(this);
+    }
+
+    private TiebreakGegnerPunkteBisGame increment() {
+        return new TiebreakGegnerPunkteBisGame(tiebreakPunkteBisGame.increment());
     }
 }

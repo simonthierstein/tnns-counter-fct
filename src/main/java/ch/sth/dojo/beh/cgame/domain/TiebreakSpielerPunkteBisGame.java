@@ -21,4 +21,8 @@ public record TiebreakSpielerPunkteBisGame(TiebreakPunkteBisGame punkteBisGame) 
     TiebreakSpielerPunkteBisGame decrement() {
         return new TiebreakSpielerPunkteBisGame(punkteBisGame.decrement());
     }
+
+    TiebreakSpielerPunkteBisGame adaptTo(final TiebreakGegnerPunkteBisGame decrement) {
+        return new TiebreakSpielerPunkteBisGame(punkteBisGame.increment());
+    }
 }
