@@ -41,14 +41,10 @@ public record SpielerPunktet() implements DomainCommand {
     }
 
     private static Either<DomainProblem, DomainEvent> applyToTiebreak(final Tiebreak tiebreak) {
-        condition(tiebreak, Tiebreak.passIfSpielerOnePunktBisSatz,
+        return right(condition(tiebreak, Tiebreak.passIfSpielerOnePunktBisSatz,
             x -> new SpielerSatzGewonnen(),
             x -> new SpielerPunktGewonnen()
-        );
-
-        return tiebreak.tiebreakSpielerPunkteBisGame().punkteBisGame().value() == 1
-            ? Either.right(new SpielerSatzGewonnen())
-            : Either.right(new SpielerPunktGewonnen());
+        ));
     }
 
     private static Either<DomainProblem, DomainEvent> applyToLaufendesCGame(LaufendesCGame laufendesCGame, CSatz satz) {
