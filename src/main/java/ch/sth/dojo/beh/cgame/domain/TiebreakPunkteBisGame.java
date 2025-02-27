@@ -1,7 +1,11 @@
 package ch.sth.dojo.beh.cgame.domain;
 
+import static ch.sth.dojo.beh.PredicateUtils.compose;
+import static ch.sth.dojo.beh.PredicateUtils.eq;
+import static ch.sth.dojo.beh.PredicateUtils.gte;
+import static ch.sth.dojo.beh.PredicateUtils.lte;
+
 import ch.sth.dojo.beh.DomainProblem;
-import ch.sth.dojo.beh.PredicateUtils;
 import io.vavr.Predicates;
 import io.vavr.control.Either;
 import io.vavr.control.Option;
@@ -9,15 +13,11 @@ import java.util.function.Predicate;
 
 public record TiebreakPunkteBisGame(Integer value) {
 
-    private static final Predicate<Integer> ieq1 = x -> x == 1;
-    private static final Predicate<Integer> gte1 = x -> x >= 1;
-    private static final Predicate<Integer> lte7 = x -> x <= 7;
-
-    static Predicate<TiebreakPunkteBisGame> eq1 = PredicateUtils.compose(ieq1, TiebreakPunkteBisGame::value);
+    static Predicate<TiebreakPunkteBisGame> eq1 = compose(eq(1), TiebreakPunkteBisGame::value);
 
     static Either<DomainProblem, TiebreakPunkteBisGame> of(final Integer punkteBisGame) {
         return Option.of(punkteBisGame)
-            .filter(Predicates.allOf(gte1, lte7))
+            .filter(Predicates.allOf(gte(1), lte(7)))
             .map(TiebreakPunkteBisGame::new)
             .toEither(DomainProblem.valueNotValid);
     }

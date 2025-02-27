@@ -21,4 +21,24 @@ public final class PredicateUtils {
     public static <T, U> Predicate<U> compose(Predicate<T> inner, Function<U, T> mapper) {
         return u -> inner.test(mapper.apply(u));
     }
+
+    static Predicate<Integer> gt(Integer other) {
+        return x -> x > other;
+    }
+
+    public static Predicate<Integer> gte(Integer other) {
+        return x -> x >= other;
+    }
+
+    public static Predicate<Integer> lte(Integer other) {
+        return x -> x <= other;
+    }
+
+    static Predicate<Integer> lt(Integer other) {
+        return x -> x < other;
+    }
+
+    public static Predicate<Integer> eq(Integer other) {
+        return x -> x.equals(other);
+    }
 }
