@@ -12,6 +12,7 @@ import ch.sth.dojo.beh.DomainProblem;
 import ch.sth.dojo.beh.cgame.domain.AbgeschlossenesCGame;
 import ch.sth.dojo.beh.cgame.domain.CGame;
 import ch.sth.dojo.beh.cgame.domain.LaufendesCGame;
+import ch.sth.dojo.beh.cgame.domain.Tiebreak;
 import ch.sth.dojo.beh.csatz.domain.CSatz;
 import ch.sth.dojo.beh.csatz.domain.LaufenderCSatz;
 import ch.sth.dojo.beh.evt.DomainEvent;
@@ -35,7 +36,19 @@ public record SpielerPunktet() implements DomainCommand {
     private static Either<DomainProblem, DomainEvent> apply(CSatz cSatz, CGame cGame) {
         return cGame.apply(
             laufendesCGame -> applyToLaufendesCGame(laufendesCGame, cSatz),
+            tiebreak -> applyToTiebreak(tiebreak),
             abgeschlossenesCGame -> applyToAbgeschlossenesCGame(cSatz, abgeschlossenesCGame));
+    }
+
+    private static Either<DomainProblem, DomainEvent> applyToTiebreak(final Tiebreak tiebreak) {
+        condition(tiebreak, Tiebreak.passIfSpielerOnePunktBisSatz,
+            x -> new SpielerSatzGewonnen(),
+            x -> new SpielerPunktGewonnen()
+        );
+
+        return tiebreak.tiebreakSpielerPunkteBisGame().punkteBisGame().value() == 1
+            ? Either.right(new SpielerSatzGewonnen())
+            : Either.right(new SpielerPunktGewonnen());
     }
 
     private static Either<DomainProblem, DomainEvent> applyToLaufendesCGame(LaufendesCGame laufendesCGame, CSatz satz) {

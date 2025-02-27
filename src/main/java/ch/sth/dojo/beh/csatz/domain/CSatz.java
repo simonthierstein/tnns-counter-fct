@@ -32,4 +32,8 @@ public interface CSatz {
         return spielerEith.flatMap(spielerx ->
             gegnerEith.map(gegnerx -> new LaufenderCSatz(spielerx, gegnerx)));
     }
+
+    static boolean isSixAll(CSatz satz) {
+        return apply(satz, laufenderCSatz -> laufenderCSatz.spielerPunkteSatz().value() == 6 && laufenderCSatz.gegnerPunkteSatz().value() == 6, x -> false);
+    }
 }

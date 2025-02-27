@@ -12,6 +12,7 @@ import ch.sth.dojo.beh.DomainProblem;
 import ch.sth.dojo.beh.cgame.domain.AbgeschlossenesCGame;
 import ch.sth.dojo.beh.cgame.domain.CGame;
 import ch.sth.dojo.beh.cgame.domain.LaufendesCGame;
+import ch.sth.dojo.beh.cgame.domain.Tiebreak;
 import ch.sth.dojo.beh.csatz.domain.CSatz;
 import ch.sth.dojo.beh.csatz.domain.LaufenderCSatz;
 import ch.sth.dojo.beh.evt.DomainEvent;
@@ -30,7 +31,15 @@ public record GegnerPunktet() implements DomainCommand {
     private static Either<DomainProblem, DomainEvent> apply(CSatz cSatz, CGame cGame) {
         return cGame.apply(
             laufendesCGame -> applyToLaufendesCGame(laufendesCGame, cSatz),
+            tiebreak -> right(applyToTiebreak(cSatz, tiebreak)),
             abgeschlossenesCGame -> applyToAbgeschlossenesCGame(cSatz, abgeschlossenesCGame));
+    }
+
+    private static DomainEvent applyToTiebreak(final CSatz cSatz, final Tiebreak tiebreak) {
+        return condition(tiebreak, Tiebreak.passIfGegnerOnePunktBisSatz,
+            x -> new GegnerSatzGewonnen(),
+            x -> new GegnerPunktGewonnen()
+        );
     }
 
     private static Either<DomainProblem, DomainEvent> applyToLaufendesCGame(LaufendesCGame laufendesCGame, CSatz satz) {

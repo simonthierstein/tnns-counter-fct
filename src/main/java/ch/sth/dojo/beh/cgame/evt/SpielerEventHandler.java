@@ -4,6 +4,7 @@
 
 package ch.sth.dojo.beh.cgame.evt;
 
+import static io.vavr.control.Either.left;
 import static io.vavr.control.Either.right;
 
 import ch.sth.dojo.beh.DomainProblem;
@@ -46,21 +47,17 @@ public interface SpielerEventHandler {
 
     static Either<DomainProblem, CGame> handleSpielerTBEvent(Tiebreak state, SpielerDomainEvent event) { // TODO sth/26.02.2025 : refact with non TB Event handler
         return switch (event) {
-            case SpielerPunktGewonnen evt -> handleEvent(state, evt);
-            case SpielerGameGewonnen evt -> right(handleEvent(state, evt));
+            case SpielerPunktGewonnen evt -> right(handleEvent(state, evt));
+            case SpielerGameGewonnen() -> left(DomainProblem.eventNotValid);
             case SpielerSatzGewonnen evt -> right(handleEvent(state, evt));
         };
     }
 
-    private static AbgeschlossenesCGame handleEvent(Tiebreak state, SpielerSatzGewonnen event) {
-        return new AbgeschlossenesCGame();
+    private static Tiebreak handleEvent(Tiebreak state, SpielerSatzGewonnen event) {
+        return state.spielerPunktGewonnen();
     }
 
-    private static CGame handleEvent(Tiebreak state, SpielerGameGewonnen event) {
-        return LaufendesCGame.zero();
-    }
-
-    private static Either<DomainProblem, CGame> handleEvent(Tiebreak state, SpielerPunktGewonnen event) {
-        Tiebreak next = state.spielerPunktGewonnen();
+    private static Tiebreak handleEvent(Tiebreak state, SpielerPunktGewonnen event) {
+        return state.spielerPunktGewonnen();
     }
 }

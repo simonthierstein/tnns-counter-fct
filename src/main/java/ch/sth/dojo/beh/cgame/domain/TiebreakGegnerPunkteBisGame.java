@@ -10,6 +10,10 @@ public record TiebreakGegnerPunkteBisGame(TiebreakPunkteBisGame tiebreakPunkteBi
             .map(TiebreakGegnerPunkteBisGame::new);
     }
 
+    static TiebreakGegnerPunkteBisGame zero() {
+        return new TiebreakGegnerPunkteBisGame(TiebreakPunkteBisGame.zero());
+    }
+
     TiebreakGegnerPunkteBisGame decrement() {
         return new TiebreakGegnerPunkteBisGame(tiebreakPunkteBisGame.decrement());
     }

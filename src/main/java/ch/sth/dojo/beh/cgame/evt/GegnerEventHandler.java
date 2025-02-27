@@ -4,6 +4,7 @@
 
 package ch.sth.dojo.beh.cgame.evt;
 
+import static io.vavr.control.Either.left;
 import static io.vavr.control.Either.right;
 
 import ch.sth.dojo.beh.DomainProblem;
@@ -12,6 +13,7 @@ import ch.sth.dojo.beh.cgame.domain.CGame;
 import ch.sth.dojo.beh.cgame.domain.GegnerPunkteBisGame;
 import ch.sth.dojo.beh.cgame.domain.LaufendesCGame;
 import ch.sth.dojo.beh.cgame.domain.SpielerPunkteBisGame;
+import ch.sth.dojo.beh.cgame.domain.Tiebreak;
 import ch.sth.dojo.beh.evt.GegnerDomainEvent;
 import ch.sth.dojo.beh.evt.GegnerGameGewonnen;
 import ch.sth.dojo.beh.evt.GegnerPunktGewonnen;
@@ -41,4 +43,27 @@ interface GegnerEventHandler {
         return LaufendesCGame.punktGewonnen(state, new Gewinner(state.gegnerPunkteBisGame().value()), new Verlierer(state.spielerPunkteBisGame().value()),
             (gewinner, verlierer) -> LaufendesCGame.LaufendesCGame(new SpielerPunkteBisGame(verlierer.value()), new GegnerPunkteBisGame(gewinner.value())));
     }
+
+    static Either<DomainProblem, CGame> handleGegnerTBEvent(Tiebreak state, GegnerDomainEvent evt) {
+
+        return switch (evt) {
+            case GegnerGameGewonnen event -> handleEvent(state, event);
+            case GegnerPunktGewonnen event -> handleEvent(state, event);
+            case GegnerSatzGewonnen event -> handleEvent(state, event);
+        };
+
+    }
+
+    static Either<DomainProblem, CGame> handleEvent(Tiebreak state, GegnerSatzGewonnen event) {
+        return right(state.gegnerPunktGewonnen());
+    }
+
+    static Either<DomainProblem, CGame> handleEvent(Tiebreak state, GegnerPunktGewonnen event) {
+        return right(state.gegnerPunktGewonnen());
+    }
+
+    static Either<DomainProblem, CGame> handleEvent(Tiebreak state, GegnerGameGewonnen event) {
+        return left(DomainProblem.eventNotValid);
+    }
+
 }

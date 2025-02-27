@@ -1,6 +1,9 @@
 package ch.sth.dojo.beh;
 
+import static io.vavr.control.Either.right;
+
 import ch.sth.dojo.beh.cgame.domain.CGame;
+import ch.sth.dojo.beh.cgame.domain.Tiebreak;
 import ch.sth.dojo.beh.cgame.evt.CGameEventHandler;
 import ch.sth.dojo.beh.csatz.domain.CSatz;
 import ch.sth.dojo.beh.csatz.evt.CSatzEventHandler;
@@ -21,7 +24,7 @@ public interface RootEventHandler {
 
     static Either<DomainProblem, Tuple2<CSatz, CGame>> handleEvent(Tuple2<CSatz, CGame> prev, DomainEvent event) {
         return switch (event) {
-            case GameGestartet gameGestartet -> Either.right(prev);
+            case GameGestartet gameGestartet -> right(prev);
             case GegnerPunktGewonnen gegnerPunktGewonnen -> gegnerPunktGewonnen(prev, gegnerPunktGewonnen);
             case GegnerGameGewonnen gegnerGameGewonnen -> gegnerGameGewonnen(prev, gegnerGameGewonnen);
             case GegnerSatzGewonnen gegnerSatzGewonnen -> gegnerSatzGewonnen(prev, gegnerSatzGewonnen);
@@ -44,7 +47,7 @@ public interface RootEventHandler {
     }
 
     static Either<DomainProblem, Tuple2<CSatz, CGame>> spielerGameGewonnen(Tuple2<CSatz, CGame> prev, SpielerGameGewonnen event) {
-        return eithers2Tuple(CSatzEventHandler.handleCSatzEvent(prev._1, event), CGameEventHandler.handleCGameEvent(prev._2, event));
+        return gameGewonnenTiebreakSwitch(CSatzEventHandler.handleCSatzEvent(prev._1, event), CGameEventHandler.handleCGameEvent(prev._2, event));
     }
 
     private static Either<DomainProblem, Tuple2<CSatz, CGame>> gegnerSatzGewonnen(final Tuple2<CSatz, CGame> prev, final GegnerSatzGewonnen event) {
@@ -56,7 +59,13 @@ public interface RootEventHandler {
     }
 
     private static Either<DomainProblem, Tuple2<CSatz, CGame>> gegnerGameGewonnen(final Tuple2<CSatz, CGame> prev, final GegnerGameGewonnen event) {
-        return eithers2Tuple(CSatzEventHandler.handleCSatzEvent(prev._1, event), CGameEventHandler.handleCGameEvent(prev._2, event));
+        return gameGewonnenTiebreakSwitch(CSatzEventHandler.handleCSatzEvent(prev._1, event), CGameEventHandler.handleCGameEvent(prev._2, event));
+    }
+
+    private static Either<DomainProblem, Tuple2<CSatz, CGame>> gameGewonnenTiebreakSwitch(final Either<DomainProblem, CSatz> nextSatz, final Either<DomainProblem, CGame> nextGame) {
+        return nextSatz.flatMap(x -> Condition.condition(x, CSatz::isSixAll,
+            satz -> right(Tuple.of(x, Tiebreak.zero())),
+            satz -> eithers2Tuple(nextSatz, nextGame)));
     }
 
     private static Either<DomainProblem, Tuple2<CSatz, CGame>> eithers2Tuple(final Either<DomainProblem, CSatz> satz, final Either<DomainProblem, CGame> game) {
