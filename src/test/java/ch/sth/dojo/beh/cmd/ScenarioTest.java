@@ -50,6 +50,9 @@ class ScenarioTest {
             "GegnerPunktet, 00-40, 6-5, GegnerGameGewonnen, TB0-0, 6-6",
             "GegnerPunktet, TB0-6, 6-6, GegnerSatzGewonnen, TB0-7, SATZ",
             "SpielerPunktet, TB6-6, 6-6, SpielerPunktGewonnen, TB7-6, 6-6",
+            "SpielerPunktet, TB7-7, 6-6, SpielerPunktGewonnen, TB8-7, 6-6",
+            "SpielerPunktet, TB5-5, 6-6, SpielerPunktGewonnen, TB6-5, 6-6",
+            "GegnerPunktet, TB6-5, 6-6, GegnerPunktGewonnen, TB6-6, 6-6",
             "SpielerPunktet, TB7-6, 6-6, SpielerSatzGewonnen, TB8-6, SATZ"
         }
     )
@@ -230,7 +233,11 @@ class ScenarioTest {
             Case($("TB0-7"), Tuple.of(9, 0).apply(Tiebreak::of)),
             Case($("TB6-6"), Tuple.of(2, 2).apply(Tiebreak::of)),
             Case($("TB7-6"), Tuple.of(1, 3).apply(Tiebreak::of)),
-            Case($("TB8-6"), Tuple.of(0, 3).apply(Tiebreak::of))
+            Case($("TB8-6"), Tuple.of(0, 3).apply(Tiebreak::of)),
+            Case($("TB7-7"), Tuple.of(2, 2).apply(Tiebreak::of)),
+            Case($("TB5-5"), Tuple.of(2, 2).apply(Tiebreak::of)),
+            Case($("TB6-5"), Tuple.of(1, 3).apply(Tiebreak::of)),
+            Case($("TB8-7"), Tuple.of(1, 3).apply(Tiebreak::of))
         ).get();
     }
 
@@ -248,7 +255,7 @@ class ScenarioTest {
         final Tuple2<CSatz, CGame> prevState = PreviousState.tuple1.apply(scenarioConfig.previousState);
         return DomainCommand.handleCommand(prevState,
                 scenarioConfig.action.domainCommand)
-            .peek(evt -> assertThat(evt).withFailMessage("Config failed: %s", scenarioConfig).isEqualTo(scenarioConfig.expectedEvent.event))
+            .peek(evt -> assertThat(evt).withFailMessage("Command failed: %s", scenarioConfig).isEqualTo(scenarioConfig.expectedEvent.event))
             .flatMap(evt -> RootEventHandler.handleEvent(prevState, evt))
             .map(State::untuple)
             .peek(state -> assertThat(state).isEqualTo(scenarioConfig.expectedState.state)).mapLeft(Object::toString);
