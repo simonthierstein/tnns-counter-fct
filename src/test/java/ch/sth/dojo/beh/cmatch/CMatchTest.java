@@ -9,8 +9,10 @@ import org.junit.jupiter.api.Test;
 class CMatchTest {
 
     @Test
-    void name() {
-        assertThat(CMatch.handleEvent(prevMatchState(), event())).isEqualTo(nextExpectedState());
+    void initial() {
+        assertThat(CMatch.handleEvent(prevMatchState(), event()))
+            .isNotNull()
+            .isEqualTo(nextExpectedState());
     }
 
     private static CMatch nextExpectedState() {
