@@ -16,6 +16,7 @@ import ch.sth.dojo.beh.cgame.domain.GegnerPunkteBisGame;
 import ch.sth.dojo.beh.cgame.domain.LaufendesCGame;
 import ch.sth.dojo.beh.cgame.domain.SpielerPunkteBisGame;
 import ch.sth.dojo.beh.cgame.domain.Tiebreak;
+import ch.sth.dojo.beh.cmatch.domain.CMatch;
 import ch.sth.dojo.beh.csatz.domain.AbgeschlossenerCSatz;
 import ch.sth.dojo.beh.csatz.domain.CSatz;
 import ch.sth.dojo.beh.csatz.domain.LaufenderCSatz;
@@ -31,6 +32,7 @@ import io.vavr.Function2;
 import io.vavr.Predicates;
 import io.vavr.Tuple;
 import io.vavr.Tuple2;
+import io.vavr.Tuple3;
 import io.vavr.Tuple6;
 import io.vavr.collection.List;
 import io.vavr.control.Either;
@@ -322,8 +324,8 @@ class ScenarioTest {
         return CSatz.of(spieler, gegner).get();
     }
 
-    private static Function<Tuple2<CSatz, CGame>, Either<DomainProblem, Tuple2<CSatz, CGame>>> gegnerPunktetStateTransfer(final DomainCommand command) {
-        return (Tuple2<CSatz, CGame> prevState) ->
+    private static Function<Tuple3<CMatch, CSatz, CGame>, Either<DomainProblem, Tuple3<CMatch, CSatz, CGame>>> gegnerPunktetStateTransfer(final DomainCommand command) {
+        return (Tuple3<CMatch, CSatz, CGame> prevState) ->
             DomainCommand.handleCommand(prevState, command).flatMap(evt -> RootEventHandler.handleEvent(prevState, evt));
     }
 

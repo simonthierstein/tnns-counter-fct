@@ -16,6 +16,7 @@ import ch.sth.dojo.beh.cgame.domain.SpielerPunkteBisGame;
 import ch.sth.dojo.beh.cgame.domain.Tiebreak;
 import ch.sth.dojo.beh.evt.SpielerDomainEvent;
 import ch.sth.dojo.beh.evt.SpielerGameGewonnen;
+import ch.sth.dojo.beh.evt.SpielerMatchGewonnen;
 import ch.sth.dojo.beh.evt.SpielerPunktGewonnen;
 import ch.sth.dojo.beh.evt.SpielerSatzGewonnen;
 import ch.sth.dojo.beh.shared.domain.Gewinner;
@@ -29,10 +30,15 @@ public interface SpielerEventHandler {
             case SpielerPunktGewonnen evt -> handleEvent(state, evt);
             case SpielerGameGewonnen evt -> right(handleEvent(state, evt));
             case SpielerSatzGewonnen evt -> right(handleEvent(state, evt));
+            case SpielerMatchGewonnen evt -> right(handleEvent(state, evt));
         };
     }
 
     private static AbgeschlossenesCGame handleEvent(LaufendesCGame state, SpielerSatzGewonnen event) {
+        return new AbgeschlossenesCGame();
+    }
+
+    private static AbgeschlossenesCGame handleEvent(LaufendesCGame state, SpielerMatchGewonnen event) {
         return new AbgeschlossenesCGame();
     }
 
@@ -50,7 +56,12 @@ public interface SpielerEventHandler {
             case SpielerPunktGewonnen evt -> right(handleEvent(state, evt));
             case SpielerGameGewonnen() -> left(DomainProblem.eventNotValid);
             case SpielerSatzGewonnen evt -> right(handleEvent(state, evt));
+            case SpielerMatchGewonnen evt -> right(handleEvent(state, evt));
         };
+    }
+
+    private static Tiebreak handleEvent(Tiebreak state, SpielerMatchGewonnen event) {
+        return state.spielerPunktGewonnen();
     }
 
     private static Tiebreak handleEvent(Tiebreak state, SpielerSatzGewonnen event) {

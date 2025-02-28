@@ -4,6 +4,6 @@
 
 package ch.sth.dojo.beh.evt;
 
-public sealed interface GegnerDomainEvent extends DomainEvent permits GegnerPunktGewonnen, GegnerGameGewonnen, GegnerSatzGewonnen {
+public sealed interface GegnerDomainEvent extends DomainEvent permits GegnerGameGewonnen, GegnerMatchGewonnen, GegnerPunktGewonnen, GegnerSatzGewonnen {
 
 }

@@ -11,7 +11,7 @@ import static io.vavr.Predicates.instanceOf;
 
 import java.util.function.Function;
 
-public sealed interface SpielerDomainEvent extends DomainEvent permits SpielerPunktGewonnen, SpielerGameGewonnen, SpielerSatzGewonnen {
+public sealed interface SpielerDomainEvent extends DomainEvent permits SpielerGameGewonnen, SpielerMatchGewonnen, SpielerPunktGewonnen, SpielerSatzGewonnen {
 
     static <T> T apply(SpielerDomainEvent evt,
         Function<SpielerPunktGewonnen, T> spielerPunktGewonnenTFunction,
