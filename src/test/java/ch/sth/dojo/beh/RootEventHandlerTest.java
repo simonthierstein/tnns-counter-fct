@@ -5,7 +5,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import ch.sth.dojo.beh.cgame.domain.CGame;
 import ch.sth.dojo.beh.cgame.domain.LaufendesCGame;
 import ch.sth.dojo.beh.cmatch.domain.CMatch;
-import ch.sth.dojo.beh.cmatch.domain.CMatch.LaufendesMatch;
 import ch.sth.dojo.beh.csatz.domain.CSatz;
 import ch.sth.dojo.beh.csatz.domain.GegnerPunkteSatz;
 import ch.sth.dojo.beh.csatz.domain.LaufenderCSatz;
@@ -56,7 +55,7 @@ class RootEventHandlerTest {
     }
 
     private static Tuple3<CMatch, CSatz, CGame> inputState(final int spielerPunkteSatz, final int gegnerPunkteSatz) {
-        return Tuple.of(new LaufendesMatch(), new LaufenderCSatz(new SpielerPunkteSatz(spielerPunkteSatz), new GegnerPunkteSatz(gegnerPunkteSatz)),
+        return Tuple.of(CMatch.zero(), new LaufenderCSatz(new SpielerPunkteSatz(spielerPunkteSatz), new GegnerPunkteSatz(gegnerPunkteSatz)),
             LaufendesCGame.zero());
     }
 }
