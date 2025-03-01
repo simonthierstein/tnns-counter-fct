@@ -7,6 +7,8 @@ import ch.sth.dojo.beh.cgame.domain.CGame;
 import ch.sth.dojo.beh.cgame.domain.GegnerPunkteBisGame;
 import ch.sth.dojo.beh.cgame.domain.LaufendesCGame;
 import ch.sth.dojo.beh.cgame.domain.SpielerPunkteBisGame;
+import ch.sth.dojo.beh.cmatch.domain.CMatch;
+import ch.sth.dojo.beh.cmatch.domain.CMatch.LaufendesMatch;
 import ch.sth.dojo.beh.csatz.domain.CSatz;
 import ch.sth.dojo.beh.csatz.domain.LaufenderCSatz;
 import ch.sth.dojo.beh.evt.DomainEvent;
@@ -15,7 +17,7 @@ import ch.sth.dojo.beh.evt.GegnerPunktGewonnen;
 import ch.sth.dojo.beh.evt.SpielerGameGewonnen;
 import ch.sth.dojo.beh.evt.SpielerPunktGewonnen;
 import io.vavr.Tuple;
-import io.vavr.Tuple2;
+import io.vavr.Tuple3;
 import io.vavr.control.Either;
 import org.junit.jupiter.api.Test;
 
@@ -29,8 +31,8 @@ class DomainCommandTest {
         assertThat(domainEvents.get()).isInstanceOf(SpielerPunktGewonnen.class);
     }
 
-    private static Tuple2<CSatz, CGame> zeroGame() {
-        return Tuple.of(LaufenderCSatz.zero(), LaufendesCGame.zero());
+    private static Tuple3<CMatch, CSatz, CGame> zeroGame() {
+        return Tuple.of(CMatch.zero(), LaufenderCSatz.zero(), LaufendesCGame.zero());
     }
 
     @Test
@@ -41,8 +43,8 @@ class DomainCommandTest {
         assertThat(domainEvents.get()).isInstanceOf(SpielerGameGewonnen.class);
     }
 
-    private static Tuple2<CSatz, CGame> laufendesGameWith(final int spielerValue, final int gegnerValue) {
-        return Tuple.of(LaufenderCSatz.zero(), new LaufendesCGame(new SpielerPunkteBisGame(spielerValue), new GegnerPunkteBisGame(gegnerValue)));
+    private static Tuple3<CMatch, CSatz, CGame> laufendesGameWith(final int spielerValue, final int gegnerValue) {
+        return Tuple.of(new LaufendesMatch(), LaufenderCSatz.zero(), new LaufendesCGame(new SpielerPunkteBisGame(spielerValue), new GegnerPunkteBisGame(gegnerValue)));
     }
 
     @Test

@@ -13,22 +13,23 @@ import ch.sth.dojo.beh.cgame.domain.AbgeschlossenesCGame;
 import ch.sth.dojo.beh.cgame.domain.CGame;
 import ch.sth.dojo.beh.cgame.domain.LaufendesCGame;
 import ch.sth.dojo.beh.cgame.domain.Tiebreak;
+import ch.sth.dojo.beh.cmatch.domain.CMatch;
 import ch.sth.dojo.beh.csatz.domain.CSatz;
 import ch.sth.dojo.beh.csatz.domain.LaufenderCSatz;
 import ch.sth.dojo.beh.evt.DomainEvent;
 import ch.sth.dojo.beh.evt.SpielerGameGewonnen;
 import ch.sth.dojo.beh.evt.SpielerPunktGewonnen;
 import ch.sth.dojo.beh.evt.SpielerSatzGewonnen;
-import io.vavr.Tuple2;
+import io.vavr.Tuple3;
 import io.vavr.control.Either;
 
 public record SpielerPunktet() implements DomainCommand {
 
-    public static Either<DomainProblem, DomainEvent> applyC(Tuple2<CSatz, CGame> state, SpielerPunktet cmd) {
+    public static Either<DomainProblem, DomainEvent> applyC(Tuple3<CMatch, CSatz, CGame> state, SpielerPunktet cmd) {
         return state.apply(SpielerPunktet::apply);
     }
 
-    private static Either<DomainProblem, DomainEvent> apply(CSatz cSatz, CGame cGame) {
+    private static Either<DomainProblem, DomainEvent> apply(CMatch cMatch, CSatz cSatz, CGame cGame) {
         return cGame.apply(
             laufendesCGame -> applyToLaufendesCGame(laufendesCGame, cSatz),
             tiebreak -> applyToTiebreak(tiebreak),

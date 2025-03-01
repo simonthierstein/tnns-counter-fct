@@ -28,10 +28,9 @@ import ch.sth.dojo.beh.evt.SpielerGameGewonnen;
 import ch.sth.dojo.beh.evt.SpielerPunktGewonnen;
 import ch.sth.dojo.beh.evt.SpielerSatzGewonnen;
 import io.vavr.Function1;
-import io.vavr.Function2;
+import io.vavr.Function3;
 import io.vavr.Predicates;
 import io.vavr.Tuple;
-import io.vavr.Tuple2;
 import io.vavr.Tuple3;
 import io.vavr.Tuple6;
 import io.vavr.collection.List;
@@ -62,7 +61,7 @@ class ScenarioTest {
         final Tuple6<String, String, String, String, String, String> tupled = Tuple.of(cmd, prevGame, prevSatz, evt, nextGame, nextSatz);
         var psc = tupled.map(parseCommand(), parseState(), parseSatzState(), parseEvent(), parseState(), parseSatzState())
             .apply((domainCommand, game, satz, event, game2, satz2) ->
-                Tuple.of(domainCommand, State.bind.apply(satz, game), event, State.bind.apply(satz2, game2)))
+                Tuple.of(domainCommand, State.bind.apply(match(), satz, game), event, State.bind.apply(match(), satz2, game2)))
             .apply(PartialScenarioConfig::PartialScenarioConfig);
 
         var result = applyCommand(psc);
@@ -73,16 +72,20 @@ class ScenarioTest {
 
     }
 
+    private static CMatch match() {
+        return CMatch.zero();
+    }
+
     @ParameterizedTest(name = "Spieler gewinnt game mit gegner score {0}🥸")
     @ValueSource(strings = {"00", "15", "30"})
     void spielerGewinntGame_standard(String other) {
 
         // TODO sth/22.02.2025 : deklarativer mit command abfolge
 
-        final Tuple2<CSatz, CGame> prev = SatzGameTupleWith();
+        final Tuple3<CMatch, CSatz, CGame> prev = SatzGameTupleWith();
         final DomainCommand gegnerPunktetCommand = GegnerPunktetWith();
 
-        final Either<DomainProblem, Tuple2<CSatz, CGame>> gegnerPointsApplied = List.of(other)
+        final Either<DomainProblem, Tuple3<CMatch, CSatz, CGame>> gegnerPointsApplied = List.of(other)
             .flatMap(str -> Match(str).of(
                 Case($("00"), List.empty()),
                 Case($("15"), List.range(0, 1)),
@@ -93,7 +96,7 @@ class ScenarioTest {
 
         final DomainCommand spielerPunkteCommand = SpielerPunktetWith();
 
-        final Either<DomainProblem, Tuple2<CSatz, CGame>> result = List.range(0, 4)
+        final Either<DomainProblem, Tuple3<CMatch, CSatz, CGame>> result = List.range(0, 4)
             .foldLeft(gegnerPointsApplied,
                 (acc, it) ->
                     acc.flatMap(prevState ->
@@ -130,7 +133,7 @@ class ScenarioTest {
         final Tuple6<String, String, String, String, String, String> tupled = Tuple.of(cmd, prevGame, prevSatz, evt, nextGame, nextSatz);
         var psc = tupled.map(parseCommand(), parseState(), parseSatzState(), parseEvent(), parseState(), parseSatzState())
             .apply((domainCommand, game, satz, event, game2, satz2) ->
-                Tuple.of(domainCommand, State.bind.apply(satz, game), event, State.bind.apply(satz2, game2)))
+                Tuple.of(domainCommand, State.bind.apply(match(), satz, game), event, State.bind.apply(match(), satz2, game2)))
             .apply(PartialScenarioConfig::PartialScenarioConfig);
 
         final Either<String, State> states = applyCommand(psc);
@@ -151,11 +154,11 @@ class ScenarioTest {
         final Tuple6<String, String, String, String, String, String> tupled = Tuple.of(cmd, prevGame, prevSatz, evt, nextGame, nextSatz);
         var psc = tupled.map(parseCommand(), parseState(), parseSatzState(), parseEvent(), parseState(), parseSatzState())
             .apply((domainCommand, game, satz, event, game2, satz2) ->
-                Tuple.of(domainCommand, State.bind.apply(satz, game), event, State.bind.apply(satz2, game2)))
+                Tuple.of(domainCommand, State.bind.apply(match(), satz, game), event, State.bind.apply(match(), satz2, game2)))
             .apply(PartialScenarioConfig::PartialScenarioConfig);
 
         var result = applyCommand(psc)
-            .map(state -> PartialScenarioConfig.PartialScenarioConfig(new GegnerPunktet(), state, new GegnerPunktGewonnen(), State.bind.apply(CSatz.of(0, 1).get(), CGame.of(4, 3).get())))
+            .map(state -> PartialScenarioConfig.PartialScenarioConfig(new GegnerPunktet(), state, new GegnerPunktGewonnen(), State.bind.apply(match(), CSatz.of(0, 1).get(), CGame.of(4, 3).get())))
             .flatMap(ScenarioTest::applyCommand);
 
         assertThat(result.isRight())
@@ -254,7 +257,7 @@ class ScenarioTest {
     }
 
     private static Either<String, State> applyCommand(final PartialScenarioConfig scenarioConfig) {
-        final Tuple2<CSatz, CGame> prevState = PreviousState.tuple1.apply(scenarioConfig.previousState);
+        final Tuple3<CMatch, CSatz, CGame> prevState = PreviousState.tuple1.apply(scenarioConfig.previousState);
         return DomainCommand.handleCommand(prevState,
                 scenarioConfig.action.domainCommand)
             .peek(evt -> assertThat(evt).withFailMessage("Command failed: %s", scenarioConfig).isEqualTo(scenarioConfig.expectedEvent.event))
@@ -277,17 +280,17 @@ class ScenarioTest {
 
     }
 
-    record State(CSatz satz, CGame game) {
+    record State(CMatch match, CSatz satz, CGame game) {
 
-        static Function2<CSatz, CGame, State> bind = State::new;
-        static Function1<State, Tuple2<CSatz, CGame>> toTuple = State::tuple;
+        static Function3<CMatch, CSatz, CGame, State> bind = State::new;
+        static Function1<State, Tuple3<CMatch, CSatz, CGame>> toTuple = State::tuple;
 
-        static State untuple(Tuple2<CSatz, CGame> stateTuple) {
+        static State untuple(Tuple3<CMatch, CSatz, CGame> stateTuple) {
             return stateTuple.apply(State::new);
         }
 
-        private static Tuple2<CSatz, CGame> tuple(State input) {
-            return Tuple.of(input.satz, input.game);
+        private static Tuple3<CMatch, CSatz, CGame> tuple(State input) {
+            return Tuple.of(input.match, input.satz, input.game);
         }
     }
 
@@ -301,7 +304,7 @@ class ScenarioTest {
 
         static Function<State, PreviousState> bind = PreviousState::new;
         static Function<PreviousState, State> unbind = PreviousState::state;
-        static Function<PreviousState, Tuple2<CSatz, CGame>> tuple1 = unbind.andThen(State.toTuple);
+        static Function<PreviousState, Tuple3<CMatch, CSatz, CGame>> tuple1 = unbind.andThen(State.toTuple);
     }
 
     record ExpectedEvent(DomainEvent event) {
@@ -337,8 +340,8 @@ class ScenarioTest {
         return CGame.of(spieler, gegner).get();
     }
 
-    private static Tuple2<CSatz, CGame> SatzGameTupleWith() {
-        return Tuple.of(CSatz.zero(), CGame.zero());
+    private static Tuple3<CMatch, CSatz, CGame> SatzGameTupleWith() {
+        return Tuple.of(match(), CSatz.zero(), CGame.zero());
     }
 
     private static DomainCommand GegnerPunktetWith() {
@@ -377,8 +380,8 @@ class ScenarioTest {
         assertThat(domainEvents.get()).isInstanceOf(SpielerPunktGewonnen.class);
     }
 
-    private static Tuple2<CSatz, CGame> zeroGame() {
-        return Tuple.of(LaufenderCSatz.zero(), LaufendesCGame.zero());
+    private static Tuple3<CMatch, CSatz, CGame> zeroGame() {
+        return Tuple.of(match(), LaufenderCSatz.zero(), LaufendesCGame.zero());
     }
 
     @Test
@@ -389,8 +392,8 @@ class ScenarioTest {
         assertThat(domainEvents.get()).isInstanceOf(SpielerGameGewonnen.class);
     }
 
-    private static Tuple2<CSatz, CGame> laufendesGameWith(final int spielerValue, final int gegnerValue) {
-        return Tuple.of(LaufenderCSatz.zero(), new LaufendesCGame(new SpielerPunkteBisGame(spielerValue), new GegnerPunkteBisGame(gegnerValue)));
+    private static Tuple3<CMatch, CSatz, CGame> laufendesGameWith(final int spielerValue, final int gegnerValue) {
+        return Tuple.of(match(), LaufenderCSatz.zero(), new LaufendesCGame(new SpielerPunkteBisGame(spielerValue), new GegnerPunkteBisGame(gegnerValue)));
     }
 
     @Test
