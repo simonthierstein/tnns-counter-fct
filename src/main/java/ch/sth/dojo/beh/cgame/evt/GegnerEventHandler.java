@@ -27,7 +27,7 @@ interface GegnerEventHandler {
         );
     }
 
-    static Either<DomainProblem, CGame> handleEvent(CGame state, GegnerMatchGewonnen evt) {
+    private static Either<DomainProblem, CGame> handleEvent(CGame state, GegnerMatchGewonnen evt) {
         return state.apply(
             LaufendesCGameEventHandler::gegnerMatchGewonnen,
             TiebreakEventHandler::gegnerMatchGewonnen,
@@ -35,7 +35,7 @@ interface GegnerEventHandler {
         );
     }
 
-    static Either<DomainProblem, CGame> handleEvent(CGame state, GegnerSatzGewonnen evt) {
+    private static Either<DomainProblem, CGame> handleEvent(CGame state, GegnerSatzGewonnen evt) {
         return state.apply(
             LaufendesCGameEventHandler::gegnerSatzGewonnen,
             TiebreakEventHandler::gegnerSatzGewonnen,
@@ -43,7 +43,7 @@ interface GegnerEventHandler {
         );
     }
 
-    static Either<DomainProblem, CGame> handleEvent(CGame state, GegnerPunktGewonnen evt) {
+    private static Either<DomainProblem, CGame> handleEvent(CGame state, GegnerPunktGewonnen evt) {
         return state.apply(
             LaufendesCGameEventHandler::gegnerPunktGewonnen,
             TiebreakEventHandler::gegnerPunktGewonnen,
@@ -51,7 +51,7 @@ interface GegnerEventHandler {
         );
     }
 
-    static Either<DomainProblem, CGame> handleEvent(CGame state, GegnerGameGewonnen evt) {
+    private static Either<DomainProblem, CGame> handleEvent(CGame state, GegnerGameGewonnen evt) {
         return right(LaufendesCGame.zero());
     }
 
