@@ -17,7 +17,6 @@ import ch.sth.dojo.beh.cgame.domain.LaufendesCGame;
 import ch.sth.dojo.beh.cgame.domain.SpielerPunkteBisGame;
 import ch.sth.dojo.beh.cgame.domain.Tiebreak;
 import ch.sth.dojo.beh.cmatch.domain.CMatch;
-import ch.sth.dojo.beh.csatz.domain.AbgeschlossenerCSatz;
 import ch.sth.dojo.beh.csatz.domain.CSatz;
 import ch.sth.dojo.beh.csatz.domain.LaufenderCSatz;
 import ch.sth.dojo.beh.evt.DomainEvent;
@@ -104,8 +103,8 @@ class ScenarioTest {
 
         assertThat(result.isRight()).isTrue();
         result.forEach(t -> assertAll(
-            () -> assertThat(t._1).isEqualTo(SatzWith(1, 0)),
-            () -> assertThat(t._2).isEqualTo(LaufendesCGame.zero())
+            () -> assertThat(t._2).isEqualTo(SatzWith(1, 0)),
+            () -> assertThat(t._3).isEqualTo(LaufendesCGame.zero())
         ));
 
         System.out.println(other);
@@ -125,8 +124,8 @@ class ScenarioTest {
             "GegnerPunktet, 30-30, 4-1, GegnerPunktGewonnen, 30-40, 4-1",
             "GegnerPunktet, DA-AD, 4-1, GegnerGameGewonnen, 00-00, 4-2",
             "GegnerPunktet, 40-30, 4-1, GegnerPunktGewonnen, DEUCE, 4-1",
-            "SpielerPunktet, 40-00, 5-1, SpielerSatzGewonnen, GAME, SATZ",
-            "GegnerPunktet, 00-40, 5-6, GegnerSatzGewonnen, GAME, SATZ"
+            "SpielerPunktet, 40-00, 5-1, SpielerSatzGewonnen, 00-00, SATZ",
+            "GegnerPunktet, 00-40, 5-6, GegnerSatzGewonnen, 00-00, SATZ"
         }
     )
     void scenario1_spielerGewinntGame_laufenderSatz(String cmd, String prevGame, String prevSatz, String evt, String nextGame, String nextSatz) {
@@ -172,7 +171,7 @@ class ScenarioTest {
     private Function<String, CSatz> parseSatzState() {
         return input -> Option.some(input)
             .filter(Predicates.not("SATZ"::equals))
-            .toEither(new AbgeschlossenerCSatz())
+            .toEither(LaufenderCSatz.zero())
             .map(str -> str.split("-"))
             .map(Arrays::stream)
             .map(List::ofAll)

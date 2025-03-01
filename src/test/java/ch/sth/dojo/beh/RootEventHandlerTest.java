@@ -2,12 +2,10 @@ package ch.sth.dojo.beh;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import ch.sth.dojo.beh.cgame.domain.AbgeschlossenesCGame;
 import ch.sth.dojo.beh.cgame.domain.CGame;
 import ch.sth.dojo.beh.cgame.domain.LaufendesCGame;
 import ch.sth.dojo.beh.cmatch.domain.CMatch;
 import ch.sth.dojo.beh.cmatch.domain.CMatch.LaufendesMatch;
-import ch.sth.dojo.beh.csatz.domain.AbgeschlossenerCSatz;
 import ch.sth.dojo.beh.csatz.domain.CSatz;
 import ch.sth.dojo.beh.csatz.domain.GegnerPunkteSatz;
 import ch.sth.dojo.beh.csatz.domain.LaufenderCSatz;
@@ -39,8 +37,8 @@ class RootEventHandlerTest {
         assertThat(res.isRight())
             .withFailMessage("invalid result %s", res)
             .isTrue();
-        assertThat(res.get()._2).isInstanceOf(AbgeschlossenerCSatz.class);
-        assertThat(res.get()._3).isInstanceOf(AbgeschlossenesCGame.class);
+        assertThat(res.get()._2).isEqualTo(LaufenderCSatz.zero());
+        assertThat(res.get()._3).isEqualTo(LaufendesCGame.zero());
 
     }
 
@@ -52,8 +50,8 @@ class RootEventHandlerTest {
         assertThat(res.isRight())
             .withFailMessage("invalid result %s", res)
             .isTrue();
-        assertThat(res.get()._2).isInstanceOf(AbgeschlossenerCSatz.class);
-        assertThat(res.get()._3).isInstanceOf(AbgeschlossenesCGame.class);
+        assertThat(res.get()._2).isEqualTo(LaufenderCSatz.zero());
+        assertThat(res.get()._3).isEqualTo(LaufendesCGame.zero());
 
     }
 

@@ -2,7 +2,7 @@ package ch.sth.dojo.beh.csatz.evt;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import ch.sth.dojo.beh.csatz.domain.AbgeschlossenerCSatz;
+import ch.sth.dojo.beh.csatz.domain.CSatz;
 import ch.sth.dojo.beh.csatz.domain.GegnerPunkteSatz;
 import ch.sth.dojo.beh.csatz.domain.LaufenderCSatz;
 import ch.sth.dojo.beh.csatz.domain.SpielerPunkteSatz;
@@ -86,7 +86,9 @@ class CSatzEventHandlerTest {
         var res = CSatzEventHandler.handleEvent(prev, new SpielerSatzGewonnen());
 
         assertThat(res.isRight()).isTrue();
-        assertThat(res.get()).isInstanceOf(AbgeschlossenerCSatz.class);
+        assertThat(res.get())
+            .isInstanceOf(LaufenderCSatz.class)
+            .isEqualTo(CSatz.zero());
     }
 
     @DisplayName("Gegner Satz gewonnen: {0} - {1}")
@@ -104,7 +106,9 @@ class CSatzEventHandlerTest {
         var res = CSatzEventHandler.handleEvent(prev, new GegnerSatzGewonnen());
 
         assertThat(res.isRight()).isTrue();
-        assertThat(res.get()).isInstanceOf(AbgeschlossenerCSatz.class);
+        assertThat(res.get())
+            .isInstanceOf(LaufenderCSatz.class)
+            .isEqualTo(CSatz.zero());
     }
 
 }
