@@ -24,12 +24,12 @@ class TiebreakEventHandler {
             case GegnerGameGewonnen event -> handleEvent(state, event);
             case GegnerPunktGewonnen event -> handleEvent(state, event);
             case GegnerSatzGewonnen event -> handleEvent(state, event);
-            case GegnerMatchGewonnen event -> handleEvent(state, event);
+            case GegnerMatchGewonnen event -> gegnerMatchGewonnen(state, event);
         };
 
     }
 
-    public static Either<DomainProblem, CGame> handleEvent(Tiebreak state, GegnerMatchGewonnen event) {
+    public static Either<DomainProblem, CGame> gegnerMatchGewonnen(Tiebreak state, GegnerMatchGewonnen event) {
         return right(state.gegnerPunktGewonnen());
     }
 
@@ -43,5 +43,9 @@ class TiebreakEventHandler {
 
     public static Either<DomainProblem, CGame> handleEvent(Tiebreak state, GegnerGameGewonnen event) {
         return left(DomainProblem.eventNotValid);
+    }
+
+    public static Either<DomainProblem, CGame> gegnerSatzGewonnen(final Tiebreak state, final GegnerSatzGewonnen evt) {
+        return right(state.gegnerPunktGewonnen());
     }
 }
