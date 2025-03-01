@@ -72,7 +72,7 @@ public interface RootEventHandler {
     private static Either<DomainProblem, Tuple3<CMatch, CSatz, CGame>> delegateEventHandling(final Tuple3<CMatch, CSatz, CGame> prev, final DomainEvent event) {
         return prev.map1(prevMatch -> CMatchEventHandler.handleEvent(prevMatch, event))
             .map2(prevSatz -> CSatzEventHandler.handleCSatzEvent(prevSatz, event))
-            .map3(prevGame -> CGameEventHandler.handleCGameEvent(prevGame, event))
+            .map3(prevGame -> CGameEventHandler.handleEvent(prevGame, event))
             .apply(tuple3EithersToEitherTuple3);
     }
 
@@ -81,7 +81,7 @@ public interface RootEventHandler {
     }
 
     private static Either<DomainProblem, Tuple3<CMatch, CSatz, CGame>> gegnerPunktGewonnen(final Tuple3<CMatch, CSatz, CGame> prev, final GegnerPunktGewonnen event) {
-        return CGameEventHandler.handleCGameEvent(prev._3, event).map(replaceNextGame.apply(prev));
+        return CGameEventHandler.handleEvent(prev._3, event).map(replaceNextGame.apply(prev));
     }
 
     private static Either<DomainProblem, Tuple3<CMatch, CSatz, CGame>> gegnerGameGewonnen(final Tuple3<CMatch, CSatz, CGame> prev, final GegnerGameGewonnen event) {

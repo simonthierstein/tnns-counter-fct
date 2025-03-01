@@ -18,7 +18,7 @@ public interface CGameEventHandler {
     Function<AbgeschlossenesCGame, Either<DomainProblem, CGame>> abgeschlossenToLeft = abgeschlossenesCGame -> left(eventNotValid);
     Function<Tiebreak, Either<DomainProblem, CGame>> tiebreakToLeft = abgeschlossenesCGame -> left(eventNotValid);
 
-    static Either<DomainProblem, CGame> handleCGameEvent(CGame state, DomainEvent event) {
+    static Either<DomainProblem, CGame> handleEvent(CGame state, DomainEvent event) {
         return switch (event) {
             case GegnerDomainEvent gegnerDomainEvent -> GegnerEventHandler.handleGegnerEvent(state, gegnerDomainEvent);
             case SpielerDomainEvent spielerDomainEvent -> SpielerEventHandler.handleSpielerEvent(state, spielerDomainEvent);
