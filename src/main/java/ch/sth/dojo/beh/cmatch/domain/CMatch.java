@@ -6,7 +6,7 @@ public interface CMatch {
         return new LaufendesMatch();
     }
 
-    class LaufendesMatch implements CMatch {
+    record LaufendesMatch() implements CMatch {
 
     }
 }

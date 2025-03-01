@@ -1,7 +1,5 @@
 package ch.sth.dojo.beh;
 
-import static io.vavr.control.Either.right;
-
 import ch.sth.dojo.beh.cgame.domain.CGame;
 import ch.sth.dojo.beh.cgame.domain.Tiebreak;
 import ch.sth.dojo.beh.cgame.evt.CGameEventHandler;
@@ -10,7 +8,6 @@ import ch.sth.dojo.beh.cmatch.evt.CMatchEventHandler;
 import ch.sth.dojo.beh.csatz.domain.CSatz;
 import ch.sth.dojo.beh.csatz.evt.CSatzEventHandler;
 import ch.sth.dojo.beh.evt.DomainEvent;
-import ch.sth.dojo.beh.evt.GameGestartet;
 import ch.sth.dojo.beh.evt.GegnerGameGewonnen;
 import ch.sth.dojo.beh.evt.GegnerMatchGewonnen;
 import ch.sth.dojo.beh.evt.GegnerPunktGewonnen;
@@ -33,7 +30,6 @@ public interface RootEventHandler {
 
     static Either<DomainProblem, Tuple3<CMatch, CSatz, CGame>> handleEvent(Tuple3<CMatch, CSatz, CGame> prev, DomainEvent event) {
         return switch (event) {
-            case GameGestartet gameGestartet -> right(prev);
             case GegnerPunktGewonnen gegnerPunktGewonnen -> gegnerPunktGewonnen(prev, gegnerPunktGewonnen);
             case GegnerGameGewonnen gegnerGameGewonnen -> gegnerGameGewonnen(prev, gegnerGameGewonnen);
             case GegnerSatzGewonnen gegnerSatzGewonnen -> gegnerSatzGewonnen(prev, gegnerSatzGewonnen);
@@ -71,7 +67,7 @@ public interface RootEventHandler {
 
     private static Either<DomainProblem, Tuple3<CMatch, CSatz, CGame>> delegateEventHandling(final Tuple3<CMatch, CSatz, CGame> prev, final DomainEvent event) {
         return prev.map1(prevMatch -> CMatchEventHandler.handleEvent(prevMatch, event))
-            .map2(prevSatz -> CSatzEventHandler.handleCSatzEvent(prevSatz, event))
+            .map2(prevSatz -> CSatzEventHandler.handleEvent(prevSatz, event))
             .map3(prevGame -> CGameEventHandler.handleEvent(prevGame, event))
             .apply(tuple3EithersToEitherTuple3);
     }

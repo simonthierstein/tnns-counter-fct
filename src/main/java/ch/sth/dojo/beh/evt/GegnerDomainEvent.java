@@ -14,11 +14,11 @@ public sealed interface GegnerDomainEvent extends DomainEvent permits GegnerGame
         Function<GegnerPunktGewonnen, T> f3,
         Function<GegnerSatzGewonnen, T> f4
     ) {
-        switch (event) {
+        return switch (event) {
             case GegnerGameGewonnen evt -> f1.apply(evt);
             case GegnerMatchGewonnen evt -> f2.apply(evt);
             case GegnerPunktGewonnen evt -> f3.apply(evt);
             case GegnerSatzGewonnen evt -> f4.apply(evt);
-        }
+        };
     }
 }
