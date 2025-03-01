@@ -35,4 +35,11 @@ public sealed interface CGame permits LaufendesCGame, AbgeschlossenesCGame, Tieb
         );
     }
 
+    static <T> T apply(CGame target,
+        Function<LaufendesCGame, T> laufendesCGameTFunction,
+        Function<Tiebreak, T> tiebreakTFunction,
+        Function<AbgeschlossenesCGame, T> abgeschlossenesCGameTFunction) {
+        return target.apply(laufendesCGameTFunction, tiebreakTFunction, abgeschlossenesCGameTFunction);
+    }
+
 }

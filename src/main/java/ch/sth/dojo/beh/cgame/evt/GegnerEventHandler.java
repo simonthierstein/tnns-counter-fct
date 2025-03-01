@@ -4,7 +4,6 @@
 
 package ch.sth.dojo.beh.cgame.evt;
 
-import static io.vavr.control.Either.left;
 import static io.vavr.control.Either.right;
 
 import ch.sth.dojo.beh.DomainProblem;
@@ -20,35 +19,35 @@ import io.vavr.control.Either;
 interface GegnerEventHandler {
 
     static Either<DomainProblem, CGame> handleGegnerEvent(CGame state, GegnerDomainEvent event) {
-        return switch (event) {
-            case GegnerGameGewonnen evt -> handleEvent(state, evt);
-            case GegnerPunktGewonnen evt -> handleEvent(state, evt);
-            case GegnerSatzGewonnen evt -> handleEvent(state, evt);
-            case GegnerMatchGewonnen evt -> handleEvent(state, evt);
-        };
+        return GegnerDomainEvent.apply(event,
+            evt -> handleEvent(state, evt),
+            evt -> handleEvent(state, evt),
+            evt -> handleEvent(state, evt),
+            evt -> handleEvent(state, evt)
+        );
     }
 
     static Either<DomainProblem, CGame> handleEvent(CGame state, GegnerMatchGewonnen evt) {
         return state.apply(
-            laufendesCGame -> LaufendesCGameEventHandler.gegnerMatchGewonnen(laufendesCGame, evt),
-            tiebreak -> TiebreakEventHandler.gegnerMatchGewonnen(tiebreak, evt),
-            abgeschlossenesCGame -> AbgeschlossenesCGameEventHandler.gegnerMatchGewonnen(abgeschlossenesCGame, evt)
+            LaufendesCGameEventHandler::gegnerMatchGewonnen,
+            TiebreakEventHandler::gegnerMatchGewonnen,
+            CGameEventHandler.abgeschlossenToLeft
         );
     }
 
     static Either<DomainProblem, CGame> handleEvent(CGame state, GegnerSatzGewonnen evt) {
         return state.apply(
-            laufendesCGame -> LaufendesCGameEventHandler.gegnerSatzGewonnen(laufendesCGame, evt),
-            tiebreak -> TiebreakEventHandler.gegnerSatzGewonnen(tiebreak, evt),
-            abgeschlossenesCGame -> AbgeschlossenesCGameEventHandler.gegnerSatzGewonnen(abgeschlossenesCGame, evt)
+            LaufendesCGameEventHandler::gegnerSatzGewonnen,
+            TiebreakEventHandler::gegnerSatzGewonnen,
+            CGameEventHandler.abgeschlossenToLeft
         );
     }
 
     static Either<DomainProblem, CGame> handleEvent(CGame state, GegnerPunktGewonnen evt) {
         return state.apply(
-            laufendesCGame -> LaufendesCGameEventHandler.handleEvent(laufendesCGame, evt),
-            tiebreak -> TiebreakEventHandler.handleEvent(tiebreak, evt),
-            abgeschlossenesCGame -> left(DomainProblem.eventNotValid)
+            LaufendesCGameEventHandler::gegnerPunktGewonnen,
+            TiebreakEventHandler::gegnerPunktGewonnen,
+            CGameEventHandler.abgeschlossenToLeft
         );
     }
 

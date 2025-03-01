@@ -22,4 +22,17 @@ public sealed interface SpielerDomainEvent extends DomainEvent permits SpielerGa
         );
     }
 
+    static <T> T apply(SpielerDomainEvent event,
+        Function<SpielerGameGewonnen, T> f1,
+        Function<SpielerMatchGewonnen, T> f2,
+        Function<SpielerPunktGewonnen, T> f3,
+        Function<SpielerSatzGewonnen, T> f4
+    ) {
+        return switch (event) {
+            case SpielerGameGewonnen evt -> f1.apply(evt);
+            case SpielerMatchGewonnen evt -> f2.apply(evt);
+            case SpielerPunktGewonnen evt -> f3.apply(evt);
+            case SpielerSatzGewonnen evt -> f4.apply(evt);
+        };
+    }
 }
