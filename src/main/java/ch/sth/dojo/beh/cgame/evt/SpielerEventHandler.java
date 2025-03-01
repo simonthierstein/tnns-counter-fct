@@ -25,6 +25,35 @@ import io.vavr.control.Either;
 
 public interface SpielerEventHandler {
 
+    static Either<DomainProblem, CGame> handleSpielerEvent_(CGame state, SpielerDomainEvent event) {
+        return switch (event) {
+            case SpielerPunktGewonnen evt -> handleEvent(state, evt);
+            case SpielerGameGewonnen evt -> handleEvent(state, evt);
+            case SpielerSatzGewonnen evt -> handleEvent(state, evt);
+            case SpielerMatchGewonnen evt -> handleEvent(state, evt);
+        };
+    }
+
+    static Either<DomainProblem, CGame> handleEvent(CGame state, SpielerMatchGewonnen evt) {
+        return right(new AbgeschlossenesCGame());
+    }
+
+    static Either<DomainProblem, CGame> handleEvent(CGame state, SpielerSatzGewonnen evt) {
+        return right(new AbgeschlossenesCGame());
+    }
+
+    static Either<DomainProblem, CGame> handleEvent(CGame state, SpielerGameGewonnen evt) {
+        return right(LaufendesCGame.zero());
+    }
+
+    static Either<DomainProblem, CGame> handleEvent(CGame state, SpielerPunktGewonnen evt) {
+        return state.apply(
+            laufendesCGame -> handleEvent(laufendesCGame, evt),
+            tiebreak -> right(handleEvent(tiebreak, evt)),
+            abgeschlossenesCGame -> left(DomainProblem.eventNotValid)
+        );
+    }
+
     static Either<DomainProblem, CGame> handleSpielerEvent(LaufendesCGame state, SpielerDomainEvent event) {
         return switch (event) {
             case SpielerPunktGewonnen evt -> handleEvent(state, evt);

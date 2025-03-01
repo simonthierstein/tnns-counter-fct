@@ -6,6 +6,7 @@ package ch.sth.dojo.beh.cmatch.evt;
 
 import static ch.sth.dojo.beh.DomainProblem.eventNotValid;
 import static io.vavr.control.Either.left;
+import static io.vavr.control.Either.right;
 
 import ch.sth.dojo.beh.DomainProblem;
 import ch.sth.dojo.beh.cmatch.domain.CMatch;
@@ -33,21 +34,23 @@ public final class CMatchEventHandler {
     }
 
     private static Either<DomainProblem, CMatch> handleSpielerEvent(final CMatch state, final SpielerDomainEvent evt) {
-        return switch (evt) {
+        final Either<DomainProblem, CMatch> cMatches = switch (evt) {
             case SpielerGameGewonnen spielerGameGewonnen -> null;
             case SpielerPunktGewonnen spielerPunktGewonnen -> null;
             case SpielerSatzGewonnen spielerSatzGewonnen -> null;
             case SpielerMatchGewonnen spielerSatzGewonnen -> null;
         };
+        return right(state);
     }
 
     private static Either<DomainProblem, CMatch> handleGegnerEvent(final CMatch state, final GegnerDomainEvent evt) {
-        return switch (evt) {
+        final Either<DomainProblem, CMatch> cMatches = switch (evt) {
             case GegnerGameGewonnen gegnerGameGewonnen -> null;
             case GegnerPunktGewonnen gegnerPunktGewonnen -> null;
             case GegnerSatzGewonnen gegnerSatzGewonnen -> null;
             case GegnerMatchGewonnen gegnerSatzGewonnen -> null;
         };
+        return right(state);
     }
 
 }

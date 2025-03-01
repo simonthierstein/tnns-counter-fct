@@ -12,6 +12,7 @@ import ch.sth.dojo.beh.csatz.domain.AbgeschlossenerCSatz;
 import ch.sth.dojo.beh.csatz.domain.CSatz;
 import ch.sth.dojo.beh.csatz.domain.LaufenderCSatz;
 import ch.sth.dojo.beh.evt.DomainEvent;
+import ch.sth.dojo.beh.evt.GameGestartet;
 import ch.sth.dojo.beh.evt.GegnerDomainEvent;
 import ch.sth.dojo.beh.evt.GegnerGameGewonnen;
 import ch.sth.dojo.beh.evt.GegnerSatzGewonnen;
@@ -25,6 +26,15 @@ import java.util.function.Function;
 public interface CSatzEventHandler {
 
     private static <T> T apply(final CSatz prev, final DomainEvent event, final Function<LaufenderCSatz, T> laufendFct, final Function<AbgeschlossenerCSatz, T> abgeschlossenFct) {
+        switch (event) {
+            case GameGestartet gameGestartet -> {
+            }
+            case GegnerDomainEvent gegnerDomainEvent -> {
+            }
+            case SpielerDomainEvent spielerDomainEvent -> {
+            }
+        }
+
         return Match(event).of(
             Case($(instanceOf(SpielerGameGewonnen.class)), CSatz.apply(prev, laufendFct, abgeschlossenFct)),
             Case($(instanceOf(GegnerGameGewonnen.class)), CSatz.apply(prev, laufendFct, abgeschlossenFct)),
@@ -45,8 +55,7 @@ public interface CSatzEventHandler {
             abgeschlossenerCSatz -> Either.<DomainProblem, CSatz>left(eventNotValid));
     }
 
-
-    static Either<DomainProblem, CSatz> handleEvent(LaufenderCSatz state, DomainEvent event) {
+    private static Either<DomainProblem, CSatz> handleEvent(LaufenderCSatz state, DomainEvent event) {
         return switch (event) {
             case SpielerDomainEvent evt -> SpielerEventHandler.handleSpielerEvent(state, evt);
             case GegnerDomainEvent evt -> GegnerEventHandler.handleGegnerEvent(state, evt);

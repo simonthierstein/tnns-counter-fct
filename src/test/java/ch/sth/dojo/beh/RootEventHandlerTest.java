@@ -39,8 +39,8 @@ class RootEventHandlerTest {
         assertThat(res.isRight())
             .withFailMessage("invalid result %s", res)
             .isTrue();
-        assertThat(res.get()._1).isInstanceOf(AbgeschlossenerCSatz.class);
-        assertThat(res.get()._2).isInstanceOf(AbgeschlossenesCGame.class);
+        assertThat(res.get()._2).isInstanceOf(AbgeschlossenerCSatz.class);
+        assertThat(res.get()._3).isInstanceOf(AbgeschlossenesCGame.class);
 
     }
 
@@ -52,8 +52,8 @@ class RootEventHandlerTest {
         assertThat(res.isRight())
             .withFailMessage("invalid result %s", res)
             .isTrue();
-        assertThat(res.get()._1).isInstanceOf(AbgeschlossenerCSatz.class);
-        assertThat(res.get()._2).isInstanceOf(AbgeschlossenesCGame.class);
+        assertThat(res.get()._2).isInstanceOf(AbgeschlossenerCSatz.class);
+        assertThat(res.get()._3).isInstanceOf(AbgeschlossenesCGame.class);
 
     }
 
