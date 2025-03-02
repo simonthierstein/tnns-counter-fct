@@ -4,6 +4,7 @@
 
 package ch.sth.dojo.beh.cmatch.evt;
 
+import static io.vavr.control.Either.left;
 import static io.vavr.control.Either.right;
 
 import ch.sth.dojo.beh.DomainProblem;
@@ -31,13 +32,12 @@ public final class CMatchEventHandler {
     }
 
     private static Either<DomainProblem, CMatch> handleSpielerEvent(final CMatch state, final SpielerDomainEvent evt) {
-        final Either<DomainProblem, CMatch> cMatches = switch (evt) {
+        return switch (evt) {
             case SpielerPunktGewonnen event -> right(state);
             case SpielerGameGewonnen event -> right(state);
             case SpielerSatzGewonnen event -> spielerSatzGewonnen(state, event);
             case SpielerMatchGewonnen event -> spielerMatchGewonnen(state, event);
         };
-        return cMatches;
     }
 
     private static Either<DomainProblem, CMatch> spielerMatchGewonnen(final CMatch state, final SpielerMatchGewonnen event) {
@@ -49,13 +49,16 @@ public final class CMatchEventHandler {
     }
 
     private static Either<DomainProblem, CMatch> handleGegnerEvent(final CMatch state, final GegnerDomainEvent evt) {
-        final Either<DomainProblem, CMatch> cMatches = switch (evt) {
-            case GegnerGameGewonnen gegnerGameGewonnen -> null;
-            case GegnerPunktGewonnen gegnerPunktGewonnen -> null;
-            case GegnerSatzGewonnen gegnerSatzGewonnen -> null;
-            case GegnerMatchGewonnen gegnerSatzGewonnen -> null;
+        return switch (evt) {
+            case GegnerPunktGewonnen event -> left(DomainProblem.NYIMP);
+            case GegnerGameGewonnen event -> left(DomainProblem.NYIMP);
+            case GegnerSatzGewonnen event -> left(DomainProblem.NYIMP);
+            case GegnerMatchGewonnen event -> gegnerMatchGewonnen(state, event);
         };
-        return right(state);
+    }
+
+    private static Either<DomainProblem, CMatch> gegnerMatchGewonnen(final CMatch state, final GegnerMatchGewonnen event) {
+        return CMatch.gegnerMatchGewonnen(state);
     }
 
 }

@@ -12,6 +12,7 @@ public sealed interface CMatch permits LaufendesMatch, AbgeschlossenesMatch {
 
     Function<AbgeschlossenesMatch, Either<DomainProblem, CMatch>> abgeschlossenesMatchToDomainProblem = abgeschlossenesMatch -> left(DomainProblem.eventNotValid);
     Function<LaufendesMatch, Either<DomainProblem, CMatch>> laufendesMatchSpielerPunktet = laufendesMatch -> right(laufendesMatch.spielerPunktet());
+    Function<LaufendesMatch, Either<DomainProblem, CMatch>> laufendesMatchGegnerPunktet = laufendesMatch -> right(laufendesMatch.gegnerPunktet());
 
     static <T> T apply(CMatch target,
         Function<LaufendesMatch, T> f1,
@@ -54,6 +55,14 @@ public sealed interface CMatch permits LaufendesMatch, AbgeschlossenesMatch {
     static Either<DomainProblem, CMatch> spielerMatchGewonnen(CMatch state) {
         return apply(state,
             laufendesMatchSpielerPunktet,
+            abgeschlossenesMatchToDomainProblem
+        )
+            .filterOrElse(AbgeschlossenesMatch.class::isInstance, x -> DomainProblem.eventNotValid);
+    }
+
+    static Either<DomainProblem, CMatch> gegnerMatchGewonnen(CMatch state) {
+        return apply(state,
+            laufendesMatchGegnerPunktet,
             abgeschlossenesMatchToDomainProblem
         )
             .filterOrElse(AbgeschlossenesMatch.class::isInstance, x -> DomainProblem.eventNotValid);
