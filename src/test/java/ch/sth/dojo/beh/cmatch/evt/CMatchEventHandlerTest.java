@@ -76,7 +76,6 @@ class CMatchEventHandlerTest {
 
     @ParameterizedTest
     @ValueSource(
-
         strings = {"SpielerMatchGewonnen", "GegnerMatchGewonnen"}
     )
     void handleSpielerEvent_MatchGewonnen_invalidevent(String event) {
