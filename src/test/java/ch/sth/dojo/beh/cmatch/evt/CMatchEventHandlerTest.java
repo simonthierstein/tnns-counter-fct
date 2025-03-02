@@ -18,6 +18,7 @@ import ch.sth.dojo.beh.evt.SpielerMatchGewonnen;
 import ch.sth.dojo.beh.evt.SpielerPunktGewonnen;
 import ch.sth.dojo.beh.evt.SpielerSatzGewonnen;
 import io.vavr.control.Either;
+import io.vavr.control.Option;
 import java.util.function.Function;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -62,6 +63,8 @@ class CMatchEventHandlerTest {
     @CsvSource({
         "SpielerMatchGewonnen,1,0,2,0",
         "SpielerMatchGewonnen,1,1,2,1",
+        "GegnerMatchGewonnen,0,1,0,2",
+        "GegnerMatchGewonnen,1,1,1,2",
     })
     void handleSpielerEvent_MatchGewonnen(String inputEventString, Integer inputSpielerSatzScore, Integer inputGegnerSatzScoreInteger, Integer expectedSpielerSatzScore,
         Integer expectedGegnerSatzScore) {
@@ -80,7 +83,7 @@ class CMatchEventHandlerTest {
     )
     void handleSpielerEvent_MatchGewonnen_invalidevent(String event) {
         final CMatch inputState = CMatch.zero();
-        final DomainEvent inputEvent = parseEvent(event);
+        final DomainEvent inputEvent = Option.some(event).map(stringToEvent()).get();
         final DomainProblem expectedError = DomainProblem.eventNotValid;
 
         CMatchEventHandler.handleEvent(inputState, inputEvent)
@@ -90,13 +93,6 @@ class CMatchEventHandlerTest {
             );
     }
 
-    private static DomainEvent parseEvent(final String eventString) {
-        return switch (eventString) {
-            case "GegnerMatchGewonnen" -> new GegnerMatchGewonnen();
-            case "SpielerMatchGewonnen" -> new SpielerMatchGewonnen();
-            default -> throw new RuntimeException();
-        };
-    }
 
     private static Function<String, DomainEvent> stringToEvent() {
         return str -> Match(str).of(

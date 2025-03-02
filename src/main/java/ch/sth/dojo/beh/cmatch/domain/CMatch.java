@@ -38,11 +38,9 @@ public sealed interface CMatch permits LaufendesMatch, AbgeschlossenesMatch {
     }
 
     static CMatch createMatchInstance(SpielerPunkteMatch spielerPunkteMatch, GegnerPunkteMatch gegnerPunkteMatch) {
-        final Option<SpielerPunkteMatch> existIfWon = Option.some(spielerPunkteMatch).filter(SpielerPunkteMatch.hasWon);
-        return existIfWon.map(x -> new AbgeschlossenesMatch())
+        return Option.when(SpielerPunkteMatch.hasWon.test(spielerPunkteMatch) || GegnerPunkteMatch.hasWon.test(gegnerPunkteMatch), new AbgeschlossenesMatch())
             .map(CMatch::narrow)
             .getOrElse(() -> new LaufendesMatch(spielerPunkteMatch, gegnerPunkteMatch));
-
     }
 
     static Either<DomainProblem, CMatch> spielerSatzGewonnen(CMatch state) {
