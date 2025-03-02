@@ -30,8 +30,8 @@ class CMatchEventHandlerTest {
     @ValueSource(strings = {
         "SpielerGameGewonnen",
         "SpielerPunktGewonnen",
-        //        "GegnerGameGewonnen",
-        //        "GegnerPunktGewonnen"
+        "GegnerGameGewonnen",
+        "GegnerPunktGewonnen"
     })
     void handleSpielerEvent_PunktOrGameGewonnen(String inputEventString) {
         final CMatch inputState = CMatch.zero();
@@ -94,7 +94,6 @@ class CMatchEventHandlerTest {
                 succ -> fail("Expected error but was %s", succ)
             );
     }
-
 
     private static Function<String, DomainEvent> stringToEvent() {
         return str -> Match(str).of(

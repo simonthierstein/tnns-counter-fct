@@ -4,7 +4,6 @@
 
 package ch.sth.dojo.beh.cmatch.evt;
 
-import static io.vavr.control.Either.left;
 import static io.vavr.control.Either.right;
 
 import ch.sth.dojo.beh.DomainProblem;
@@ -50,8 +49,8 @@ public final class CMatchEventHandler {
 
     private static Either<DomainProblem, CMatch> handleGegnerEvent(final CMatch state, final GegnerDomainEvent evt) {
         return switch (evt) {
-            case GegnerPunktGewonnen event -> left(DomainProblem.NYIMP);
-            case GegnerGameGewonnen event -> left(DomainProblem.NYIMP);
+            case GegnerPunktGewonnen event -> right(state);
+            case GegnerGameGewonnen event -> right(state);
             case GegnerSatzGewonnen event -> gegnerSatzGewonnen(state, event);
             case GegnerMatchGewonnen event -> gegnerMatchGewonnen(state, event);
         };
