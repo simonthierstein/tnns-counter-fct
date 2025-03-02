@@ -43,12 +43,30 @@ class CMatchEventHandlerTest {
     }
 
     @ParameterizedTest
-    @CsvSource(
-        "SpielerSatzGewonnen,1,0"
-    )
-    void handleSpielerEvent_SatzGewonnen(String inputEventString, Integer spielerSatzScore, Integer gegnerSatzScore) {
-        final CMatch inputState = CMatch.zero();
-        final CMatch expectedState = CMatch.of(spielerSatzScore, gegnerSatzScore).get();
+    @CsvSource({
+        "SpielerSatzGewonnen,0,0,1,0",
+        "SpielerSatzGewonnen,0,1,1,1",
+    })
+    void handleSpielerEvent_SatzGewonnen(String inputEventString, Integer inputSpielerSatzScore, Integer inputGegnerSatzScoreInteger, Integer expectedSpielerSatzScore,
+        Integer expectedGegnerSatzScore) {
+        final CMatch inputState = CMatch.of(inputSpielerSatzScore, inputGegnerSatzScoreInteger).get();
+        final CMatch expectedState = CMatch.of(expectedSpielerSatzScore, expectedGegnerSatzScore).get();
+
+        Either.<DomainProblem, String>right(inputEventString)
+            .map(stringToEvent())
+            .flatMap(evt -> CMatchEventHandler.handleEvent(inputState, evt))
+            .fold(err -> fail(err.toString()), succ -> assertThat(succ).isEqualTo(expectedState));
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+        "SpielerMatchGewonnen,1,0,2,0",
+        "SpielerMatchGewonnen,1,1,2,1",
+    })
+    void handleSpielerEvent_MatchGewonnen(String inputEventString, Integer inputSpielerSatzScore, Integer inputGegnerSatzScoreInteger, Integer expectedSpielerSatzScore,
+        Integer expectedGegnerSatzScore) {
+        final CMatch inputState = CMatch.of(inputSpielerSatzScore, inputGegnerSatzScoreInteger).get();
+        final CMatch expectedState = CMatch.of(expectedSpielerSatzScore, expectedGegnerSatzScore).get();
 
         Either.<DomainProblem, String>right(inputEventString)
             .map(stringToEvent())

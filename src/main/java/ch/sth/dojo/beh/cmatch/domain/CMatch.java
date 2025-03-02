@@ -9,7 +9,8 @@ import java.util.function.Function;
 
 public sealed interface CMatch permits LaufendesMatch, AbgeschlossenesMatch {
 
-    Function<AbgeschlossenesMatch, Either<DomainProblem, CMatch>> abgeschlossenToDomainProblem = x -> left(DomainProblem.eventNotValid);
+    Function<AbgeschlossenesMatch, Either<DomainProblem, CMatch>> abgeschlossenesMatchToDomainProblem = abgeschlossenesMatch -> left(DomainProblem.eventNotValid);
+    Function<LaufendesMatch, Either<DomainProblem, CMatch>> laufendesMatchSpielerPunktet = laufendesMatch -> right(laufendesMatch.spielerPunktet());
 
     static <T> T apply(CMatch target,
         Function<LaufendesMatch, T> f1,
@@ -38,8 +39,15 @@ public sealed interface CMatch permits LaufendesMatch, AbgeschlossenesMatch {
 
     static Either<DomainProblem, CMatch> spielerSatzGewonnen(CMatch state) {
         return apply(state,
-            laufendesMatch -> right(laufendesMatch.spielerPunktet()),
-            abgeschlossenesMatch -> left(DomainProblem.eventNotValid)
+            laufendesMatchSpielerPunktet,
+            abgeschlossenesMatchToDomainProblem
+        );
+    }
+
+    static Either<DomainProblem, CMatch> spielerMatchGewonnen(CMatch state) {
+        return apply(state,
+            laufendesMatchSpielerPunktet,
+            abgeschlossenesMatchToDomainProblem
         );
     }
 }
