@@ -9,7 +9,6 @@ import static io.vavr.control.Either.left;
 import static io.vavr.control.Either.right;
 
 import ch.sth.dojo.beh.DomainProblem;
-import ch.sth.dojo.beh.cgame.domain.AbgeschlossenesCGame;
 import ch.sth.dojo.beh.cgame.domain.CGame;
 import ch.sth.dojo.beh.cgame.domain.LaufendesCGame;
 import ch.sth.dojo.beh.cgame.domain.Tiebreak;
@@ -35,7 +34,7 @@ public record SpielerPunktet() implements DomainCommand {
         return cGame.apply(
             laufendesCGame -> applyToLaufendesCGame(laufendesCGame, cSatz, cMatch),
             tiebreak -> applyToTiebreak(tiebreak),
-            abgeschlossenesCGame -> applyToAbgeschlossenesCGame(cSatz, abgeschlossenesCGame));
+            abgeschlossenesCGame -> applyToAbgeschlossenesCGame(cSatz));
     }
 
     private static Either<DomainProblem, DomainEvent> applyToTiebreak(final Tiebreak tiebreak) {
@@ -77,7 +76,7 @@ public record SpielerPunktet() implements DomainCommand {
         );
     }
 
-    private static Either<DomainProblem, DomainEvent> applyToAbgeschlossenesCGame(final CSatz prev, AbgeschlossenesCGame abgeschlossenesCGame) {// TODO sth/02.03.2025 : T1
+    private static Either<DomainProblem, DomainEvent> applyToAbgeschlossenesCGame(final CSatz prev) {
         return CSatz.apply(prev,
             laufend -> right(new SpielerPunktGewonnen()),
             abgeschlossenerCSatz -> left(DomainProblem.valueNotValid));
