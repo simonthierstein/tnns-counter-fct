@@ -47,6 +47,8 @@ class CMatchEventHandlerTest {
     @CsvSource({
         "SpielerSatzGewonnen,0,0,1,0",
         "SpielerSatzGewonnen,0,1,1,1",
+        "GegnerSatzGewonnen,0,0,0,1",
+        "GegnerSatzGewonnen,1,0,1,1",
     })
     void handleSpielerEvent_SatzGewonnen(String inputEventString, Integer inputSpielerSatzScore, Integer inputGegnerSatzScoreInteger, Integer expectedSpielerSatzScore,
         Integer expectedGegnerSatzScore) {

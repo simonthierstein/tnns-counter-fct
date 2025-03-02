@@ -52,9 +52,13 @@ public final class CMatchEventHandler {
         return switch (evt) {
             case GegnerPunktGewonnen event -> left(DomainProblem.NYIMP);
             case GegnerGameGewonnen event -> left(DomainProblem.NYIMP);
-            case GegnerSatzGewonnen event -> left(DomainProblem.NYIMP);
+            case GegnerSatzGewonnen event -> gegnerSatzGewonnen(state, event);
             case GegnerMatchGewonnen event -> gegnerMatchGewonnen(state, event);
         };
+    }
+
+    private static Either<DomainProblem, CMatch> gegnerSatzGewonnen(final CMatch state, final GegnerSatzGewonnen event) {
+        return CMatch.gegnerSatzGewonnen(state);
     }
 
     private static Either<DomainProblem, CMatch> gegnerMatchGewonnen(final CMatch state, final GegnerMatchGewonnen event) {

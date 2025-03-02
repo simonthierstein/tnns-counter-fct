@@ -66,6 +66,13 @@ public sealed interface CMatch permits LaufendesMatch, AbgeschlossenesMatch {
             .filterOrElse(AbgeschlossenesMatch.class::isInstance, x -> DomainProblem.eventNotValid);
     }
 
+    static Either<DomainProblem, CMatch> gegnerSatzGewonnen(CMatch state) {
+        return apply(state,
+            laufendesMatchGegnerPunktet,
+            abgeschlossenesMatchToDomainProblem
+        );
+    }
+
     static <T extends CMatch> CMatch narrow(T cMatch) {
         return cMatch;
     }
