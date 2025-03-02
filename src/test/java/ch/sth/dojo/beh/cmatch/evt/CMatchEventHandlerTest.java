@@ -19,6 +19,7 @@ import ch.sth.dojo.beh.evt.SpielerPunktGewonnen;
 import ch.sth.dojo.beh.evt.SpielerSatzGewonnen;
 import io.vavr.control.Either;
 import java.util.function.Function;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -72,6 +73,19 @@ class CMatchEventHandlerTest {
             .map(stringToEvent())
             .flatMap(evt -> CMatchEventHandler.handleEvent(inputState, evt))
             .fold(err -> fail(err.toString()), succ -> assertThat(succ).isEqualTo(expectedState));
+    }
+
+    @Test
+    void handleSpielerEvent_MatchGewonnen_invalidevent() {
+        final CMatch inputState = CMatch.of(0, 0).get();
+        final DomainEvent inputEvent = new SpielerMatchGewonnen();
+        final DomainProblem expectedError = DomainProblem.eventNotValid;
+
+        CMatchEventHandler.handleEvent(inputState, inputEvent)
+            .fold(
+                err -> assertThat(err).isEqualTo(expectedError),
+                succ -> fail("Expected error but was %s", succ)
+            );
     }
 
     private static Function<String, DomainEvent> stringToEvent() {

@@ -5,6 +5,7 @@ import static io.vavr.control.Either.right;
 
 import ch.sth.dojo.beh.DomainProblem;
 import io.vavr.control.Either;
+import io.vavr.control.Option;
 import java.util.function.Function;
 
 public sealed interface CMatch permits LaufendesMatch, AbgeschlossenesMatch {
@@ -22,8 +23,6 @@ public sealed interface CMatch permits LaufendesMatch, AbgeschlossenesMatch {
         };
     }
 
-
-
     static CMatch zero() {
         return new LaufendesMatch(SpielerPunkteMatch.zero(), GegnerPunkteMatch.zero());
     }
@@ -34,7 +33,15 @@ public sealed interface CMatch permits LaufendesMatch, AbgeschlossenesMatch {
 
         return ssc.flatMap(sscx ->
             gsc.map(gscx ->
-                new LaufendesMatch(sscx, gscx)));
+                createMatchInstance(sscx, gscx)));
+    }
+
+    static CMatch createMatchInstance(SpielerPunkteMatch spielerPunkteMatch, GegnerPunkteMatch gegnerPunkteMatch) {
+        final Option<SpielerPunkteMatch> existIfWon = Option.some(spielerPunkteMatch).filter(SpielerPunkteMatch.hasWon);
+        return existIfWon.map(x -> new AbgeschlossenesMatch())
+            .map(CMatch::narrow)
+            .getOrElse(() -> new LaufendesMatch(spielerPunkteMatch, gegnerPunkteMatch));
+
     }
 
     static Either<DomainProblem, CMatch> spielerSatzGewonnen(CMatch state) {
@@ -49,6 +56,10 @@ public sealed interface CMatch permits LaufendesMatch, AbgeschlossenesMatch {
             laufendesMatchSpielerPunktet,
             abgeschlossenesMatchToDomainProblem
         );
+    }
+
+    static <T extends CMatch> CMatch narrow(T cMatch) {
+        return cMatch;
     }
 }
 
