@@ -14,7 +14,9 @@ public record LaufendesMatch(SpielerPunkteMatch spielerPunkteMatch, GegnerPunkte
 
     public static final Predicate<LaufendesMatch> passIfSpielerOneSatzBisMatch =
         compose(PunkteMatch.hasOneSet, x -> x.spielerPunkteMatch.punkteMatch());
-    static final Function<LaufendesMatch, CMatch> spielerPunktetTransition = LaufendesMatch::spielerPunktet;
+    public static final Predicate<? super LaufendesMatch> passIfGegnerOneSatzBisMatch =
+        compose(PunkteMatch.hasOneSet, x -> x.gegnerPunkteMatch.punkteMatch());
+    static final Function<LaufendesMatch, CMatch> spielerPunktetTransition = LaufendesMatch::spielerPunktet; // TODO sth/02.03.2025 : T2
     static final Function<LaufendesMatch, CMatch> gegnerPunktetTransition = LaufendesMatch::spielerPunktet;
 
     public CMatch spielerPunktet() {

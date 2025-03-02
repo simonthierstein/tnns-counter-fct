@@ -71,7 +71,7 @@ class ScenarioTest {
             //            "SpielerPunktet, 40-00, 5-1, 0-0, SpielerSatzGewonnen, 00-00, 0-0, 1-0",
             //            "GegnerPunktet, 00-40, 5-6, 0-0, GegnerSatzGewonnen, 00-00, 0-0, 0-1",
             "SpielerPunktet, 40-00, 5-1, 1-0, SpielerMatchGewonnen, GAME, SATZ, MATCH",
-            //            "GegnerPunktet, 00-40, 5-6, 0-1, GegnerMatchGewonnen, 00-00, 0-0, 0-2",
+            "GegnerPunktet, 00-40, 5-6, 0-1, GegnerMatchGewonnen, GAME, SATZ, MATCH",
         }
     )
     void scenario3_laufenderSatz(String cmd, String prevGame, String prevSatz, String prevMatch, String evt, String nextGame, String nextSatz, String nextMatch) {

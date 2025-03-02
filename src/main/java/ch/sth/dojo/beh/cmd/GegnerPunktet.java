@@ -14,10 +14,12 @@ import ch.sth.dojo.beh.cgame.domain.CGame;
 import ch.sth.dojo.beh.cgame.domain.LaufendesCGame;
 import ch.sth.dojo.beh.cgame.domain.Tiebreak;
 import ch.sth.dojo.beh.cmatch.domain.CMatch;
+import ch.sth.dojo.beh.cmatch.domain.LaufendesMatch;
 import ch.sth.dojo.beh.csatz.domain.CSatz;
 import ch.sth.dojo.beh.csatz.domain.LaufenderCSatz;
 import ch.sth.dojo.beh.evt.DomainEvent;
 import ch.sth.dojo.beh.evt.GegnerGameGewonnen;
+import ch.sth.dojo.beh.evt.GegnerMatchGewonnen;
 import ch.sth.dojo.beh.evt.GegnerPunktGewonnen;
 import ch.sth.dojo.beh.evt.GegnerSatzGewonnen;
 import io.vavr.Tuple3;
@@ -31,7 +33,7 @@ public record GegnerPunktet() implements DomainCommand {
 
     private static Either<DomainProblem, DomainEvent> apply(CMatch match, CSatz cSatz, CGame cGame) {
         return cGame.apply(
-            laufendesCGame -> applyToLaufendesCGame(laufendesCGame, cSatz),
+            laufendesCGame -> applyToLaufendesCGame(laufendesCGame, cSatz, match),
             tiebreak -> right(applyToTiebreak(cSatz, tiebreak)),
             abgeschlossenesCGame -> applyToAbgeschlossenesCGame(cSatz, abgeschlossenesCGame));
     }
@@ -43,22 +45,36 @@ public record GegnerPunktet() implements DomainCommand {
         );
     }
 
-    private static Either<DomainProblem, DomainEvent> applyToLaufendesCGame(LaufendesCGame laufendesCGame, CSatz satz) {
+    private static Either<DomainProblem, DomainEvent> applyToLaufendesCGame(LaufendesCGame laufendesCGame, CSatz satz, final CMatch cMatch) {
         return condition(laufendesCGame, LaufendesCGame.passIfGegnerOnePunktBisCGame,
-            game -> applyToCSatz(satz),
+            game -> applyToCSatz(satz, cMatch),
             x -> right(new GegnerPunktGewonnen()));
     }
 
-    private static Either<DomainProblem, DomainEvent> applyToCSatz(CSatz satz) {
+    private static Either<DomainProblem, DomainEvent> applyToCSatz(CSatz satz, final CMatch cMatch) {
         return CSatz.apply(satz,
-            laufenderCSatz -> right(applyToLaufenderSatz(laufenderCSatz)),
+            laufenderCSatz -> applyToLaufenderSatz(laufenderCSatz, cMatch),
             x -> left(DomainProblem.valueNotValid));
     }
 
-    private static DomainEvent applyToLaufenderSatz(final LaufenderCSatz laufenderCSatz) {
+    private static Either<DomainProblem, DomainEvent> applyToLaufenderSatz(final LaufenderCSatz laufenderCSatz, final CMatch cMatch) {
         return condition(laufenderCSatz, LaufenderCSatz.passIfGegnerOneGameBisSatz,
-            x -> new GegnerSatzGewonnen(),
-            x -> new GegnerGameGewonnen());
+            x -> applyToMatch(cMatch),
+            x -> right(new GegnerGameGewonnen()));
+    }
+
+    private static Either<DomainProblem, DomainEvent> applyToMatch(CMatch match) {
+        return CMatch.apply(match,
+            laufendesMatch -> right(applyToLaufendesMatch(laufendesMatch)),
+            abgeschlossenesMatch -> left(DomainProblem.valueNotValid)
+        );
+    }
+
+    private static DomainEvent applyToLaufendesMatch(final LaufendesMatch laufendesMatch) {
+        return condition(laufendesMatch, LaufendesMatch.passIfGegnerOneSatzBisMatch,
+            x -> new GegnerMatchGewonnen(),
+            x -> new GegnerSatzGewonnen()
+        );
     }
 
     private static Either<DomainProblem, DomainEvent> applyToAbgeschlossenesCGame(final CSatz prev, AbgeschlossenesCGame abgeschlossenesCGame) {
