@@ -34,7 +34,7 @@ public final class PredicateUtils {
         return x -> x <= other;
     }
 
-    static Predicate<Integer> lt(Integer other) {
+    public static Predicate<Integer> lt(Integer other) {
         return x -> x < other;
     }
 
