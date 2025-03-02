@@ -11,6 +11,11 @@ public interface DomainProblem {
     DomainProblem transitionNotValid = new TransitionNotValid();
     DomainProblem valueNotValid = new ValueNotValid();
     DomainProblem nullValueNotValid = new NullValueNotValid();
+    DomainProblem NYIMP = new NotYetImplemented();
+
+    record NotYetImplemented() implements DomainProblem {
+
+    }
 
     record SpielerPunktetFehlgeschlagen() implements DomainProblem {
 
