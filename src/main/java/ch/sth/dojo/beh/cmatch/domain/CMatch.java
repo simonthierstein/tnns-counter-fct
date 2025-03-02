@@ -1,6 +1,7 @@
 package ch.sth.dojo.beh.cmatch.domain;
 
 import static io.vavr.control.Either.left;
+import static io.vavr.control.Either.right;
 
 import ch.sth.dojo.beh.DomainProblem;
 import io.vavr.control.Either;
@@ -35,5 +36,11 @@ public sealed interface CMatch permits LaufendesMatch, AbgeschlossenesMatch {
                 new LaufendesMatch(sscx, gscx)));
     }
 
+    static Either<DomainProblem, CMatch> spielerSatzGewonnen(CMatch state) {
+        return apply(state,
+            laufendesMatch -> right(laufendesMatch.spielerPunktet()),
+            abgeschlossenesMatch -> left(DomainProblem.eventNotValid)
+        );
+    }
 }
 

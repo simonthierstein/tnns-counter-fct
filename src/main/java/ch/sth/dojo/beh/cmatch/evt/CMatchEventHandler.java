@@ -33,12 +33,16 @@ public final class CMatchEventHandler {
 
     private static Either<DomainProblem, CMatch> handleSpielerEvent(final CMatch state, final SpielerDomainEvent evt) {
         final Either<DomainProblem, CMatch> cMatches = switch (evt) {
-            case SpielerPunktGewonnen spielerPunktGewonnen -> right(state);
-            case SpielerGameGewonnen spielerGameGewonnen -> right(state);
-            case SpielerSatzGewonnen spielerSatzGewonnen -> left(DomainProblem.NYIMP);
-            case SpielerMatchGewonnen spielerSatzGewonnen -> left(DomainProblem.NYIMP);
+            case SpielerPunktGewonnen event -> right(state);
+            case SpielerGameGewonnen event -> right(state);
+            case SpielerSatzGewonnen event -> spielerSatzGewonnen(state, event);
+            case SpielerMatchGewonnen event -> left(DomainProblem.NYIMP);
         };
         return cMatches;
+    }
+
+    private static Either<DomainProblem, CMatch> spielerSatzGewonnen(final CMatch state, final SpielerSatzGewonnen event) {
+        return CMatch.spielerSatzGewonnen(state);
     }
 
     private static Either<DomainProblem, CMatch> handleGegnerEvent(final CMatch state, final GegnerDomainEvent evt) {

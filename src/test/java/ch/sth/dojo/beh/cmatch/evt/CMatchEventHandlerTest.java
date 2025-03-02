@@ -20,6 +20,7 @@ import ch.sth.dojo.beh.evt.SpielerSatzGewonnen;
 import io.vavr.control.Either;
 import java.util.function.Function;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 class CMatchEventHandlerTest {
@@ -31,9 +32,23 @@ class CMatchEventHandlerTest {
         //        "GegnerGameGewonnen",
         //        "GegnerPunktGewonnen"
     })
-    void handleSpielerEvent_gameGewonnen(String inputEventString) {
+    void handleSpielerEvent_PunktOrGameGewonnen(String inputEventString) {
         final CMatch inputState = CMatch.zero();
         final CMatch expectedState = CMatch.zero();
+
+        Either.<DomainProblem, String>right(inputEventString)
+            .map(stringToEvent())
+            .flatMap(evt -> CMatchEventHandler.handleEvent(inputState, evt))
+            .fold(err -> fail(err.toString()), succ -> assertThat(succ).isEqualTo(expectedState));
+    }
+
+    @ParameterizedTest
+    @CsvSource(
+        "SpielerSatzGewonnen,1,0"
+    )
+    void handleSpielerEvent_SatzGewonnen(String inputEventString, Integer spielerSatzScore, Integer gegnerSatzScore) {
+        final CMatch inputState = CMatch.zero();
+        final CMatch expectedState = CMatch.of(spielerSatzScore, gegnerSatzScore).get();
 
         Either.<DomainProblem, String>right(inputEventString)
             .map(stringToEvent())
