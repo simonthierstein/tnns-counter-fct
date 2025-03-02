@@ -80,7 +80,7 @@ public record GegnerPunktet() implements DomainCommand {
     private static Either<DomainProblem, DomainEvent> applyToAbgeschlossenesCGame(final CSatz prev, AbgeschlossenesCGame abgeschlossenesCGame) {
         return CSatz.apply(prev,
             laufend -> right(new GegnerPunktGewonnen()),
-            abgeschlossenerCSatz -> left(DomainProblem.valueNotValid)); // TODO sth/21.02.2025 : where is new game instantiated?
+            abgeschlossenerCSatz -> left(DomainProblem.valueNotValid));
     }
 
 }
