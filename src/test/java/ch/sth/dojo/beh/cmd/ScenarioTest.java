@@ -17,6 +17,7 @@ import ch.sth.dojo.beh.cgame.domain.LaufendesCGame;
 import ch.sth.dojo.beh.cgame.domain.SpielerPunkteBisGame;
 import ch.sth.dojo.beh.cgame.domain.Tiebreak;
 import ch.sth.dojo.beh.cmatch.domain.CMatch;
+import ch.sth.dojo.beh.csatz.domain.AbgeschlossenerCSatz;
 import ch.sth.dojo.beh.csatz.domain.CSatz;
 import ch.sth.dojo.beh.csatz.domain.LaufenderCSatz;
 import ch.sth.dojo.beh.evt.DomainEvent;
@@ -69,7 +70,7 @@ class ScenarioTest {
             //            "GegnerPunktet, 40-30, 4-1, 0-0, GegnerPunktGewonnen, DEUCE, 4-1, 0-0",
             //            "SpielerPunktet, 40-00, 5-1, 0-0, SpielerSatzGewonnen, 00-00, 0-0, 1-0",
             //            "GegnerPunktet, 00-40, 5-6, 0-0, GegnerSatzGewonnen, 00-00, 0-0, 0-1",
-            "SpielerPunktet, 40-00, 5-1, 1-0, SpielerMatchGewonnen, 00-00, 0-0, 2-0",
+            "SpielerPunktet, 40-00, 5-1, 1-0, SpielerMatchGewonnen, GAME, SATZ, MATCH",
             //            "GegnerPunktet, 00-40, 5-6, 0-1, GegnerMatchGewonnen, 00-00, 0-0, 0-2",
         }
     )
@@ -156,8 +157,7 @@ class ScenarioTest {
     private Function<String, CSatz> parseSatzState() {
         return input -> scoreParsing(Option.some(input)
             .filter(Predicates.not("SATZ"::equals))
-                .toEither(LaufenderCSatz.zero()),
-            list -> CSatz.of(list.get(0), list.get(1)).get());
+            .toEither(new AbgeschlossenerCSatz()), list -> CSatz.of(list.get(0), list.get(1)).get());
     }
 
     private static Function<String, CMatch> parseMatchState() {

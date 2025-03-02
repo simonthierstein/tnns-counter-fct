@@ -44,8 +44,8 @@ public interface RootEventHandler {
     Function2<Tuple3<CMatch, CSatz, CGame>, CSatz, Tuple3<CMatch, CSatz, CGame>> replaceNextSatz = (prev, nextSatz) -> prev.map2(x -> nextSatz);
     Function2<Tuple3<CMatch, CSatz, CGame>, CGame, Tuple3<CMatch, CSatz, CGame>> replaceNextGame = (prev, nextGame) -> prev.map3(x -> nextGame);
 
-    private static Either<DomainProblem, Tuple3<CMatch, CSatz, CGame>> spielerMatchGewonnen(Tuple3<CMatch, CSatz, CGame> prev, SpielerMatchGewonnen spielerMatchGewonnen) {
-        return null;
+    private static Either<DomainProblem, Tuple3<CMatch, CSatz, CGame>> spielerMatchGewonnen(Tuple3<CMatch, CSatz, CGame> prev, SpielerMatchGewonnen event) {
+        return delegateEventHandling(prev, event);
     }
 
     private static Either<DomainProblem, Tuple3<CMatch, CSatz, CGame>> spielerSatzGewonnen(Tuple3<CMatch, CSatz, CGame> prev, SpielerSatzGewonnen event) {
