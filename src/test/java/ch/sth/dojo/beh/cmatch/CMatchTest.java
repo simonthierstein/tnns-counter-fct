@@ -31,12 +31,12 @@ class CMatchTest {
     @CsvSource(
         {
             "0-0,SpielerTransition,1-0",
-            "1-0,SpielerTransition,2-0",
+            "1-0,SpielerTransition,MATCH",
             "0-0,GegnerTransition,0-1",
-            "0-1,GegnerTransition,0-2",
+            "0-1,GegnerTransition,MATCH",
             "1-0,GegnerTransition,1-1",
-            "1-1,GegnerTransition,1-2",
-            "1-1,SpielerTransition,2-1"
+            "1-1,GegnerTransition,MATCH",
+            "1-1,SpielerTransition,MATCH"
         }
     )
     void count(String input, String cmd, String expected) {
