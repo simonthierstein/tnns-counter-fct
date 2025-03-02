@@ -13,8 +13,8 @@ import java.util.function.Predicate;
 
 public record PunkteMatch(Integer value) {
 
-    static Predicate<PunkteMatch> hasOneSet = PredicateUtils.compose(eq(1), PunkteMatch::value);
-    static Predicate<PunkteMatch> hasTwoSets = PredicateUtils.compose(eq(2), PunkteMatch::value);
+    public static Predicate<PunkteMatch> hasOneSet = PredicateUtils.compose(eq(1), PunkteMatch::value);
+    public static Predicate<PunkteMatch> hasTwoSets = PredicateUtils.compose(eq(2), PunkteMatch::value);
 
     static Either<DomainProblem, PunkteMatch> of(Integer value) {
         return Option.of(value)

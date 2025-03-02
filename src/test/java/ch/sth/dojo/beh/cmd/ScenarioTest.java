@@ -21,9 +21,11 @@ import ch.sth.dojo.beh.csatz.domain.CSatz;
 import ch.sth.dojo.beh.csatz.domain.LaufenderCSatz;
 import ch.sth.dojo.beh.evt.DomainEvent;
 import ch.sth.dojo.beh.evt.GegnerGameGewonnen;
+import ch.sth.dojo.beh.evt.GegnerMatchGewonnen;
 import ch.sth.dojo.beh.evt.GegnerPunktGewonnen;
 import ch.sth.dojo.beh.evt.GegnerSatzGewonnen;
 import ch.sth.dojo.beh.evt.SpielerGameGewonnen;
+import ch.sth.dojo.beh.evt.SpielerMatchGewonnen;
 import ch.sth.dojo.beh.evt.SpielerPunktGewonnen;
 import ch.sth.dojo.beh.evt.SpielerSatzGewonnen;
 import io.vavr.Function1;
@@ -32,6 +34,7 @@ import io.vavr.Predicates;
 import io.vavr.Tuple;
 import io.vavr.Tuple3;
 import io.vavr.Tuple6;
+import io.vavr.Tuple8;
 import io.vavr.collection.List;
 import io.vavr.control.Either;
 import io.vavr.control.Option;
@@ -47,20 +50,34 @@ class ScenarioTest {
     @ParameterizedTest
     @CsvSource(
         {
-            "GegnerPunktet, 00-40, 6-5, GegnerGameGewonnen, TB0-0, 6-6",
-            "GegnerPunktet, TB0-6, 6-6, GegnerSatzGewonnen, TB0-7, SATZ",
-            "SpielerPunktet, TB6-6, 6-6, SpielerPunktGewonnen, TB7-6, 6-6",
-            "SpielerPunktet, TB7-7, 6-6, SpielerPunktGewonnen, TB8-7, 6-6",
-            "SpielerPunktet, TB5-5, 6-6, SpielerPunktGewonnen, TB6-5, 6-6",
-            "GegnerPunktet, TB6-5, 6-6, GegnerPunktGewonnen, TB6-6, 6-6",
-            "SpielerPunktet, TB7-6, 6-6, SpielerSatzGewonnen, TB8-6, SATZ"
+            //            "GegnerPunktet, 00-40, 6-5, 0-0, GegnerGameGewonnen, TB0-0, 6-6, 0-0",
+            //            "GegnerPunktet, TB0-6, 6-6, 0-0, GegnerSatzGewonnen, TB0-7, 0-0, 0-1",
+            //            "SpielerPunktet, TB6-6, 6-6, 0-0, SpielerPunktGewonnen, TB7-6, 6-6, 0-0",
+            //            "SpielerPunktet, TB7-7, 6-6, 0-0, SpielerPunktGewonnen, TB8-7, 6-6, 0-0",
+            //            "SpielerPunktet, TB5-5, 6-6, 0-0, SpielerPunktGewonnen, TB6-5, 6-6, 0-0",
+            //            "GegnerPunktet, TB6-5, 6-6, 0-0, GegnerPunktGewonnen, TB6-6, 6-6, 0-0",
+            //            "SpielerPunktet, TB7-6, 6-6, 0-0, SpielerSatzGewonnen, TB8-6, 0-0, 1-0",
+            //            "SpielerPunktet, 40-00, 4-1, 0-0, SpielerGameGewonnen, 00-00, 5-1, 0-0",
+            //            "SpielerPunktet, 30-00, 4-1, 0-0, SpielerPunktGewonnen, 40-00, 4-1, 0-0",
+            //            "SpielerPunktet, 30-30, 4-1, 0-0, SpielerPunktGewonnen, 40-30, 4-1, 0-0",
+            //            "SpielerPunktet, AD-DA, 4-1, 0-0, SpielerGameGewonnen, 00-00, 5-1, 0-0",
+            //            "SpielerPunktet, 30-40, 4-1, 0-0, SpielerPunktGewonnen, DEUCE, 4-1, 0-0",
+            //            "GegnerPunktet, 00-40, 4-1, 0-0, GegnerGameGewonnen, 00-00, 4-2, 0-0",
+            //            "GegnerPunktet, 00-30, 4-1, 0-0, GegnerPunktGewonnen, 00-40, 4-1, 0-0",
+            //            "GegnerPunktet, 30-30, 4-1, 0-0, GegnerPunktGewonnen, 30-40, 4-1, 0-0",
+            //            "GegnerPunktet, DA-AD, 4-1, 0-0, GegnerGameGewonnen, 00-00, 4-2, 0-0",
+            //            "GegnerPunktet, 40-30, 4-1, 0-0, GegnerPunktGewonnen, DEUCE, 4-1, 0-0",
+            //            "SpielerPunktet, 40-00, 5-1, 0-0, SpielerSatzGewonnen, 00-00, 0-0, 1-0",
+            //            "GegnerPunktet, 00-40, 5-6, 0-0, GegnerSatzGewonnen, 00-00, 0-0, 0-1",
+            "SpielerPunktet, 40-00, 5-1, 1-0, SpielerMatchGewonnen, 00-00, 0-0, 2-0",
+            //            "GegnerPunktet, 00-40, 5-6, 0-1, GegnerMatchGewonnen, 00-00, 0-0, 0-2",
         }
     )
-    void scenario3_punktZumTiebreak_laufenderSatz(String cmd, String prevGame, String prevSatz, String evt, String nextGame, String nextSatz) {
-        final Tuple6<String, String, String, String, String, String> tupled = Tuple.of(cmd, prevGame, prevSatz, evt, nextGame, nextSatz);
-        var psc = tupled.map(parseCommand(), parseState(), parseSatzState(), parseEvent(), parseState(), parseSatzState())
-            .apply((domainCommand, game, satz, event, game2, satz2) ->
-                Tuple.of(domainCommand, State.bind.apply(match(), satz, game), event, State.bind.apply(match(), satz2, game2)))
+    void scenario3_laufenderSatz(String cmd, String prevGame, String prevSatz, String prevMatch, String evt, String nextGame, String nextSatz, String nextMatch) {
+        final Tuple8<String, String, String, String, String, String, String, String> tupled = Tuple.of(cmd, prevGame, prevSatz, prevMatch, evt, nextGame, nextSatz, nextMatch);
+        var psc = tupled.map(parseCommand(), parseState(), parseSatzState(), parseMatchState(), parseEvent(), parseState(), parseSatzState(), parseMatchState())
+            .apply((domainCommand, game, satz, match, event, game2, satz2, match2) ->
+                Tuple.of(domainCommand, State.bind.apply(match, satz, game), event, State.bind.apply(match2, satz2, game2)))
             .apply(PartialScenarioConfig::PartialScenarioConfig);
 
         var result = applyCommand(psc);
@@ -114,38 +131,6 @@ class ScenarioTest {
     @ParameterizedTest
     @CsvSource(
         {
-            "SpielerPunktet, 40-00, 4-1, SpielerGameGewonnen, 00-00, 5-1",
-            "SpielerPunktet, 30-00, 4-1, SpielerPunktGewonnen, 40-00, 4-1",
-            "SpielerPunktet, 30-30, 4-1, SpielerPunktGewonnen, 40-30, 4-1",
-            "SpielerPunktet, AD-DA, 4-1, SpielerGameGewonnen, 00-00, 5-1",
-            "SpielerPunktet, 30-40, 4-1, SpielerPunktGewonnen, DEUCE, 4-1",
-            "GegnerPunktet, 00-40, 4-1, GegnerGameGewonnen, 00-00, 4-2",
-            "GegnerPunktet, 00-30, 4-1, GegnerPunktGewonnen, 00-40, 4-1",
-            "GegnerPunktet, 30-30, 4-1, GegnerPunktGewonnen, 30-40, 4-1",
-            "GegnerPunktet, DA-AD, 4-1, GegnerGameGewonnen, 00-00, 4-2",
-            "GegnerPunktet, 40-30, 4-1, GegnerPunktGewonnen, DEUCE, 4-1",
-            "SpielerPunktet, 40-00, 5-1, SpielerSatzGewonnen, 00-00, SATZ",
-            "GegnerPunktet, 00-40, 5-6, GegnerSatzGewonnen, 00-00, SATZ"
-        }
-    )
-    void scenario1_spielerGewinntGame_laufenderSatz(String cmd, String prevGame, String prevSatz, String evt, String nextGame, String nextSatz) {
-        final Tuple6<String, String, String, String, String, String> tupled = Tuple.of(cmd, prevGame, prevSatz, evt, nextGame, nextSatz);
-        var psc = tupled.map(parseCommand(), parseState(), parseSatzState(), parseEvent(), parseState(), parseSatzState())
-            .apply((domainCommand, game, satz, event, game2, satz2) ->
-                Tuple.of(domainCommand, State.bind.apply(match(), satz, game), event, State.bind.apply(match(), satz2, game2)))
-            .apply(PartialScenarioConfig::PartialScenarioConfig);
-
-        final Either<String, State> states = applyCommand(psc);
-
-        assertThat(states.isRight())
-            .withFailMessage(states::getLeft)
-            .isTrue();
-
-    }
-
-    @ParameterizedTest
-    @CsvSource(
-        {
             "GegnerPunktet, 00-40, 0-0, GegnerGameGewonnen, 00-00, 0-1"
         }
     )
@@ -169,14 +154,25 @@ class ScenarioTest {
     }
 
     private Function<String, CSatz> parseSatzState() {
-        return input -> Option.some(input)
+        return input -> scoreParsing(Option.some(input)
             .filter(Predicates.not("SATZ"::equals))
-            .toEither(LaufenderCSatz.zero())
+                .toEither(LaufenderCSatz.zero()),
+            list -> CSatz.of(list.get(0), list.get(1)).get());
+    }
+
+    private static Function<String, CMatch> parseMatchState() {
+        return input -> scoreParsing(Option.some(input)
+            .filter(Predicates.not("MATCH"::equals))
+            .toEither(CMatch.abgeschlossenesMatch()), list -> CMatch.of(list.get(0), list.get(1)).get());
+    }
+
+    private static <T> T scoreParsing(final Either<T, String> scoreEither, final Function<List<Integer>, T> createrFunction) {
+        return scoreEither
             .map(str -> str.split("-"))
             .map(Arrays::stream)
             .map(List::ofAll)
             .map(list -> list.map(Integer::parseInt))
-            .map(list -> CSatz.of(list.get(0), list.get(1)).get())
+            .map(createrFunction)
             .fold(Function.identity(), Function.identity());
     }
 
@@ -190,7 +186,8 @@ class ScenarioTest {
     enum EventTag {
         SpielerPunktGewonnen, GegnerPunktGewonnen,
         SpielerGameGewonnen, GegnerGameGewonnen,
-        SpielerSatzGewonnen, GegnerSatzGewonnen;
+        SpielerSatzGewonnen, GegnerSatzGewonnen,
+        SpielerMatchGewonnen, GegnerMatchGewonnen;
 
         static Function<EventTag, DomainEvent> eventTagToEvent() {
             return eventTag -> Match(eventTag).of(
@@ -199,7 +196,9 @@ class ScenarioTest {
                 Case($(SpielerGameGewonnen), new SpielerGameGewonnen()),
                 Case($(GegnerGameGewonnen), new GegnerGameGewonnen()),
                 Case($(SpielerSatzGewonnen), new SpielerSatzGewonnen()),
-                Case($(GegnerSatzGewonnen), new GegnerSatzGewonnen())
+                Case($(GegnerSatzGewonnen), new GegnerSatzGewonnen()),
+                Case($(SpielerMatchGewonnen), new SpielerMatchGewonnen()),
+                Case($(GegnerMatchGewonnen), new GegnerMatchGewonnen())
             );
         }
     }

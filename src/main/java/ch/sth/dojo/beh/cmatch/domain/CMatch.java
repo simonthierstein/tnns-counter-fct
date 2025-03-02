@@ -76,5 +76,9 @@ public sealed interface CMatch permits LaufendesMatch, AbgeschlossenesMatch {
     static <T extends CMatch> CMatch narrow(T cMatch) {
         return cMatch;
     }
+
+    static AbgeschlossenesMatch abgeschlossenesMatch() {
+        return new AbgeschlossenesMatch();
+    }
 }
 
