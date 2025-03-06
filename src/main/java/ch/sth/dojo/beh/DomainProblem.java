@@ -1,5 +1,8 @@
 package ch.sth.dojo.beh;
 
+import io.vavr.control.Either;
+import java.util.function.Function;
+
 public interface DomainProblem {
 
     DomainProblem spielerPunktetFehlgeschlagen = new SpielerPunktetFehlgeschlagen();
@@ -51,6 +54,10 @@ public interface DomainProblem {
 
     record NullValueNotValid() implements DomainProblem {
 
+    }
+
+    static <T> Function<T, Either<DomainProblem, T>> asLeft(DomainProblem domainProblem) {
+        return t -> Either.left(domainProblem);
     }
 
 }
