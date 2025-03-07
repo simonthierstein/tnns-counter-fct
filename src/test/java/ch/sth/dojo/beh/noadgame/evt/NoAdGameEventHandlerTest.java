@@ -1,15 +1,9 @@
 package ch.sth.dojo.beh.noadgame.evt;
 
-import ch.sth.dojo.beh.evt.DomainEvent;
-import ch.sth.dojo.beh.evt.GegnerPunktGewonnen;
-import ch.sth.dojo.beh.evt.SpielerPunktGewonnen;
+import static ch.sth.dojo.beh.noadgame.TestParsingUtils.parseEvent;
+import static ch.sth.dojo.beh.noadgame.TestParsingUtils.parseTennisToNoAdGame;
 import ch.sth.dojo.beh.noadgame.domain.NoAdGame;
-import static io.vavr.API.$;
-import static io.vavr.API.Case;
-import static io.vavr.API.Match;
 import io.vavr.Tuple;
-import io.vavr.collection.List;
-import java.util.Arrays;
 import java.util.function.Function;
 import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -34,7 +28,7 @@ class NoAdGameEventHandlerTest {
     )
     void handleEvent(String score, String event, Integer expectedSpieler, Integer expectedGegner) {
         var fixture = Tuple.of(score, event, expectedSpieler, expectedGegner)
-            .map(parseTennisToCommandDomain(), parseEvent(), Function.identity(), Function.identity());
+            .map(parseTennisToNoAdGame(), parseEvent(), Function.identity(), Function.identity());
 
         var res = NoAdGameEventHandler.handleEvent(fixture._1, fixture._2);
 
@@ -42,35 +36,5 @@ class NoAdGameEventHandlerTest {
 
     }
 
-    private Function<String, DomainEvent> parseEvent() {
-        return str -> Match(str).of(
-            Case($("SpielerPunktGewonnen"), new SpielerPunktGewonnen()),
-            Case($("GegnerPunktGewonnen"), new GegnerPunktGewonnen())
-        );
-    }
-
-    private DomainEvent event() {
-        return null;
-    }
-
-    private NoAdGame state() {
-        return null;
-    }
-
-    private static Function<String, NoAdGame> parseTennisToCommandDomain() {
-        return tennisStr -> List.ofAll(Arrays.stream(tennisStr.split("-")))
-            .map(parseTennisToNumber())
-            .foldLeft(Tuple.of(0, 0), (acc, it) -> acc.update1(it).swap()).apply((sp, ge) ->
-                NoAdGame.of(sp, ge).get());
-    }
-
-    private static Function<String, Integer> parseTennisToNumber() {
-        return str -> Match(str).of(
-            Case($("00"), 0),
-            Case($("15"), 1),
-            Case($("30"), 2),
-            Case($("40"), 3),
-            Case($("GAME"), 4)
-        );
-    }
 }
+

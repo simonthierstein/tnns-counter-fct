@@ -1,6 +1,7 @@
 package ch.sth.dojo.beh.noadgame.domain;
 
 import ch.sth.dojo.beh.DomainProblem;
+import static ch.sth.dojo.beh.PredicateUtils.compose;
 import ch.sth.dojo.beh.shared.domain.Gewinner;
 import ch.sth.dojo.beh.shared.domain.GewinnerVerlierer;
 import ch.sth.dojo.beh.shared.domain.Verlierer;
@@ -17,8 +18,8 @@ public record LaufendesNoAdGame(SpielerPunkte spielerPunkte, GegnerPunkte gegner
         new SpielerPunkte(gewinner.value()), new GegnerPunkte(verlierer.value()));
     private static final Function<GewinnerVerlierer, GewinnerVerlierer> incrementGewinner =
         gewinnerVerlierer -> GewinnerVerlierer.of(new Gewinner(gewinnerVerlierer.gewinner().value() + 1), gewinnerVerlierer.verlierer());
-    public static Predicate<LaufendesNoAdGame> passIfGegnerOnePunktBisCGame = game -> GegnerPunkte.passIfOnePunktBisGame.test(game.gegnerPunkte);
-    public static Predicate<LaufendesNoAdGame> passIfSpielerOnePunktBisCGame = game -> SpielerPunkte.passIfOnePunktBisGame.test(game.spielerPunkte);
+    public static Predicate<LaufendesNoAdGame> passIfGegnerOnePunktBisCGame = compose(GegnerPunkte.passIfOnePunktBisGame, LaufendesNoAdGame::gegnerPunkte);
+    public static Predicate<LaufendesNoAdGame> passIfSpielerOnePunktBisCGame = compose(SpielerPunkte.passIfOnePunktBisGame, LaufendesNoAdGame::spielerPunkte);
 
     public static LaufendesNoAdGame zero() {
         return new LaufendesNoAdGame(SpielerPunkte.zero(), GegnerPunkte.zero());
