@@ -16,7 +16,6 @@ import ch.sth.dojo.beh.evt.SpielerGameGewonnen;
 import ch.sth.dojo.beh.evt.SpielerMatchGewonnen;
 import ch.sth.dojo.beh.evt.SpielerPunktGewonnen;
 import ch.sth.dojo.beh.evt.SpielerSatzGewonnen;
-import io.vavr.Function2;
 import io.vavr.Function3;
 import io.vavr.Tuple;
 import io.vavr.Tuple3;
@@ -40,9 +39,6 @@ public interface RootEventHandler {
             case SpielerMatchGewonnen spielerMatchGewonnen -> spielerMatchGewonnen(prev, spielerMatchGewonnen);
         };
     }
-
-    Function2<Tuple3<CMatch, CSatz, CGame>, CSatz, Tuple3<CMatch, CSatz, CGame>> replaceNextSatz = (prev, nextSatz) -> prev.map2(x -> nextSatz);
-    Function2<Tuple3<CMatch, CSatz, CGame>, CGame, Tuple3<CMatch, CSatz, CGame>> replaceNextGame = (prev, nextGame) -> prev.map3(x -> nextGame);
 
     private static Either<DomainProblem, Tuple3<CMatch, CSatz, CGame>> spielerMatchGewonnen(Tuple3<CMatch, CSatz, CGame> prev, SpielerMatchGewonnen event) {
         return delegateEventHandling(prev, event);
@@ -77,7 +73,7 @@ public interface RootEventHandler {
     }
 
     private static Either<DomainProblem, Tuple3<CMatch, CSatz, CGame>> gegnerPunktGewonnen(final Tuple3<CMatch, CSatz, CGame> prev, final GegnerPunktGewonnen event) {
-        return CGameEventHandler.handleEvent(prev._3, event).map(replaceNextGame.apply(prev));
+        return delegateEventHandling(prev, event);
     }
 
     private static Either<DomainProblem, Tuple3<CMatch, CSatz, CGame>> gegnerGameGewonnen(final Tuple3<CMatch, CSatz, CGame> prev, final GegnerGameGewonnen event) {
