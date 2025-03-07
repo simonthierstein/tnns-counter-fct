@@ -20,6 +20,28 @@ import io.vavr.control.Option;
 
 public class CGameCommand {
 
+    public static Either<DomainProblem, DomainEvent> gegnerGewinntPunkt(final CGame state) {
+        return state.apply(
+            laufendesCGame -> right(gegnerGewinntPunkt(laufendesCGame)),
+            tiebreak -> right(gegnerGewinntPunkt(tiebreak)),
+            abgeschlossenesCGame -> left(DomainProblem.valueNotValid)
+        );
+    }
+
+    private static DomainEvent gegnerGewinntPunkt(final Tiebreak state) {
+        return Option.some(state)
+            .filter(Tiebreak.passIfGegnerOnePunktBisSatz)
+            .map(x -> gegnerGameGewonnen())
+            .getOrElse(gegnerPunktGewonnen());
+    }
+
+    private static DomainEvent gegnerGewinntPunkt(final LaufendesCGame state) {
+        return Option.some(state)
+            .filter(LaufendesCGame.passIfGegnerOnePunktBisCGame)
+            .map(x -> gegnerGameGewonnen())
+            .getOrElse(gegnerPunktGewonnen());
+    }
+
     public static Either<DomainProblem, DomainEvent> spielerGewinntPunkt(CGame state) {
         return state.apply(
             laufendesCGame -> right(spielerGewinntPunkt(laufendesCGame)),
