@@ -13,7 +13,6 @@ import ch.sth.dojo.beh.evt.GegnerGameGewonnen;
 import ch.sth.dojo.beh.evt.GegnerPunktGewonnen;
 import ch.sth.dojo.beh.evt.SpielerGameGewonnen;
 import ch.sth.dojo.beh.evt.SpielerPunktGewonnen;
-import ch.sth.dojo.beh.evt.SpielerSatzGewonnen;
 import io.vavr.control.Either;
 import static io.vavr.control.Either.left;
 import static io.vavr.control.Either.right;
@@ -32,8 +31,8 @@ public class CGameCommand {
     private static DomainEvent spielerGewinntPunkt(final Tiebreak state) {
         return Option.some(state)
             .filter(Tiebreak.passIfSpielerOnePunktBisSatz)
-            .map(x -> spielerPunktGewonnen())
-            .getOrElse(spielerSatzGewonnen());
+            .map(x -> spielerGameGewonnen())
+            .getOrElse(spielerPunktGewonnen());
     }
 
     private static DomainEvent spielerGewinntPunkt(final LaufendesCGame state) {
@@ -41,10 +40,6 @@ public class CGameCommand {
             .filter(LaufendesCGame.passIfSpielerOnePunktBisCGame)
             .map(x -> spielerGameGewonnen())
             .getOrElse(spielerPunktGewonnen());
-    }
-
-    private static DomainEvent spielerSatzGewonnen() {
-        return new SpielerSatzGewonnen();
     }
 
     private static DomainEvent spielerGameGewonnen() {

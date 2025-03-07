@@ -4,9 +4,8 @@
 
 package ch.sth.dojo.beh.cgame.domain;
 
-import static ch.sth.dojo.beh.PredicateUtils.compose;
-
 import ch.sth.dojo.beh.DomainProblem;
+import static ch.sth.dojo.beh.PredicateUtils.compose;
 import io.vavr.control.Either;
 import java.util.function.Predicate;
 

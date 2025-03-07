@@ -1,10 +1,9 @@
 package ch.sth.dojo.beh.cgame.domain;
 
+import ch.sth.dojo.beh.DomainProblem;
 import static ch.sth.dojo.beh.PredicateUtils.compose;
 import static ch.sth.dojo.beh.PredicateUtils.eq;
 import static ch.sth.dojo.beh.PredicateUtils.gte;
-
-import ch.sth.dojo.beh.DomainProblem;
 import io.vavr.Predicates;
 import io.vavr.control.Either;
 import io.vavr.control.Option;
@@ -32,4 +31,5 @@ public record TiebreakPunkteBisGame(Integer value) {
     TiebreakPunkteBisGame increment() {
         return new TiebreakPunkteBisGame(value + 1);
     }
+
 }
