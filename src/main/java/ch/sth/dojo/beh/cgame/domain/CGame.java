@@ -1,17 +1,16 @@
 package ch.sth.dojo.beh.cgame.domain;
 
+import ch.sth.dojo.beh.DomainProblem;
 import static ch.sth.dojo.beh.cgame.domain.LaufendesCGame.LaufendesCGame;
 import static io.vavr.API.$;
 import static io.vavr.API.Case;
 import static io.vavr.API.Match;
 import static io.vavr.Predicates.instanceOf;
-
-import ch.sth.dojo.beh.DomainProblem;
 import io.vavr.control.Either;
 import io.vavr.control.Option;
 import java.util.function.Function;
 
-public sealed interface CGame permits LaufendesCGame, AbgeschlossenesCGame, Tiebreak {
+public sealed interface CGame permits LaufendesCGame, AbgeschlossenesCGame {
 
     static CGame zero() {
         return LaufendesCGame.zero();
@@ -26,20 +25,17 @@ public sealed interface CGame permits LaufendesCGame, AbgeschlossenesCGame, Tieb
 
     default <T> T apply(
         Function<LaufendesCGame, T> laufendesCGameTFunction,
-        Function<Tiebreak, T> tiebreakTFunction,
         Function<AbgeschlossenesCGame, T> abgeschlossenesCGameTFunction) {
         return Match(this).of(
             Case($(instanceOf(LaufendesCGame.class)), laufendesCGameTFunction),
-            Case($(instanceOf(Tiebreak.class)), tiebreakTFunction),
             Case($(instanceOf(AbgeschlossenesCGame.class)), abgeschlossenesCGameTFunction)
         );
     }
 
     static <T> T apply(CGame target,
         Function<LaufendesCGame, T> laufendesCGameTFunction,
-        Function<Tiebreak, T> tiebreakTFunction,
         Function<AbgeschlossenesCGame, T> abgeschlossenesCGameTFunction) {
-        return target.apply(laufendesCGameTFunction, tiebreakTFunction, abgeschlossenesCGameTFunction);
+        return target.apply(laufendesCGameTFunction, abgeschlossenesCGameTFunction);
     }
 
 }

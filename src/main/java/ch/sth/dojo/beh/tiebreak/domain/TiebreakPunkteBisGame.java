@@ -1,4 +1,4 @@
-package ch.sth.dojo.beh.cgame.domain;
+package ch.sth.dojo.beh.tiebreak.domain;
 
 import ch.sth.dojo.beh.DomainProblem;
 import static ch.sth.dojo.beh.PredicateUtils.compose;

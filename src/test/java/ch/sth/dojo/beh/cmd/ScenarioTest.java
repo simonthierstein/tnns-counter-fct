@@ -1,13 +1,6 @@
 package ch.sth.dojo.beh.cmd;
 
 import static ch.sth.dojo.beh.Condition.condition;
-import static ch.sth.dojo.beh.cmd.ScenarioTest.EventTag.eventTagToEvent;
-import static io.vavr.API.$;
-import static io.vavr.API.Case;
-import static io.vavr.API.Match;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertAll;
-
 import ch.sth.dojo.beh.DomainProblem;
 import ch.sth.dojo.beh.RootEventHandler;
 import ch.sth.dojo.beh.cgame.domain.AbgeschlossenesCGame;
@@ -15,8 +8,8 @@ import ch.sth.dojo.beh.cgame.domain.CGame;
 import ch.sth.dojo.beh.cgame.domain.GegnerPunkteBisGame;
 import ch.sth.dojo.beh.cgame.domain.LaufendesCGame;
 import ch.sth.dojo.beh.cgame.domain.SpielerPunkteBisGame;
-import ch.sth.dojo.beh.cgame.domain.Tiebreak;
 import ch.sth.dojo.beh.cmatch.domain.CMatch;
+import static ch.sth.dojo.beh.cmd.ScenarioTest.EventTag.eventTagToEvent;
 import ch.sth.dojo.beh.csatz.domain.AbgeschlossenerCSatz;
 import ch.sth.dojo.beh.csatz.domain.CSatz;
 import ch.sth.dojo.beh.csatz.domain.LaufenderCSatz;
@@ -29,11 +22,18 @@ import ch.sth.dojo.beh.evt.SpielerGameGewonnen;
 import ch.sth.dojo.beh.evt.SpielerMatchGewonnen;
 import ch.sth.dojo.beh.evt.SpielerPunktGewonnen;
 import ch.sth.dojo.beh.evt.SpielerSatzGewonnen;
+import ch.sth.dojo.beh.matchstate.GameMatchState;
+import ch.sth.dojo.beh.matchstate.MatchState;
+import static ch.sth.dojo.beh.matchstate.MatchState.gameMatchState;
+import static ch.sth.dojo.beh.matchstate.MatchState.tiebreakMatchState;
+import ch.sth.dojo.beh.tiebreak.domain.Tiebreak;
+import static io.vavr.API.$;
+import static io.vavr.API.Case;
+import static io.vavr.API.Match;
 import io.vavr.Function1;
 import io.vavr.Function3;
 import io.vavr.Predicates;
 import io.vavr.Tuple;
-import io.vavr.Tuple3;
 import io.vavr.Tuple6;
 import io.vavr.Tuple8;
 import io.vavr.collection.List;
@@ -41,23 +41,17 @@ import io.vavr.control.Either;
 import io.vavr.control.Option;
 import java.util.Arrays;
 import java.util.function.Function;
+import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.junit.jupiter.params.provider.ValueSource;
 
 class ScenarioTest {
 
     @ParameterizedTest
     @CsvSource(
         {
-            "GegnerPunktet, 00-40, 6-5, 0-0, GegnerGameGewonnen, TB0-0, 6-6, 0-0",
-            "GegnerPunktet, TB0-6, 6-6, 0-0, GegnerSatzGewonnen, TB0-7, 0-0, 0-1",
-            "SpielerPunktet, TB6-6, 6-6, 0-0, SpielerPunktGewonnen, TB7-6, 6-6, 0-0",
-            "SpielerPunktet, TB7-7, 6-6, 0-0, SpielerPunktGewonnen, TB8-7, 6-6, 0-0",
-            "SpielerPunktet, TB5-5, 6-6, 0-0, SpielerPunktGewonnen, TB6-5, 6-6, 0-0",
-            "GegnerPunktet, TB6-5, 6-6, 0-0, GegnerPunktGewonnen, TB6-6, 6-6, 0-0",
-            "SpielerPunktet, TB7-6, 6-6, 0-0, SpielerSatzGewonnen, TB8-6, 0-0, 1-0",
+            //            "GegnerPunktet, 00-40, 6-5, 0-0, GegnerGameGewonnen, TB0-0, 6-6, 0-0",
             "SpielerPunktet, 40-00, 4-1, 0-0, SpielerGameGewonnen, 00-00, 5-1, 0-0",
             "SpielerPunktet, 30-00, 4-1, 0-0, SpielerPunktGewonnen, 40-00, 4-1, 0-0",
             "SpielerPunktet, 30-30, 4-1, 0-0, SpielerPunktGewonnen, 40-30, 4-1, 0-0",
@@ -78,9 +72,59 @@ class ScenarioTest {
     )
     void scenario3_laufenderSatz(String cmd, String prevGame, String prevSatz, String prevMatch, String evt, String nextGame, String nextSatz, String nextMatch) {
         final Tuple8<String, String, String, String, String, String, String, String> tupled = Tuple.of(cmd, prevGame, prevSatz, prevMatch, evt, nextGame, nextSatz, nextMatch);
-        var psc = tupled.map(parseCommand(), parseState(), parseSatzState(), parseMatchState(), parseEvent(), parseState(), parseSatzState(), parseMatchState())
+        var psc = tupled.map(parseCommand(), parseGameState(), parseSatzState(), parseMatchState(), parseEvent(), parseGameState(), parseSatzState(), parseMatchState())
             .apply((domainCommand, game, satz, match, event, game2, satz2, match2) ->
-                Tuple.of(domainCommand, State.bind.apply(match, satz, game), event, State.bind.apply(match2, satz2, game2)))
+                Tuple.of(domainCommand, State.bindGame.apply(match, satz, game), event, State.bindGame.apply(match2, satz2, game2)))
+            .apply(PartialScenarioConfig::PartialScenarioConfig);
+
+        var result = applyCommand(psc);
+
+        assertThat(result.isRight())
+            .withFailMessage(result::getLeft)
+            .isTrue();
+
+    }
+
+    @ParameterizedTest
+    @CsvSource(
+        {
+            //            "GegnerPunktet, 00-40, 6-5, 0-0, GegnerGameGewonnen, TB0-0, 6-6, 0-0",
+            "GegnerPunktet, TB0-6, 6-6, 0-0, GegnerSatzGewonnen, TB0-7, 0-0, 0-1",
+            "SpielerPunktet, TB6-6, 6-6, 0-0, SpielerPunktGewonnen, TB7-6, 6-6, 0-0",
+            "SpielerPunktet, TB7-7, 6-6, 0-0, SpielerPunktGewonnen, TB8-7, 6-6, 0-0",
+            "SpielerPunktet, TB5-5, 6-6, 0-0, SpielerPunktGewonnen, TB6-5, 6-6, 0-0",
+            "GegnerPunktet, TB6-5, 6-6, 0-0, GegnerPunktGewonnen, TB6-6, 6-6, 0-0",
+            "SpielerPunktet, TB7-6, 6-6, 0-0, SpielerSatzGewonnen, TB8-6, 0-0, 1-0",
+            "SpielerPunktet, TB7-6, 6-6, 1-0, SpielerMatchGewonnen, TB8-6, SATZ, MATCH",
+        }
+    )
+    void scenario3_laufenderSatzTiebreak(String cmd, String prevGame, String prevSatz, String prevMatch, String evt, String nextGame, String nextSatz, String nextMatch) {
+        final Tuple8<String, String, String, String, String, String, String, String> tupled = Tuple.of(cmd, prevGame, prevSatz, prevMatch, evt, nextGame, nextSatz, nextMatch);
+        var psc = tupled.map(parseCommand(), parseTiebreakState(), parseSatzState(), parseMatchState(), parseEvent(), parseTiebreakState(), parseSatzState(), parseMatchState())
+            .apply((domainCommand, game, satz, match, event, game2, satz2, match2) ->
+                Tuple.of(domainCommand, State.bindTiebreak.apply(match, satz, game), event, State.bindTiebreak.apply(match2, satz2, game2)))
+            .apply(PartialScenarioConfig::PartialScenarioConfig);
+
+        var result = applyCommand(psc);
+
+        assertThat(result.isRight())
+            .withFailMessage(result::getLeft)
+            .isTrue();
+
+    }
+
+    @ParameterizedTest
+    @CsvSource(
+        {
+            "GegnerPunktet, 00-40, 6-5, 0-0, GegnerGameGewonnen, TB0-0, 6-6, 0-0",
+            "SpielerPunktet, 40-00, 5-6, 0-0, SpielerGameGewonnen, TB0-0, 6-6, 0-0",
+        }
+    )
+    void scenario3_laufenderSatzUebergangTiebreak(String cmd, String prevGame, String prevSatz, String prevMatch, String evt, String nextGame, String nextSatz, String nextMatch) {
+        final Tuple8<String, String, String, String, String, String, String, String> tupled = Tuple.of(cmd, prevGame, prevSatz, prevMatch, evt, nextGame, nextSatz, nextMatch);
+        var psc = tupled.map(parseCommand(), parseGameState(), parseSatzState(), parseMatchState(), parseEvent(), parseTiebreakState(), parseSatzState(), parseMatchState())
+            .apply((domainCommand, game, satz, match, event, game2, satz2, match2) ->
+                Tuple.of(domainCommand, State.bindGame.apply(match, satz, game), event, State.bindTiebreak.apply(match2, satz2, game2)))
             .apply(PartialScenarioConfig::PartialScenarioConfig);
 
         var result = applyCommand(psc);
@@ -95,42 +139,6 @@ class ScenarioTest {
         return CMatch.zero();
     }
 
-    @ParameterizedTest(name = "Spieler gewinnt game mit gegner score {0}🥸")
-    @ValueSource(strings = {"00", "15", "30"})
-    void spielerGewinntGame_standard(String other) {
-
-        // TODO sth/22.02.2025 : deklarativer mit command abfolge
-
-        final Tuple3<CMatch, CSatz, CGame> prev = SatzGameTupleWith();
-        final DomainCommand gegnerPunktetCommand = GegnerPunktetWith();
-
-        final Either<DomainProblem, Tuple3<CMatch, CSatz, CGame>> gegnerPointsApplied = List.of(other)
-            .flatMap(str -> Match(str).of(
-                Case($("00"), List.empty()),
-                Case($("15"), List.range(0, 1)),
-                Case($("30"), List.range(0, 2))
-            ))
-            .map(x -> gegnerPunktetStateTransfer(gegnerPunktetCommand))
-            .foldLeft(Either.right(prev), Either::flatMap);
-
-        final DomainCommand spielerPunkteCommand = SpielerPunktetWith();
-
-        final Either<DomainProblem, Tuple3<CMatch, CSatz, CGame>> result = List.range(0, 4)
-            .foldLeft(gegnerPointsApplied,
-                (acc, it) ->
-                    acc.flatMap(prevState ->
-                        DomainCommand.handleCommand(prevState, spielerPunkteCommand).flatMap(evt -> RootEventHandler.handleEvent(prevState, evt))));
-
-        assertThat(result.isRight()).isTrue();
-        result.forEach(t -> assertAll(
-            () -> assertThat(t._2).isEqualTo(SatzWith(1, 0)),
-            () -> assertThat(t._3).isEqualTo(LaufendesCGame.zero())
-        ));
-
-        System.out.println(other);
-
-    }
-
     @ParameterizedTest
     @CsvSource(
         {
@@ -139,13 +147,13 @@ class ScenarioTest {
     )
     void scenario2_spielerGewinntGameUndNaechsterPunkt_laufenderSatz(String cmd, String prevGame, String prevSatz, String evt, String nextGame, String nextSatz) {
         final Tuple6<String, String, String, String, String, String> tupled = Tuple.of(cmd, prevGame, prevSatz, evt, nextGame, nextSatz);
-        var psc = tupled.map(parseCommand(), parseState(), parseSatzState(), parseEvent(), parseState(), parseSatzState())
+        var psc = tupled.map(parseCommand(), parseGameState(), parseSatzState(), parseEvent(), parseGameState(), parseSatzState())
             .apply((domainCommand, game, satz, event, game2, satz2) ->
-                Tuple.of(domainCommand, State.bind.apply(match(), satz, game), event, State.bind.apply(match(), satz2, game2)))
+                Tuple.of(domainCommand, State.bindGame.apply(match(), satz, game), event, State.bindGame.apply(match(), satz2, game2)))
             .apply(PartialScenarioConfig::PartialScenarioConfig);
 
         var result = applyCommand(psc)
-            .map(state -> PartialScenarioConfig.PartialScenarioConfig(new GegnerPunktet(), state, new GegnerPunktGewonnen(), State.bind.apply(match(), CSatz.of(0, 1).get(), CGame.of(4, 3).get())))
+            .map(state -> PartialScenarioConfig.PartialScenarioConfig(new GegnerPunktet(), state, new GegnerPunktGewonnen(), State.bindGame.apply(match(), CSatz.of(0, 1).get(), CGame.of(4, 3).get())))
             .flatMap(ScenarioTest::applyCommand);
 
         assertThat(result.isRight())
@@ -154,6 +162,18 @@ class ScenarioTest {
         assertThat(result.get().game)
             .isEqualTo(CGame.of(4, 3).get());
 
+    }
+
+    private Function<? super String, Tiebreak> parseTiebreakState() {
+        return input -> Option.some(input)
+            .map(parseTennisToTiebreakCommandDomain())
+            .get();
+    }
+
+    private Function<String, CGame> parseGameState() {
+        return input -> Option.some(input)
+            .map(parseTennisToCommandDomain())
+            .get();
     }
 
     private Function<String, CSatz> parseSatzState() {
@@ -203,12 +223,7 @@ class ScenarioTest {
                 Case($(GegnerMatchGewonnen), new GegnerMatchGewonnen())
             );
         }
-    }
 
-    private Function<String, CGame> parseState() {
-        return input -> Option.some(input)
-            .map(parseTennisToCommandDomain())
-            .get();
     }
 
     private static Function<String, CGame> parseTennisToCommandDomain() {
@@ -231,7 +246,12 @@ class ScenarioTest {
             Case($("AD-DA"), Tuple.of(1, 3).apply(CGame::of)),
             Case($("DA-AD"), Tuple.of(3, 1).apply(CGame::of)),
             Case($("DEUCE"), Tuple.of(2, 2).apply(CGame::of)),
-            Case($("GAME"), Either.right(new AbgeschlossenesCGame())),
+            Case($("GAME"), Either.right(new AbgeschlossenesCGame()))
+        ).get();
+    }
+
+    private static Function<String, Tiebreak> parseTennisToTiebreakCommandDomain() {
+        return tennisStr -> Match(tennisStr).of(
             // Tiebreak
             Case($("TB0-0"), Tuple.of(7, 7).apply(Tiebreak::of)),
             Case($("TB0-6"), Tuple.of(8, 1).apply(Tiebreak::of)),
@@ -257,7 +277,7 @@ class ScenarioTest {
     }
 
     private static Either<String, State> applyCommand(final PartialScenarioConfig scenarioConfig) {
-        final Tuple3<CMatch, CSatz, CGame> prevState = PreviousState.tuple1.apply(scenarioConfig.previousState);
+        final MatchState prevState = PreviousState.tuple1.apply(scenarioConfig.previousState);
         return DomainCommand.handleCommand(prevState,
                 scenarioConfig.action.domainCommand)
             .peek(evt -> assertThat(evt).withFailMessage("Command failed: %s", scenarioConfig).isEqualTo(scenarioConfig.expectedEvent.event))
@@ -280,17 +300,24 @@ class ScenarioTest {
 
     }
 
-    record State(CMatch match, CSatz satz, CGame game) {
+    record State(CMatch match, CSatz satz, CGame game, Tiebreak tiebreak) {// TODO sth/10.03.2025 : handle tiebreak/game
 
-        static Function3<CMatch, CSatz, CGame, State> bind = State::new;
-        static Function1<State, Tuple3<CMatch, CSatz, CGame>> toTuple = State::tuple;
+        static Function3<CMatch, CSatz, CGame, State> bindGame = (match1, satz1, game1) -> new State(match1, satz1, game1, null);
+        static Function3<CMatch, CSatz, Tiebreak, State> bindTiebreak = (match1, satz1, tiebreak1) -> new State(match1, satz1, null, tiebreak1);
+        static Function1<State, MatchState> toTuple = State::tuple;
 
-        static State untuple(Tuple3<CMatch, CSatz, CGame> stateTuple) {
-            return stateTuple.apply(State::new);
+        static State untuple(MatchState stateTuple) {
+            return stateTuple.apply(
+                state -> new State(state.nextMatch(), state.nextSatz(), state.nextGame(), null),
+                state -> new State(state.nextMatch(), state.nextSatz(), null, state.tiebreak())
+            );
         }
 
-        private static Tuple3<CMatch, CSatz, CGame> tuple(State input) {
-            return Tuple.of(input.match, input.satz, input.game);
+        private static MatchState tuple(State input) {
+            return Match(input).of(
+                Case($(x -> x.game != null), x -> gameMatchState(input.match, input.satz, input.game)),
+                Case($(), x -> tiebreakMatchState(input.match, input.satz, input.tiebreak))
+            );
         }
     }
 
@@ -304,7 +331,7 @@ class ScenarioTest {
 
         static Function<State, PreviousState> bind = PreviousState::new;
         static Function<PreviousState, State> unbind = PreviousState::state;
-        static Function<PreviousState, Tuple3<CMatch, CSatz, CGame>> tuple1 = unbind.andThen(State.toTuple);
+        static Function<PreviousState, MatchState> tuple1 = unbind.andThen(State.toTuple);
     }
 
     record ExpectedEvent(DomainEvent event) {
@@ -327,10 +354,10 @@ class ScenarioTest {
         return CSatz.of(spieler, gegner).get();
     }
 
-    private static Function<Tuple3<CMatch, CSatz, CGame>, Either<DomainProblem, Tuple3<CMatch, CSatz, CGame>>> gegnerPunktetStateTransfer(final DomainCommand command) {
-        return (Tuple3<CMatch, CSatz, CGame> prevState) ->
-            DomainCommand.handleCommand(prevState, command).flatMap(evt -> RootEventHandler.handleEvent(prevState, evt));
-    }
+    //    private static Function<MatchState, Either<DomainProblem, MatchState>> gegnerPunktetStateTransfer(final DomainCommand command) {
+    //        return (MatchState prevState) ->
+    //            DomainCommand.handleCommand(prevState, command).flatMap(evt -> RootEventHandler.handleEvent(prevState, evt));
+    //    }
 
     private static CSatz LaufenderCSatzWith(final int spieler, final int gegner) {
         return CSatz.of(spieler, gegner).get();
@@ -340,16 +367,12 @@ class ScenarioTest {
         return CGame.of(spieler, gegner).get();
     }
 
-    private static Tuple3<CMatch, CSatz, CGame> SatzGameTupleWith() {
-        return Tuple.of(match(), CSatz.zero(), CGame.zero());
+    private static MatchState SatzGameTupleWith() {
+        return gameMatchState(match(), CSatz.zero(), CGame.zero());
     }
 
     private static DomainCommand GegnerPunktetWith() {
         return new GegnerPunktet();
-    }
-
-    private static DomainCommand SpielerPunktetWith() {
-        return new SpielerPunktet();
     }
 
     @Test
@@ -380,8 +403,8 @@ class ScenarioTest {
         assertThat(domainEvents.get()).isInstanceOf(SpielerPunktGewonnen.class);
     }
 
-    private static Tuple3<CMatch, CSatz, CGame> zeroGame() {
-        return Tuple.of(match(), LaufenderCSatz.zero(), LaufendesCGame.zero());
+    private static GameMatchState zeroGame() {
+        return gameMatchState(CMatch.zero(), LaufenderCSatz.zero(), LaufendesCGame.zero());
     }
 
     @Test
@@ -392,8 +415,8 @@ class ScenarioTest {
         assertThat(domainEvents.get()).isInstanceOf(SpielerGameGewonnen.class);
     }
 
-    private static Tuple3<CMatch, CSatz, CGame> laufendesGameWith(final int spielerValue, final int gegnerValue) {
-        return Tuple.of(match(), LaufenderCSatz.zero(), new LaufendesCGame(new SpielerPunkteBisGame(spielerValue), new GegnerPunkteBisGame(gegnerValue)));
+    private static MatchState laufendesGameWith(final int spielerValue, final int gegnerValue) {
+        return gameMatchState(match(), LaufenderCSatz.zero(), new LaufendesCGame(new SpielerPunkteBisGame(spielerValue), new GegnerPunkteBisGame(gegnerValue)));
     }
 
     @Test

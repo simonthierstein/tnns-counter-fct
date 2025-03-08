@@ -1,7 +1,6 @@
 package ch.sth.dojo.beh;
 
 import ch.sth.dojo.beh.cgame.domain.CGame;
-import ch.sth.dojo.beh.cgame.domain.Tiebreak;
 import ch.sth.dojo.beh.cgame.evt.CGameEventHandler;
 import ch.sth.dojo.beh.cmatch.domain.CMatch;
 import ch.sth.dojo.beh.cmatch.evt.CMatchEventHandler;
@@ -16,18 +15,14 @@ import ch.sth.dojo.beh.evt.SpielerGameGewonnen;
 import ch.sth.dojo.beh.evt.SpielerMatchGewonnen;
 import ch.sth.dojo.beh.evt.SpielerPunktGewonnen;
 import ch.sth.dojo.beh.evt.SpielerSatzGewonnen;
-import io.vavr.Function3;
-import io.vavr.Tuple;
-import io.vavr.Tuple3;
+import ch.sth.dojo.beh.matchstate.MatchState;
+import ch.sth.dojo.beh.tiebreak.TiebreakEventHandler;
+import ch.sth.dojo.beh.tiebreak.domain.Tiebreak;
 import io.vavr.control.Either;
 
 public interface RootEventHandler {
 
-    Function3<Either<DomainProblem, CMatch>, Either<DomainProblem, CSatz>, Either<DomainProblem, CGame>, Either<DomainProblem, Tuple3<CMatch, CSatz, CGame>>> tuple3EithersToEitherTuple3 =
-        (eith1, eith2, eith3) ->
-            eith1.flatMap(match -> eith2.flatMap(satz -> eith3.map(game -> Tuple.of(match, satz, game))));
-
-    static Either<DomainProblem, Tuple3<CMatch, CSatz, CGame>> handleEvent(Tuple3<CMatch, CSatz, CGame> prev, DomainEvent event) {
+    static Either<DomainProblem, MatchState> handleEvent(MatchState prev, DomainEvent event) {
         return switch (event) {
             case GegnerPunktGewonnen gegnerPunktGewonnen -> gegnerPunktGewonnen(prev, gegnerPunktGewonnen);
             case GegnerGameGewonnen gegnerGameGewonnen -> gegnerGameGewonnen(prev, gegnerGameGewonnen);
@@ -40,51 +35,64 @@ public interface RootEventHandler {
         };
     }
 
-    private static Either<DomainProblem, Tuple3<CMatch, CSatz, CGame>> spielerMatchGewonnen(Tuple3<CMatch, CSatz, CGame> prev, SpielerMatchGewonnen event) {
+    private static Either<DomainProblem, MatchState> spielerMatchGewonnen(MatchState prev, SpielerMatchGewonnen event) {
         return delegateEventHandling(prev, event);
     }
 
-    private static Either<DomainProblem, Tuple3<CMatch, CSatz, CGame>> spielerSatzGewonnen(Tuple3<CMatch, CSatz, CGame> prev, SpielerSatzGewonnen event) {
+    private static Either<DomainProblem, MatchState> spielerSatzGewonnen(MatchState prev, SpielerSatzGewonnen event) {
         return delegateEventHandling(prev, event);
     }
 
-    private static Either<DomainProblem, Tuple3<CMatch, CSatz, CGame>> spielerPunktGewonnenEvt(Tuple3<CMatch, CSatz, CGame> prev, SpielerPunktGewonnen event) {
+    private static Either<DomainProblem, MatchState> spielerPunktGewonnenEvt(MatchState prev, SpielerPunktGewonnen event) {
         return delegateEventHandling(prev, event);
     }
 
-    private static Either<DomainProblem, Tuple3<CMatch, CSatz, CGame>> spielerGameGewonnen(Tuple3<CMatch, CSatz, CGame> prev, SpielerGameGewonnen event) {
+    private static Either<DomainProblem, MatchState> spielerGameGewonnen(MatchState prev, SpielerGameGewonnen event) {
         return delegateEventHandling(prev, event)
-            .map(t3 -> t3.apply(RootEventHandler::gameGewonnenTiebreakSwitch));
+            .map(next -> next.apply(
+                gameMatchState -> gameGewonnenTiebreakSwitch(gameMatchState.nextMatch(), gameMatchState.nextSatz(), gameMatchState.nextGame()),
+                tiebreakMatchState -> tiebreakMatchState
+            ));
     }
 
-    private static Either<DomainProblem, Tuple3<CMatch, CSatz, CGame>> gegnerMatchGewonnen(Tuple3<CMatch, CSatz, CGame> prev, GegnerMatchGewonnen event) {
+    private static Either<DomainProblem, MatchState> gegnerMatchGewonnen(MatchState prev, GegnerMatchGewonnen event) {
         return delegateEventHandling(prev, event);
     }
 
-    private static Either<DomainProblem, Tuple3<CMatch, CSatz, CGame>> delegateEventHandling(final Tuple3<CMatch, CSatz, CGame> prev, final DomainEvent event) {
-        return prev.map1(prevMatch -> CMatchEventHandler.handleEvent(prevMatch, event))
-            .map2(prevSatz -> CSatzEventHandler.handleEvent(prevSatz, event))
-            .map3(prevGame -> CGameEventHandler.handleEvent(prevGame, event))
-            .apply(tuple3EithersToEitherTuple3);
+    private static Either<DomainProblem, MatchState> delegateEventHandling(final MatchState prev, final DomainEvent event) {
+        return Either.narrow(prev.apply(
+            prevGameMatchState -> prevGameMatchState.apply(
+                prevMatch -> CMatchEventHandler.handleEvent(prevMatch, event),
+                prevSatz -> CSatzEventHandler.handleEvent(prevSatz, event),
+                prevGame -> CGameEventHandler.handleEvent(prevGame, event)),
+            tiebreakMatchState -> tiebreakMatchState.apply(
+                prevMatch -> CMatchEventHandler.handleEvent(prevMatch, event),
+                prevSatz -> CSatzEventHandler.handleEvent(prevSatz, event),
+                prevTiebreak -> TiebreakEventHandler.handleEvent(prevTiebreak, event)
+            )
+        ));
     }
 
-    private static Either<DomainProblem, Tuple3<CMatch, CSatz, CGame>> gegnerSatzGewonnen(final Tuple3<CMatch, CSatz, CGame> prev, final GegnerSatzGewonnen event) {
+    private static Either<DomainProblem, MatchState> gegnerSatzGewonnen(final MatchState prev, final GegnerSatzGewonnen event) {
         return delegateEventHandling(prev, event);
     }
 
-    private static Either<DomainProblem, Tuple3<CMatch, CSatz, CGame>> gegnerPunktGewonnen(final Tuple3<CMatch, CSatz, CGame> prev, final GegnerPunktGewonnen event) {
+    private static Either<DomainProblem, MatchState> gegnerPunktGewonnen(final MatchState prev, final GegnerPunktGewonnen event) {
         return delegateEventHandling(prev, event);
     }
 
-    private static Either<DomainProblem, Tuple3<CMatch, CSatz, CGame>> gegnerGameGewonnen(final Tuple3<CMatch, CSatz, CGame> prev, final GegnerGameGewonnen event) {
+    private static Either<DomainProblem, MatchState> gegnerGameGewonnen(final MatchState prev, final GegnerGameGewonnen event) {
         return delegateEventHandling(prev, event)
-            .map(next -> next.apply(RootEventHandler::gameGewonnenTiebreakSwitch));
+            .map(next -> next.apply(
+                gameMatchState -> gameGewonnenTiebreakSwitch(gameMatchState.nextMatch(), gameMatchState.nextSatz(), gameMatchState.nextGame()),
+                tiebreakMatchState -> tiebreakMatchState
+            ));
     }
 
-    private static Tuple3<CMatch, CSatz, CGame> gameGewonnenTiebreakSwitch(final CMatch nextMatch, final CSatz nextSatz, final CGame nextGame) {
+    private static MatchState gameGewonnenTiebreakSwitch(final CMatch nextMatch, final CSatz nextSatz, final CGame nextGame) {
         return Condition.condition(nextSatz, CSatz::isSixAll,
-            satz -> Tuple.of(nextMatch, satz, Tiebreak.zero()),
-            satz -> Tuple.of(nextMatch, nextSatz, nextGame));
+            satz -> MatchState.tiebreakMatchState(nextMatch, satz, Tiebreak.zero()),
+            satz -> MatchState.gameMatchState(nextMatch, nextSatz, nextGame));
     }
 
 }

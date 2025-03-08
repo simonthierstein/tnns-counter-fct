@@ -4,11 +4,9 @@
 
 package ch.sth.dojo.beh.cgame.evt;
 
-import static ch.sth.dojo.beh.cgame.evt.CGameEventHandler.abgeschlossenToLeft;
-import static ch.sth.dojo.beh.cgame.evt.CGameEventHandler.tiebreakToLeft;
-
 import ch.sth.dojo.beh.DomainProblem;
 import ch.sth.dojo.beh.cgame.domain.CGame;
+import static ch.sth.dojo.beh.cgame.evt.CGameEventHandler.abgeschlossenToLeft;
 import ch.sth.dojo.beh.evt.SpielerDomainEvent;
 import ch.sth.dojo.beh.evt.SpielerGameGewonnen;
 import ch.sth.dojo.beh.evt.SpielerMatchGewonnen;
@@ -30,7 +28,6 @@ public interface SpielerEventHandler {
     private static Either<DomainProblem, CGame> handleEvent(CGame state, SpielerMatchGewonnen evt) {
         return state.apply(
             LaufendesCGameEventHandler::spielerMatchGewonnen,
-            TiebreakEventHandler::spielerMatchGewonnen,
             abgeschlossenToLeft
         );
     }
@@ -38,7 +35,6 @@ public interface SpielerEventHandler {
     private static Either<DomainProblem, CGame> handleEvent(CGame state, SpielerSatzGewonnen evt) {
         return state.apply(
             LaufendesCGameEventHandler::spielerSatzGewonnen,
-            TiebreakEventHandler::spielerSatzGewonnen,
             abgeschlossenToLeft
         );
     }
@@ -46,7 +42,6 @@ public interface SpielerEventHandler {
     private static Either<DomainProblem, CGame> handleEvent(CGame state, SpielerGameGewonnen evt) {
         return state.apply(
             LaufendesCGameEventHandler::spielerGameGewonnen,
-            tiebreakToLeft,
             abgeschlossenToLeft
         );
     }
@@ -54,7 +49,6 @@ public interface SpielerEventHandler {
     private static Either<DomainProblem, CGame> handleEvent(CGame state, SpielerPunktGewonnen evt) {
         return state.apply(
             LaufendesCGameEventHandler::spielerPunktGewonnen,
-            TiebreakEventHandler::spielerPunktGewonnen,
             abgeschlossenToLeft
         );
     }

@@ -1,6 +1,7 @@
 package ch.sth.dojo.beh.cgame.domain;
 
 import ch.sth.dojo.beh.DomainProblem;
+import ch.sth.dojo.beh.tiebreak.domain.Tiebreak;
 import io.vavr.control.Either;
 import static org.assertj.core.api.Assertions.assertThat;
 import org.assertj.core.api.Condition;

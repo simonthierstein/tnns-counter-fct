@@ -9,7 +9,6 @@ import ch.sth.dojo.beh.DomainProblem;
 import ch.sth.dojo.beh.cgame.CGameCommand;
 import ch.sth.dojo.beh.cgame.domain.CGame;
 import ch.sth.dojo.beh.cgame.domain.LaufendesCGame;
-import ch.sth.dojo.beh.cgame.domain.Tiebreak;
 import ch.sth.dojo.beh.cmatch.CMatchCommand;
 import ch.sth.dojo.beh.cmatch.domain.CMatch;
 import ch.sth.dojo.beh.cmatch.domain.LaufendesMatch;
@@ -24,11 +23,13 @@ import ch.sth.dojo.beh.evt.SpielerGameGewonnen;
 import ch.sth.dojo.beh.evt.SpielerMatchGewonnen;
 import ch.sth.dojo.beh.evt.SpielerPunktGewonnen;
 import ch.sth.dojo.beh.evt.SpielerSatzGewonnen;
+import ch.sth.dojo.beh.matchstate.MatchState;
+import ch.sth.dojo.beh.tiebreak.TiebreakCommand;
+import ch.sth.dojo.beh.tiebreak.domain.Tiebreak;
 import static io.vavr.API.$;
 import static io.vavr.API.Case;
 import static io.vavr.API.Match;
 import static io.vavr.Predicates.instanceOf;
-import io.vavr.Tuple3;
 import io.vavr.control.Either;
 import static io.vavr.control.Either.left;
 import static io.vavr.control.Either.right;
@@ -36,12 +37,22 @@ import java.util.function.Function;
 
 public record GegnerPunktet() implements DomainCommand {
 
-    public static Either<DomainProblem, DomainEvent> applyC(Tuple3<CMatch, CSatz, CGame> state, GegnerPunktet cmd) {
-        return state.apply(GegnerPunktet::apply);
+    public static Either<DomainProblem, DomainEvent> applyC(MatchState state, GegnerPunktet cmd) {
+        return state.apply(
+            gameMatchState -> gameMatchState.tupled().apply(GegnerPunktet::apply),
+            tiebreakMatchState -> tiebreakMatchState.tupled().apply(GegnerPunktet::apply)
+        );
     }
 
     private static Either<DomainProblem, DomainEvent> apply(CMatch cMatch, CSatz cSatz, CGame cGame) {
         final Either<DomainProblem, DomainEvent> domainEvents = CGameCommand.gegnerGewinntPunkt(cGame);
+        return domainEvents
+            .flatMap(handleGameEvent(cSatz))
+            .flatMap(handleSatzEvent(cMatch));
+    }
+
+    private static Either<DomainProblem, DomainEvent> apply(CMatch cMatch, CSatz cSatz, Tiebreak cGame) {
+        final Either<DomainProblem, DomainEvent> domainEvents = TiebreakCommand.gegnerGewinntPunkt(cGame);
         return domainEvents
             .flatMap(handleGameEvent(cSatz))
             .flatMap(handleSatzEvent(cMatch));

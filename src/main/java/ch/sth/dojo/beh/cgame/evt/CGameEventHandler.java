@@ -1,16 +1,15 @@
 package ch.sth.dojo.beh.cgame.evt;
 
-import static ch.sth.dojo.beh.DomainProblem.eventNotValid;
-import static io.vavr.control.Either.left;
-
 import ch.sth.dojo.beh.DomainProblem;
+import static ch.sth.dojo.beh.DomainProblem.eventNotValid;
 import ch.sth.dojo.beh.cgame.domain.AbgeschlossenesCGame;
 import ch.sth.dojo.beh.cgame.domain.CGame;
-import ch.sth.dojo.beh.cgame.domain.Tiebreak;
 import ch.sth.dojo.beh.evt.DomainEvent;
 import ch.sth.dojo.beh.evt.GegnerDomainEvent;
 import ch.sth.dojo.beh.evt.SpielerDomainEvent;
+import ch.sth.dojo.beh.tiebreak.domain.Tiebreak;
 import io.vavr.control.Either;
+import static io.vavr.control.Either.left;
 import java.util.function.Function;
 
 public interface CGameEventHandler {
