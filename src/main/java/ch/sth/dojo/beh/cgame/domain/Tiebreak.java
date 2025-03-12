@@ -2,14 +2,14 @@
  * Copyright (C) Schweizerische Bundesbahnen SBB, 2025.
  */
 
-package ch.sth.dojo.beh.tiebreak.domain;
+package ch.sth.dojo.beh.cgame.domain;
 
 import ch.sth.dojo.beh.DomainProblem;
 import static ch.sth.dojo.beh.PredicateUtils.compose;
 import io.vavr.control.Either;
 import java.util.function.Predicate;
 
-public record Tiebreak(TiebreakSpielerPunkteBisGame tiebreakSpielerPunkteBisGame, TiebreakGegnerPunkteBisGame tiebreakGegnerPunkteBisGame) {
+public record Tiebreak(TiebreakSpielerPunkteBisGame tiebreakSpielerPunkteBisGame, TiebreakGegnerPunkteBisGame tiebreakGegnerPunkteBisGame) implements CGame {
 
     public static final Predicate<Tiebreak> passIfGegnerOnePunktBisSatz = compose(TiebreakGegnerPunkteBisGame.eq1, Tiebreak::tiebreakGegnerPunkteBisGame);
     public static final Predicate<Tiebreak> passIfSpielerOnePunktBisSatz = compose(TiebreakSpielerPunkteBisGame.eq1, Tiebreak::tiebreakSpielerPunkteBisGame);

@@ -1,6 +1,7 @@
 package ch.sth.dojo.beh;
 
 import ch.sth.dojo.beh.cgame.domain.CGame;
+import ch.sth.dojo.beh.cgame.domain.Tiebreak;
 import ch.sth.dojo.beh.cgame.evt.CGameEventHandler;
 import ch.sth.dojo.beh.cmatch.domain.CMatch;
 import ch.sth.dojo.beh.cmatch.evt.CMatchEventHandler;
@@ -16,8 +17,6 @@ import ch.sth.dojo.beh.evt.SpielerMatchGewonnen;
 import ch.sth.dojo.beh.evt.SpielerPunktGewonnen;
 import ch.sth.dojo.beh.evt.SpielerSatzGewonnen;
 import ch.sth.dojo.beh.matchstate.MatchState;
-import ch.sth.dojo.beh.tiebreak.TiebreakEventHandler;
-import ch.sth.dojo.beh.tiebreak.domain.Tiebreak;
 import io.vavr.control.Either;
 
 public interface RootEventHandler {
@@ -50,8 +49,7 @@ public interface RootEventHandler {
     private static Either<DomainProblem, MatchState> spielerGameGewonnen(MatchState prev, SpielerGameGewonnen event) {
         return delegateEventHandling(prev, event)
             .map(next -> next.apply(
-                gameMatchState -> gameGewonnenTiebreakSwitch(gameMatchState.nextMatch(), gameMatchState.nextSatz(), gameMatchState.nextGame()),
-                tiebreakMatchState -> tiebreakMatchState
+                gameMatchState -> gameGewonnenTiebreakSwitch(gameMatchState.nextMatch(), gameMatchState.nextSatz(), gameMatchState.nextGame())
             ));
     }
 
@@ -64,12 +62,7 @@ public interface RootEventHandler {
             prevGameMatchState -> prevGameMatchState.apply(
                 prevMatch -> CMatchEventHandler.handleEvent(prevMatch, event),
                 prevSatz -> CSatzEventHandler.handleEvent(prevSatz, event),
-                prevGame -> CGameEventHandler.handleEvent(prevGame, event)),
-            tiebreakMatchState -> tiebreakMatchState.apply(
-                prevMatch -> CMatchEventHandler.handleEvent(prevMatch, event),
-                prevSatz -> CSatzEventHandler.handleEvent(prevSatz, event),
-                prevTiebreak -> TiebreakEventHandler.handleEvent(prevTiebreak, event)
-            )
+                prevGame -> CGameEventHandler.handleEvent(prevGame, event))
         ));
     }
 
@@ -84,14 +77,13 @@ public interface RootEventHandler {
     private static Either<DomainProblem, MatchState> gegnerGameGewonnen(final MatchState prev, final GegnerGameGewonnen event) {
         return delegateEventHandling(prev, event)
             .map(next -> next.apply(
-                gameMatchState -> gameGewonnenTiebreakSwitch(gameMatchState.nextMatch(), gameMatchState.nextSatz(), gameMatchState.nextGame()),
-                tiebreakMatchState -> tiebreakMatchState
+                gameMatchState -> gameGewonnenTiebreakSwitch(gameMatchState.nextMatch(), gameMatchState.nextSatz(), gameMatchState.nextGame())
             ));
     }
 
     private static MatchState gameGewonnenTiebreakSwitch(final CMatch nextMatch, final CSatz nextSatz, final CGame nextGame) {
         return Condition.condition(nextSatz, CSatz::isSixAll,
-            satz -> MatchState.tiebreakMatchState(nextMatch, satz, Tiebreak.zero()),
+            satz -> MatchState.gameMatchState(nextMatch, satz, Tiebreak.zero()),
             satz -> MatchState.gameMatchState(nextMatch, nextSatz, nextGame));
     }
 

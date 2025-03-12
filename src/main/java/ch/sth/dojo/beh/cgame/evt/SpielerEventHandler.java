@@ -28,28 +28,32 @@ public interface SpielerEventHandler {
     private static Either<DomainProblem, CGame> handleEvent(CGame state, SpielerMatchGewonnen evt) {
         return state.apply(
             LaufendesCGameEventHandler::spielerMatchGewonnen,
-            abgeschlossenToLeft
+            abgeschlossenToLeft,
+            TiebreakEventHandler.handleWithNarrow(evt)
         );
     }
 
     private static Either<DomainProblem, CGame> handleEvent(CGame state, SpielerSatzGewonnen evt) {
         return state.apply(
             LaufendesCGameEventHandler::spielerSatzGewonnen,
-            abgeschlossenToLeft
+            abgeschlossenToLeft,
+            TiebreakEventHandler.handleWithNarrow(evt)
         );
     }
 
     private static Either<DomainProblem, CGame> handleEvent(CGame state, SpielerGameGewonnen evt) {
         return state.apply(
             LaufendesCGameEventHandler::spielerGameGewonnen,
-            abgeschlossenToLeft
+            abgeschlossenToLeft,
+            TiebreakEventHandler.handleWithNarrow(evt)
         );
     }
 
     private static Either<DomainProblem, CGame> handleEvent(CGame state, SpielerPunktGewonnen evt) {
         return state.apply(
             LaufendesCGameEventHandler::spielerPunktGewonnen,
-            abgeschlossenToLeft
+            abgeschlossenToLeft,
+            TiebreakEventHandler.handleWithNarrow(evt)
         );
     }
 

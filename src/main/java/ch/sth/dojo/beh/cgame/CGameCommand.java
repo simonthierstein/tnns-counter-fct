@@ -22,7 +22,8 @@ public class CGameCommand {
     public static Either<DomainProblem, DomainEvent> gegnerGewinntPunkt(final CGame state) {
         return state.apply(
             laufendesCGame -> right(gegnerGewinntPunkt(laufendesCGame)),
-            abgeschlossenesCGame -> left(DomainProblem.valueNotValid)
+            abgeschlossenesCGame -> left(DomainProblem.valueNotValid),
+            TiebreakCommand::gegnerGewinntPunkt
         );
     }
 
@@ -36,7 +37,8 @@ public class CGameCommand {
     public static Either<DomainProblem, DomainEvent> spielerGewinntPunkt(CGame state) {
         return state.apply(
             laufendesCGame -> right(spielerGewinntPunkt(laufendesCGame)),
-            abgeschlossenesCGame -> left(DomainProblem.valueNotValid)
+            abgeschlossenesCGame -> left(DomainProblem.valueNotValid),
+            TiebreakCommand::spielerGewinntPunkt
         );
     }
 
