@@ -19,7 +19,7 @@ extra["springShellVersion"] = "3.2.3"
 
 dependencies {
     implementation("io.vavr:vavr:0.10.4")
-    implementation("org.springframework.shell:spring-shell-starter")
+    implementation("org.springframework.boot:spring-boot-starter-webflux")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testImplementation("org.assertj:assertj-core:3.25.3")
 
