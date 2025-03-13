@@ -23,4 +23,16 @@ public class GreetingClient {
             .map(Greeting::message);
     }
 
+  public Mono<String> spielerPunktet() {
+
+    return client.post().uri("/spielerpunktet")
+        .retrieve()
+        .bodyToMono(String.class);
+  }
+
+  public Mono<String> gegnerPunktet() {
+    return client.post().uri("/gegnerpunktet")
+        .retrieve()
+        .bodyToMono(String.class);
+  }
 }
