@@ -1,8 +1,17 @@
 # @name spieler
 POST http://localhost:8080/spielerpunktet
+Content-Type: application/json
+Accept: application/json
+
+{
+  "command": "SpielerPunktetCommand"
+}
 ###
 
 # @name gegner
 POST http://localhost:8080/gegnerpunktet
 
 ###
+
+POST localhost:8080
+
