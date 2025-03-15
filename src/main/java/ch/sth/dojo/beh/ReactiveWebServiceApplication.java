@@ -10,6 +10,10 @@ public class ReactiveWebServiceApplication {
 
     public static void main(String[] args) {
         ConfigurableApplicationContext context = SpringApplication.run(ReactiveWebServiceApplication.class, args);
+        //        runClient(context);
+    }
+
+    private static void runClient(final ConfigurableApplicationContext context) {
         TnnsCounterClient tnnsCounterClient = context.getBean(TnnsCounterClient.class);
         // We need to block for the content here or the JVM might exit before the message is logged
         System.out.println(">> message = " + tnnsCounterClient.spielerPunktet().block());
