@@ -2,23 +2,20 @@ package ch.sth.dojo.beh.infra;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.MediaType;
-import static org.springframework.web.reactive.function.server.RequestPredicates.accept;
 import org.springframework.web.reactive.function.server.RouterFunction;
 import org.springframework.web.reactive.function.server.RouterFunctions;
 import org.springframework.web.reactive.function.server.ServerResponse;
 
 @Configuration(proxyBeanMethods = false)
-public class GreetingRouter {
+public class TnnsCounterRouter {
 
     @Bean
-    public RouterFunction<ServerResponse> route(GreetingHandler greetingHandler) {
+    public RouterFunction<ServerResponse> route(TnnsCounterHandler tnnsCounterHandler) {
 
       return RouterFunctions
           .route()
-          .GET("/hello", accept(MediaType.APPLICATION_JSON), greetingHandler::hello)
-          .POST("/spielerpunktet", SpielerHandler::spielerPunktet)
-          .POST("/gegnerpunktet", SpielerHandler::gegnerPunktet)
+          .POST("/spielerpunktet", tnnsCounterHandler::spielerPunktet)
+          .POST("/gegnerpunktet", tnnsCounterHandler::gegnerPunktet)
           .build();
     }
 }
