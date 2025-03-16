@@ -1,3 +1,4 @@
+###
 # @name spieler
 POST http://localhost:8080/command
 Content-Type: application/json
@@ -8,7 +9,7 @@ Accept: application/json
 }
 ###
 
-# @name spieler
+# @name gegner
 POST http://localhost:8080/command
 Content-Type: application/json
 Accept: application/json
