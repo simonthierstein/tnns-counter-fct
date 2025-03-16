@@ -15,14 +15,18 @@ import java.util.function.Function;
 
 public interface MatchState {
 
-    default <T> T apply(Function<GameMatchState, T> gameMatchStateTFunction) {
-        return Match(this).of(
-            Case($(instanceOf(GameMatchState.class)), gameMatchStateTFunction)
-        );
+    static MatchState zero() {
+        return gameMatchState(CMatch.zero(), CSatz.zero(), CGame.zero());
     }
 
     static GameMatchState gameMatchState(final CMatch nextMatch, final CSatz nextSatz, final CGame nextGame) {
         return new GameMatchState(nextMatch, nextSatz, nextGame);
+    }
+
+    default <T> T apply(Function<GameMatchState, T> gameMatchStateTFunction) {
+        return Match(this).of(
+            Case($(instanceOf(GameMatchState.class)), gameMatchStateTFunction)
+        );
     }
 
 }

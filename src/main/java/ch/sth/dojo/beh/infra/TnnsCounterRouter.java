@@ -10,12 +10,11 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 public class TnnsCounterRouter {
 
     @Bean
-    public RouterFunction<ServerResponse> route(TnnsCounterHandler tnnsCounterHandler) {
+    public RouterFunction<ServerResponse> route(TnnsCounterCommandApi tnnsCounterCommandApi) {
 
       return RouterFunctions
           .route()
-          .POST("/spielerpunktet", tnnsCounterHandler::spielerPunktet)
-          .POST("/gegnerpunktet", tnnsCounterHandler::gegnerPunktet)
+          .POST("/command", tnnsCounterCommandApi::executeCommand)
           .build();
     }
 }
