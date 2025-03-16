@@ -22,8 +22,7 @@ public class TnnsCounterClient {
             .bodyValue("Gurkensalat")
             .accept(MediaType.APPLICATION_JSON)
             .retrieve()
-            .bodyToMono(MyResponse.class)
-            .map(Object::toString);
+            .bodyToMono(String.class);
     }
 
     public Mono<String> gegnerPunktet() {
