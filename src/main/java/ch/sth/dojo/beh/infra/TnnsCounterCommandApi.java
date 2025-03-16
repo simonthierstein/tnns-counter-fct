@@ -33,7 +33,7 @@ class TnnsCounterCommandApi {
     }
 
     private static Function<Either<DomainProblem, DomainEvent>, Mono<ServerResponse>> toServerResponse() {
-        return eith -> ServerResponse.ok().bodyValue(eith.get());
+        return eith -> ServerResponse.accepted().bodyValue(eith.get());
     }
 
     private DomainCommand routeCommand(final GenericCommand cmd) {
