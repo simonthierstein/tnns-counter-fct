@@ -1,6 +1,7 @@
 package ch.sth.dojo.beh.infra;
 
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -16,13 +17,13 @@ public class TnnsCounterClient {
         this.client = builder.baseUrl("http://localhost:8080").build();
     }
 
-    public Mono<String> spielerPunktet() {
+    public Mono<ResponseEntity<String>> spielerPunktet() {
 
         return client.post().uri("/command")
                 .bodyValue(spielerPunktetCommand())
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
-                .bodyToMono(String.class);
+                .toEntity(String.class);
     }
 
     public Mono<String> gegnerPunktet() {
