@@ -10,7 +10,7 @@ public class ReactiveWebServiceApplication {
 
     public static void main(String[] args) {
         ConfigurableApplicationContext context = SpringApplication.run(ReactiveWebServiceApplication.class, args);
-        //        runClient(context);
+                runClient(context);
     }
 
     private static void runClient(final ConfigurableApplicationContext context) {

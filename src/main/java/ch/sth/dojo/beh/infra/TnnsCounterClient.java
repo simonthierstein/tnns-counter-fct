@@ -18,16 +18,29 @@ public class TnnsCounterClient {
 
     public Mono<String> spielerPunktet() {
 
-        return client.post().uri("/spielerpunktet")
-            .bodyValue("Gurkensalat")
-            .accept(MediaType.APPLICATION_JSON)
-            .retrieve()
-            .bodyToMono(String.class);
+        return client.post().uri("/command")
+                .bodyValue(spielerPunktetCommand())
+                .accept(MediaType.APPLICATION_JSON)
+                .retrieve()
+                .bodyToMono(String.class);
     }
 
     public Mono<String> gegnerPunktet() {
-        return client.post().uri("/gegnerpunktet")
-            .retrieve()
-            .bodyToMono(String.class);
+        return client.post().uri("/command")
+                .bodyValue(gegnerPunktetCommand())
+                .retrieve()
+                .bodyToMono(String.class);
+    }
+
+    private static GenericCommand spielerPunktetCommand() {
+        return asGenericCommand("SpielerPunktet");
+    }
+
+    private static GenericCommand gegnerPunktetCommand() {
+        return asGenericCommand("GegnerPunktet");
+    }
+
+    private static GenericCommand asGenericCommand(String command) {
+        return new GenericCommand(command);
     }
 }
