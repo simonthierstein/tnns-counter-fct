@@ -23,27 +23,15 @@ public interface RootEventHandler {
 
     static Either<DomainProblem, MatchState> handleEvent(MatchState prev, DomainEvent event) {
         return switch (event) {
-            case GegnerPunktGewonnen gegnerPunktGewonnen -> gegnerPunktGewonnen(prev, gegnerPunktGewonnen);
+            case GegnerPunktGewonnen gegnerPunktGewonnen -> delegateEventHandling(prev, gegnerPunktGewonnen);
             case GegnerGameGewonnen gegnerGameGewonnen -> gegnerGameGewonnen(prev, gegnerGameGewonnen);
-            case GegnerSatzGewonnen gegnerSatzGewonnen -> gegnerSatzGewonnen(prev, gegnerSatzGewonnen);
-            case GegnerMatchGewonnen gegnerMatchGewonnen -> gegnerMatchGewonnen(prev, gegnerMatchGewonnen);
-            case SpielerPunktGewonnen spielerPunktGewonnen -> spielerPunktGewonnenEvt(prev, spielerPunktGewonnen);
+            case GegnerSatzGewonnen gegnerSatzGewonnen -> delegateEventHandling(prev, gegnerSatzGewonnen);
+            case GegnerMatchGewonnen gegnerMatchGewonnen -> delegateEventHandling(prev, gegnerMatchGewonnen);
+            case SpielerPunktGewonnen spielerPunktGewonnen -> delegateEventHandling(prev, spielerPunktGewonnen);
             case SpielerGameGewonnen spielerGameGewonnen -> spielerGameGewonnen(prev, spielerGameGewonnen);
-            case SpielerSatzGewonnen spielerSatzGewonnen -> spielerSatzGewonnen(prev, spielerSatzGewonnen);
-            case SpielerMatchGewonnen spielerMatchGewonnen -> spielerMatchGewonnen(prev, spielerMatchGewonnen);
+            case SpielerSatzGewonnen spielerSatzGewonnen -> delegateEventHandling(prev, spielerSatzGewonnen);
+            case SpielerMatchGewonnen spielerMatchGewonnen -> delegateEventHandling(prev, spielerMatchGewonnen);
         };
-    }
-
-    private static Either<DomainProblem, MatchState> spielerMatchGewonnen(MatchState prev, SpielerMatchGewonnen event) {
-        return delegateEventHandling(prev, event);
-    }
-
-    private static Either<DomainProblem, MatchState> spielerSatzGewonnen(MatchState prev, SpielerSatzGewonnen event) {
-        return delegateEventHandling(prev, event);
-    }
-
-    private static Either<DomainProblem, MatchState> spielerPunktGewonnenEvt(MatchState prev, SpielerPunktGewonnen event) {
-        return delegateEventHandling(prev, event);
     }
 
     private static Either<DomainProblem, MatchState> spielerGameGewonnen(MatchState prev, SpielerGameGewonnen event) {
@@ -53,8 +41,11 @@ public interface RootEventHandler {
             ));
     }
 
-    private static Either<DomainProblem, MatchState> gegnerMatchGewonnen(MatchState prev, GegnerMatchGewonnen event) {
-        return delegateEventHandling(prev, event);
+    private static Either<DomainProblem, MatchState> gegnerGameGewonnen(final MatchState prev, final GegnerGameGewonnen event) {
+        return delegateEventHandling(prev, event)
+            .map(next -> next.apply(
+                gameMatchState -> gameGewonnenTiebreakSwitch(gameMatchState.nextMatch(), gameMatchState.nextSatz(), gameMatchState.nextGame())
+            ));
     }
 
     private static Either<DomainProblem, MatchState> delegateEventHandling(final MatchState prev, final DomainEvent event) {
@@ -64,21 +55,6 @@ public interface RootEventHandler {
                 prevSatz -> CSatzEventHandler.handleEvent(prevSatz, event),
                 prevGame -> CGameEventHandler.handleEvent(prevGame, event))
         ));
-    }
-
-    private static Either<DomainProblem, MatchState> gegnerSatzGewonnen(final MatchState prev, final GegnerSatzGewonnen event) {
-        return delegateEventHandling(prev, event);
-    }
-
-    private static Either<DomainProblem, MatchState> gegnerPunktGewonnen(final MatchState prev, final GegnerPunktGewonnen event) {
-        return delegateEventHandling(prev, event);
-    }
-
-    private static Either<DomainProblem, MatchState> gegnerGameGewonnen(final MatchState prev, final GegnerGameGewonnen event) {
-        return delegateEventHandling(prev, event)
-            .map(next -> next.apply(
-                gameMatchState -> gameGewonnenTiebreakSwitch(gameMatchState.nextMatch(), gameMatchState.nextSatz(), gameMatchState.nextGame())
-            ));
     }
 
     private static MatchState gameGewonnenTiebreakSwitch(final CMatch nextMatch, final CSatz nextSatz, final CGame nextGame) {
