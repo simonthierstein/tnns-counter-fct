@@ -1,5 +1,7 @@
 package ch.sth.dojo.beh.cmd;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import ch.sth.dojo.beh.DomainProblem;
 import ch.sth.dojo.beh.cgame.domain.GegnerPunkteBisGame;
 import ch.sth.dojo.beh.cgame.domain.LaufendesCGame;
@@ -14,7 +16,7 @@ import ch.sth.dojo.beh.evt.SpielerPunktGewonnen;
 import ch.sth.dojo.beh.matchstate.GameMatchState;
 import ch.sth.dojo.beh.matchstate.MatchState;
 import io.vavr.control.Either;
-import static org.assertj.core.api.Assertions.assertThat;
+import java.util.UUID;
 import org.junit.jupiter.api.Test;
 
 class DomainCommandTest {
@@ -60,10 +62,10 @@ class DomainCommandTest {
     }
 
     private static DomainCommand createGegnerPunktet() {
-        return new GegnerPunktet();
+        return GegnerPunktet.gegnerPunktet(UUID.randomUUID()).get();
     }
 
     private static DomainCommand createSpielerPunktet() {
-        return new SpielerPunktet();
+        return SpielerPunktet.spielerPunktet(UUID.randomUUID()).get();
     }
 }

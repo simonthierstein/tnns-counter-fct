@@ -1,6 +1,13 @@
 package ch.sth.dojo.beh.cmd;
 
 import static ch.sth.dojo.beh.Condition.condition;
+import static ch.sth.dojo.beh.cmd.ScenarioTest.EventTag.eventTagToEvent;
+import static ch.sth.dojo.beh.matchstate.MatchState.gameMatchState;
+import static io.vavr.API.$;
+import static io.vavr.API.Case;
+import static io.vavr.API.Match;
+import static org.assertj.core.api.Assertions.assertThat;
+
 import ch.sth.dojo.beh.DomainProblem;
 import ch.sth.dojo.beh.RootEventHandler;
 import ch.sth.dojo.beh.cgame.domain.AbgeschlossenesCGame;
@@ -10,7 +17,6 @@ import ch.sth.dojo.beh.cgame.domain.LaufendesCGame;
 import ch.sth.dojo.beh.cgame.domain.SpielerPunkteBisGame;
 import ch.sth.dojo.beh.cgame.domain.Tiebreak;
 import ch.sth.dojo.beh.cmatch.domain.CMatch;
-import static ch.sth.dojo.beh.cmd.ScenarioTest.EventTag.eventTagToEvent;
 import ch.sth.dojo.beh.csatz.domain.AbgeschlossenerCSatz;
 import ch.sth.dojo.beh.csatz.domain.CSatz;
 import ch.sth.dojo.beh.csatz.domain.LaufenderCSatz;
@@ -25,10 +31,6 @@ import ch.sth.dojo.beh.evt.SpielerPunktGewonnen;
 import ch.sth.dojo.beh.evt.SpielerSatzGewonnen;
 import ch.sth.dojo.beh.matchstate.GameMatchState;
 import ch.sth.dojo.beh.matchstate.MatchState;
-import static ch.sth.dojo.beh.matchstate.MatchState.gameMatchState;
-import static io.vavr.API.$;
-import static io.vavr.API.Case;
-import static io.vavr.API.Match;
 import io.vavr.Function1;
 import io.vavr.Function3;
 import io.vavr.Predicates;
@@ -39,8 +41,8 @@ import io.vavr.collection.List;
 import io.vavr.control.Either;
 import io.vavr.control.Option;
 import java.util.Arrays;
+import java.util.UUID;
 import java.util.function.Function;
-import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -150,7 +152,8 @@ class ScenarioTest {
             .apply(PartialScenarioConfig::partialScenarioConfig);
 
         var result = applyCommand(psc)
-            .map(state -> PartialScenarioConfig.partialScenarioConfig(new GegnerPunktet(), state, new GegnerPunktGewonnen(), State.bindGame.apply(match(), CSatz.of(0, 1).get(), CGame.of(4, 3).get())))
+            .map(state -> PartialScenarioConfig.partialScenarioConfig(new GegnerPunktet(UUID.randomUUID()), state, new GegnerPunktGewonnen(),
+                State.bindGame.apply(match(), CSatz.of(0, 1).get(), CGame.of(4, 3).get())))
             .flatMap(ScenarioTest::applyCommand);
 
         assertThat(result.isRight())
@@ -268,8 +271,8 @@ class ScenarioTest {
             .map(SpielerGegner::valueOf)
             .map(spielerGegner -> condition(spielerGegner,
                 x -> x.equals(SpielerGegner.SpielerPunktet),
-                x -> new SpielerPunktet(),
-                x -> new GegnerPunktet()))
+                x -> createSpielerPunktet(),
+                x -> createGegnerPunktet()))
             .get();
     }
 
@@ -379,10 +382,10 @@ class ScenarioTest {
     }
 
     private static DomainCommand createGegnerPunktet() {
-        return new GegnerPunktet();
+        return new GegnerPunktet(UUID.randomUUID());
     }
 
     private static DomainCommand createSpielerPunktet() {
-        return new SpielerPunktet();
+        return new SpielerPunktet(UUID.randomUUID());
     }
 }

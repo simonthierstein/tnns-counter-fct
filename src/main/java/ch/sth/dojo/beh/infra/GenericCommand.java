@@ -4,6 +4,8 @@
 
 package ch.sth.dojo.beh.infra;
 
-public record GenericCommand(String command) {
+import java.util.UUID;
+
+public record GenericCommand(UUID commandId, String command) {
 
 }

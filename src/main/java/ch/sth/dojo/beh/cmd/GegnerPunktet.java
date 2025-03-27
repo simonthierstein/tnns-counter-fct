@@ -5,6 +5,13 @@
 package ch.sth.dojo.beh.cmd;
 
 import static ch.sth.dojo.beh.Condition.condition;
+import static io.vavr.API.$;
+import static io.vavr.API.Case;
+import static io.vavr.API.Match;
+import static io.vavr.Predicates.instanceOf;
+import static io.vavr.control.Either.left;
+import static io.vavr.control.Either.right;
+
 import ch.sth.dojo.beh.DomainProblem;
 import ch.sth.dojo.beh.cgame.CGameCommand;
 import ch.sth.dojo.beh.cgame.TiebreakCommand;
@@ -26,16 +33,16 @@ import ch.sth.dojo.beh.evt.SpielerMatchGewonnen;
 import ch.sth.dojo.beh.evt.SpielerPunktGewonnen;
 import ch.sth.dojo.beh.evt.SpielerSatzGewonnen;
 import ch.sth.dojo.beh.matchstate.MatchState;
-import static io.vavr.API.$;
-import static io.vavr.API.Case;
-import static io.vavr.API.Match;
-import static io.vavr.Predicates.instanceOf;
 import io.vavr.control.Either;
-import static io.vavr.control.Either.left;
-import static io.vavr.control.Either.right;
+import io.vavr.control.Option;
+import java.util.UUID;
 import java.util.function.Function;
 
-public record GegnerPunktet() implements DomainCommand {
+public record GegnerPunktet(UUID uuid) implements DomainCommand {
+
+    public static Option<GegnerPunktet> gegnerPunktet(final UUID id) {
+        return Option.of(id).map(GegnerPunktet::new);
+    }
 
     public static Either<DomainProblem, DomainEvent> applyC(MatchState state, GegnerPunktet cmd) {
         return state.apply(
