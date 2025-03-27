@@ -5,8 +5,13 @@ Content-Type: application/json
 Accept: application/json
 
 {
-  "command": "SpielerPunktet"
+  "command": "SpielerPunktet",
+  "commandId": "021c2fbc-0ae0-11f0-9cd2-0242ac120002"
 }
+
+> {%
+    client.assert(response.status === 202, "invalid response status")
+%}
 ###
 
 # @name gegner
@@ -15,7 +20,12 @@ Content-Type: application/json
 Accept: application/json
 
 {
-  "command": "GegnerPunktet"
+  "command": "GegnerPunktet",
+  "commandId": "021c2fbc-0ae0-11f0-9cd2-0242ac120003"
 }
+
+> {%
+    client.assert(response.status === 202, "invalid response status")
+%}
 ###
 
