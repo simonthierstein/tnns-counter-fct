@@ -6,6 +6,6 @@ package ch.sth.dojo.beh.infra;
 
 import java.util.UUID;
 
-public record GenericCommand(UUID commandId, String command) {
+public record GenericCommand(UUID commandId, String command, UUID aggregateId, String data) {
 
 }

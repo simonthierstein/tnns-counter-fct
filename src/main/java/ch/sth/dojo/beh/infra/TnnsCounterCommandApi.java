@@ -61,7 +61,7 @@ class TnnsCounterCommandApi {
     }
 
     private static Option<SpielerPunktet> toSpielerPunktet(final GenericCommand cmd) {
-        return SpielerPunktet.spielerPunktet(cmd.commandId());
+        return SpielerPunktet.spielerPunktet(cmd);
     }
 }
 

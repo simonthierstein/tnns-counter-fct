@@ -20,16 +20,45 @@ import ch.sth.dojo.beh.evt.DomainEvent;
 import ch.sth.dojo.beh.evt.SpielerGameGewonnen;
 import ch.sth.dojo.beh.evt.SpielerPunktGewonnen;
 import ch.sth.dojo.beh.evt.SpielerSatzGewonnen;
+import ch.sth.dojo.beh.infra.GenericCommand;
 import ch.sth.dojo.beh.matchstate.MatchState;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import io.vavr.Tuple;
 import io.vavr.control.Either;
 import io.vavr.control.Option;
-import java.util.UUID;
+import io.vavr.control.Try;
+import java.time.LocalDateTime;
 import java.util.function.Function;
 
-public record SpielerPunktet(UUID id) implements DomainCommand {
+public record SpielerPunktet(CommandId id, AggregateId aggregateId, WinningTimestamp winningTimestamp) implements DomainCommand {
 
-    public static Option<SpielerPunktet> spielerPunktet(final UUID id) {
-        return Option.of(id).map(SpielerPunktet::new);
+    record Data(LocalDateTime winningTimestamp) {
+
+    }
+
+    public static Option<SpielerPunktet> spielerPunktet(final GenericCommand cmd) {
+        final Function<String, Option<Data>> dataFunction = data1 -> parseToObject(data1);
+        return Tuple.of(cmd.commandId(), cmd.aggregateId(), cmd.data())
+            .map(CommandId.bind, AggregateId.bind, dataFunction)
+            .map3(data -> data
+                .map(Data::winningTimestamp)
+                .flatMap(WinningTimestamp.bind))
+            .apply((x, y, z) -> x
+                .flatMap(commandId ->
+                    y.flatMap(aggregateId1 ->
+                        z.map(data -> new SpielerPunktet(commandId, aggregateId1, data)))));
+    }
+
+    private static Option<Data> parseToObject(final String data) {
+        final ObjectMapper objectMapper = new ObjectMapper()
+            .registerModule(new JavaTimeModule());
+
+        return Try.of(() -> objectMapper.readValue(data, Data.class))
+            .map(data1 -> data1.map(Data::winningTimestamp)
+                .flatMap(WinningTimestamp.bind))
+            .toOption();
+
     }
 
     public static Either<DomainProblem, DomainEvent> applyC(MatchState state, SpielerPunktet cmd) {
