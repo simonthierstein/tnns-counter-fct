@@ -2,7 +2,7 @@
  * Copyright (C) Schweizerische Bundesbahnen SBB, 2025.
  */
 
-package ch.sth.dojo.beh.infra;
+package ch.sth.dojo.beh.infra.endpoint;
 
 import static io.vavr.API.$;
 import static io.vavr.API.Case;

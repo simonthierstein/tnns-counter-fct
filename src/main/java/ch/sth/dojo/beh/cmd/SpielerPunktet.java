@@ -21,6 +21,7 @@ import ch.sth.dojo.beh.evt.SpielerGameGewonnen;
 import ch.sth.dojo.beh.evt.SpielerPunktGewonnen;
 import ch.sth.dojo.beh.evt.SpielerSatzGewonnen;
 import ch.sth.dojo.beh.matchstate.MatchState;
+import io.vavr.Function3;
 import io.vavr.control.Either;
 import io.vavr.control.Option;
 import java.util.UUID;
@@ -32,17 +33,18 @@ public record SpielerPunktet(UUID id) implements DomainCommand {
         return Option.of(id).map(SpielerPunktet::new);
     }
 
-    public static Either<DomainProblem, DomainEvent> applyC(MatchState state, SpielerPunktet cmd) {
+    public static Either<DomainProblem, DomainEvent> applyCommand(MatchState state, SpielerPunktet cmd) {
         return state.apply(
-            gameMatchState -> gameMatchState.tupled().apply(SpielerPunktet::apply)
+            gameMatchState -> gameMatchState.tupled()
+                .apply(SpielerPunktet.apply())
         );
     }
 
-    private static Either<DomainProblem, DomainEvent> apply(CMatch cMatch, CSatz cSatz, CGame cGame) {
-        final Either<DomainProblem, DomainEvent> domainEvents = CGameCommand.spielerGewinntPunkt(cGame);
-        return domainEvents
-            .flatMap(handleGameEvent(cSatz))
-            .flatMap(handleSatzEvent(cMatch));
+    private static Function3<CMatch, CSatz, CGame, Either<DomainProblem, DomainEvent>> apply() {
+        return (match, satz, game) ->
+            CGameCommand.spielerGewinntPunkt(game)
+                .flatMap(handleGameEvent(satz))
+                .flatMap(handleSatzEvent(match));
     }
 
     private static Function<DomainEvent, Either<DomainProblem, DomainEvent>> handleSatzEvent(CMatch state) {

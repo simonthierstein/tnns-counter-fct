@@ -1,4 +1,4 @@
-package ch.sth.dojo.beh.infra;
+package ch.sth.dojo.beh.infra.endpoint;
 
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;

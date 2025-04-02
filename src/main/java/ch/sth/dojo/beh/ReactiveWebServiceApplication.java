@@ -1,6 +1,6 @@
 package ch.sth.dojo.beh;
 
-import ch.sth.dojo.beh.infra.TnnsCounterClient;
+import ch.sth.dojo.beh.infra.endpoint.TnnsCounterClient;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;

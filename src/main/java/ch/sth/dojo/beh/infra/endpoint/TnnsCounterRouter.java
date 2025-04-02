@@ -1,4 +1,4 @@
-package ch.sth.dojo.beh.infra;
+package ch.sth.dojo.beh.infra.endpoint;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
