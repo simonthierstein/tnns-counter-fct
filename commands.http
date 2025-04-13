@@ -12,6 +12,24 @@ Accept: application/json
 > {%
     client.assert(response.status === 202, "invalid response status")
 %}
+
+###
+
+
+###
+# @name spieler
+POST http://localhost:8080/command?command=SpielerPunktet
+Content-Type: application/json
+Accept: application/json
+
+{
+  "command": "SpielerPunktet",
+  "commandId": "021c2fbc-0ae0-11f0-9cd2-0242ac120002"
+}
+
+> {%
+    client.assert(response.status === 202, "invalid response status")
+%}
 ###
 
 # @name gegner
