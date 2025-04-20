@@ -4,6 +4,7 @@ import static io.vavr.control.Either.left;
 import static io.vavr.control.Either.right;
 
 import ch.sth.dojo.beh.DomainProblem;
+import ch.sth.dojo.beh.evt.DomainEvent;
 import io.vavr.control.Either;
 import io.vavr.control.Option;
 import java.util.function.Function;
@@ -14,7 +15,9 @@ public sealed interface CMatch permits LaufendesMatch, AbgeschlossenesMatch {
     Function<LaufendesMatch, Either<DomainProblem, CMatch>> laufendesMatchSpielerPunktet = laufendesMatch -> right(laufendesMatch.spielerPunktet());
     Function<LaufendesMatch, Either<DomainProblem, CMatch>> laufendesMatchGegnerPunktet = laufendesMatch -> right(laufendesMatch.gegnerPunktet());
 
-    static <T> T apply(CMatch target,
+    Function<AbgeschlossenesMatch, Either<DomainProblem, DomainEvent>> abgeschlossenesMatchToDomainProblemEvt = abgeschlossenesMatch -> left(DomainProblem.eventNotValid);
+
+    private static <T> T apply(CMatch target,
         Function<LaufendesMatch, T> f1,
         Function<AbgeschlossenesMatch, T> f2
     ) {
@@ -80,5 +83,18 @@ public sealed interface CMatch permits LaufendesMatch, AbgeschlossenesMatch {
     static AbgeschlossenesMatch abgeschlossenesMatch() {
         return new AbgeschlossenesMatch();
     }
+
+    static Either<DomainProblem, DomainEvent> spielerGewinntSatz(CMatch state) {
+        return apply(state,
+            laufendesMatch -> right(laufendesMatch.spielerGewinntSatz()),
+            abgeschlossenesMatchToDomainProblemEvt);
+    }
+
+    static Either<DomainProblem, DomainEvent> gegnerGewinntSatz(CMatch state) {
+        return apply(state,
+            laufendesMatch -> right(laufendesMatch.gegnerGewinntSatz()),
+            abgeschlossenesMatchToDomainProblemEvt);
+    }
 }
+
 
