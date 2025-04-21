@@ -12,7 +12,7 @@ import java.util.function.Predicate;
 
 public class SpielerPunkteMatch {
 
-    public static Predicate<SpielerPunkteMatchState> hasWon = compose(hasTwoSets, SpielerPunkteMatchState::punkteMatchState);
+    public static final Predicate<SpielerPunkteMatchState> hasWon = compose(hasTwoSets, SpielerPunkteMatchState::punkteMatchState);
 
     public static SpielerPunkteMatchState zero() {
         return new SpielerPunkteMatchState(PunkteMatch.zero());
