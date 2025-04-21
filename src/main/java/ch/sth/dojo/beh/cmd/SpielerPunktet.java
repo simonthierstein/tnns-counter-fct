@@ -13,14 +13,13 @@ import ch.sth.dojo.beh.DomainProblem;
 import ch.sth.dojo.beh.cgame.CGameCommand;
 import ch.sth.dojo.beh.cgame.domain.CGame;
 import ch.sth.dojo.beh.cmatch.CMatchCommand;
-import ch.sth.dojo.beh.cmatch.domain.CMatch;
+import ch.sth.dojo.beh.cmatch.domain.state.MatchState;
 import ch.sth.dojo.beh.csatz.CSatzCommand;
 import ch.sth.dojo.beh.csatz.domain.CSatz;
 import ch.sth.dojo.beh.evt.DomainEvent;
 import ch.sth.dojo.beh.evt.SpielerGameGewonnen;
 import ch.sth.dojo.beh.evt.SpielerPunktGewonnen;
 import ch.sth.dojo.beh.evt.SpielerSatzGewonnen;
-import ch.sth.dojo.beh.matchstate.MatchState;
 import io.vavr.Function3;
 import io.vavr.control.Either;
 import io.vavr.control.Option;
@@ -33,21 +32,21 @@ public record SpielerPunktet(UUID id) implements DomainCommand {
         return Option.of(id).map(SpielerPunktet::new);
     }
 
-    public static Either<DomainProblem, DomainEvent> applyCommand(MatchState state, SpielerPunktet cmd) {
+    public static Either<DomainProblem, DomainEvent> applyCommand(ch.sth.dojo.beh.matchstate.MatchState state, SpielerPunktet cmd) {
         return state.apply(
             gameMatchState -> gameMatchState.tupled()
                 .apply(SpielerPunktet.apply())
         );
     }
 
-    private static Function3<CMatch, CSatz, CGame, Either<DomainProblem, DomainEvent>> apply() {
+    private static Function3<MatchState, CSatz, CGame, Either<DomainProblem, DomainEvent>> apply() {
         return (match, satz, game) ->
             CGameCommand.spielerGewinntPunkt(game)
                 .flatMap(handleGameEvent(satz))
                 .flatMap(handleSatzEvent(match));
     }
 
-    private static Function<DomainEvent, Either<DomainProblem, DomainEvent>> handleSatzEvent(CMatch state) {
+    private static Function<DomainEvent, Either<DomainProblem, DomainEvent>> handleSatzEvent(MatchState state) {
         return satzEvent -> Match(satzEvent).of(
             Case($(instanceOf(SpielerPunktGewonnen.class)), Either::right),
             Case($(instanceOf(SpielerGameGewonnen.class)), Either::right),

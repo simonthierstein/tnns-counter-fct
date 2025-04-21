@@ -1,19 +1,24 @@
+/*
+ * Copyright (C) Schweizerische Bundesbahnen SBB, 2025.
+ */
+
 package ch.sth.dojo.beh.cmatch.domain;
 
 import static ch.sth.dojo.beh.PredicateUtils.compose;
 import static ch.sth.dojo.beh.cmatch.domain.PunkteMatch.hasTwoSets;
 
+import ch.sth.dojo.beh.cmatch.domain.state.SpielerPunkteMatchState;
 import java.util.function.Predicate;
 
-public record SpielerPunkteMatch(PunkteMatch punkteMatch) {
+public class SpielerPunkteMatch {
 
-    static Predicate<SpielerPunkteMatch> hasWon = compose(hasTwoSets, SpielerPunkteMatch::punkteMatch);
+    public static Predicate<SpielerPunkteMatchState> hasWon = compose(hasTwoSets, SpielerPunkteMatchState::punkteMatchState);
 
-    static SpielerPunkteMatch zero() {
-        return new SpielerPunkteMatch(PunkteMatch.zero());
+    public static SpielerPunkteMatchState zero() {
+        return new SpielerPunkteMatchState(PunkteMatch.zero());
     }
 
-    SpielerPunkteMatch increment() {
-        return new SpielerPunkteMatch(punkteMatch.increment());
+    public static SpielerPunkteMatchState increment(SpielerPunkteMatchState state) {
+        return new SpielerPunkteMatchState(PunkteMatch.increment(state.punkteMatchState()));
     }
 }

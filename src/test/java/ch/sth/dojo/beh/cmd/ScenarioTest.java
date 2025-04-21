@@ -16,7 +16,8 @@ import ch.sth.dojo.beh.cgame.domain.GegnerPunkteBisGame;
 import ch.sth.dojo.beh.cgame.domain.LaufendesCGame;
 import ch.sth.dojo.beh.cgame.domain.SpielerPunkteBisGame;
 import ch.sth.dojo.beh.cgame.domain.Tiebreak;
-import ch.sth.dojo.beh.cmatch.domain.CMatch;
+import ch.sth.dojo.beh.cmatch.domain.MatchScore;
+import ch.sth.dojo.beh.cmatch.domain.state.MatchState;
 import ch.sth.dojo.beh.csatz.domain.AbgeschlossenerCSatz;
 import ch.sth.dojo.beh.csatz.domain.CSatz;
 import ch.sth.dojo.beh.csatz.domain.LaufenderCSatz;
@@ -30,7 +31,6 @@ import ch.sth.dojo.beh.evt.SpielerMatchGewonnen;
 import ch.sth.dojo.beh.evt.SpielerPunktGewonnen;
 import ch.sth.dojo.beh.evt.SpielerSatzGewonnen;
 import ch.sth.dojo.beh.matchstate.GameMatchState;
-import ch.sth.dojo.beh.matchstate.MatchState;
 import io.vavr.Function1;
 import io.vavr.Function3;
 import io.vavr.Predicates;
@@ -134,8 +134,8 @@ class ScenarioTest {
 
     }
 
-    private static CMatch match() {
-        return CMatch.zero();
+    private static MatchState match() {
+        return MatchScore.zero();
     }
 
     @ParameterizedTest
@@ -182,10 +182,10 @@ class ScenarioTest {
             .toEither(new AbgeschlossenerCSatz()), list -> CSatz.of(list.get(0), list.get(1)).get());
     }
 
-    private static Function<String, CMatch> parseMatchState() {
+    private static Function<String, MatchState> parseMatchState() {
         return input -> scoreParsing(Option.some(input)
             .filter(Predicates.not("MATCH"::equals))
-            .toEither(CMatch.abgeschlossenesMatch()), list -> CMatch.of(list.get(0), list.get(1)).get());
+            .toEither(MatchScore.abgeschlossenesMatch()), list -> MatchScore.of(list.get(0), list.get(1)).get());
     }
 
     private static <T> T scoreParsing(final Either<T, String> scoreEither, final Function<List<Integer>, T> createrFunction) {
@@ -277,7 +277,7 @@ class ScenarioTest {
     }
 
     private static Either<String, State> applyCommand(final PartialScenarioConfig scenarioConfig) {
-        final MatchState prevState = PreviousState.tuple1.apply(scenarioConfig.previousState);
+        final ch.sth.dojo.beh.matchstate.MatchState prevState = PreviousState.tuple1.apply(scenarioConfig.previousState);
         return DomainCommand.handleCommand(prevState,
                 scenarioConfig.action.domainCommand)
             .peek(evt -> assertThat(evt).withFailMessage("Command failed: %s", scenarioConfig).isEqualTo(scenarioConfig.expectedEvent.event))
@@ -296,18 +296,18 @@ class ScenarioTest {
 
     }
 
-    record State(CMatch match, CSatz satz, CGame game) {
+    record State(MatchState match, CSatz satz, CGame game) {
 
-        static Function3<CMatch, CSatz, CGame, State> bindGame = State::new;
-        static Function1<State, MatchState> toTuple = State::tuple;
+        static Function3<MatchState, CSatz, CGame, State> bindGame = State::new;
+        static Function1<State, ch.sth.dojo.beh.matchstate.MatchState> toTuple = State::tuple;
 
-        static State untuple(MatchState stateTuple) {
+        static State untuple(ch.sth.dojo.beh.matchstate.MatchState stateTuple) {
             return stateTuple.apply(
                 state -> new State(state.nextMatch(), state.nextSatz(), state.nextGame())
             );
         }
 
-        private static MatchState tuple(State input) {
+        private static ch.sth.dojo.beh.matchstate.MatchState tuple(State input) {
             return gameMatchState(input.match, input.satz, input.game);
         }
     }
@@ -322,7 +322,7 @@ class ScenarioTest {
 
         static Function<State, PreviousState> bind = PreviousState::new;
         static Function<PreviousState, State> unbind = PreviousState::state;
-        static Function<PreviousState, MatchState> tuple1 = unbind.andThen(State.toTuple);
+        static Function<PreviousState, ch.sth.dojo.beh.matchstate.MatchState> tuple1 = unbind.andThen(State.toTuple);
     }
 
     record ExpectedEvent(DomainEvent event) {
@@ -350,7 +350,7 @@ class ScenarioTest {
     }
 
     private static GameMatchState zeroGame() {
-        return gameMatchState(CMatch.zero(), LaufenderCSatz.zero(), LaufendesCGame.zero());
+        return gameMatchState(MatchScore.zero(), LaufenderCSatz.zero(), LaufendesCGame.zero());
     }
 
     @Test
@@ -361,7 +361,7 @@ class ScenarioTest {
         assertThat(domainEvents.get()).isInstanceOf(SpielerGameGewonnen.class);
     }
 
-    private static MatchState laufendesGameWith(final int spielerValue, final int gegnerValue) {
+    private static ch.sth.dojo.beh.matchstate.MatchState laufendesGameWith(final int spielerValue, final int gegnerValue) {
         return gameMatchState(match(), LaufenderCSatz.zero(), new LaufendesCGame(new SpielerPunkteBisGame(spielerValue), new GegnerPunkteBisGame(gegnerValue)));
     }
 

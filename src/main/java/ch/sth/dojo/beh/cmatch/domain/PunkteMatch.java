@@ -1,3 +1,7 @@
+/*
+ * Copyright (C) Schweizerische Bundesbahnen SBB, 2025.
+ */
+
 package ch.sth.dojo.beh.cmatch.domain;
 
 import static ch.sth.dojo.beh.PredicateUtils.eq;
@@ -6,31 +10,32 @@ import static ch.sth.dojo.beh.PredicateUtils.lte;
 
 import ch.sth.dojo.beh.DomainProblem;
 import ch.sth.dojo.beh.PredicateUtils;
+import ch.sth.dojo.beh.cmatch.domain.state.PunkteMatchState;
 import io.vavr.Predicates;
 import io.vavr.control.Either;
 import io.vavr.control.Option;
 import java.util.function.Predicate;
 
-public record PunkteMatch(Integer value) {
+public class PunkteMatch {
 
-    public static Predicate<PunkteMatch> hasOneSet = PredicateUtils.compose(eq(1), PunkteMatch::value);
-    public static Predicate<PunkteMatch> hasTwoSets = PredicateUtils.compose(eq(2), PunkteMatch::value);
+    public static final Predicate<PunkteMatchState> hasOneSet = PredicateUtils.compose(eq(1), PunkteMatchState::value);
+    public static final Predicate<PunkteMatchState> hasTwoSets = PredicateUtils.compose(eq(2), PunkteMatchState::value);
 
-    static Either<DomainProblem, PunkteMatch> of(Integer value) {
+    public static Either<DomainProblem, PunkteMatchState> of(Integer value) {
         return Option.of(value)
             .toEither(DomainProblem.nullValueNotValid)
             .filterOrElse(Predicates.allOf(
                 gte(0),
                 lte(2)
             ), x -> DomainProblem.valueNotValid)
-            .map(PunkteMatch::new);
+            .map(PunkteMatchState::new);
     }
 
-    static PunkteMatch zero() {
-        return new PunkteMatch(0);
+    public static PunkteMatchState zero() {
+        return new PunkteMatchState(0);
     }
 
-    PunkteMatch increment() {
-        return new PunkteMatch(value + 1);
+    public static PunkteMatchState increment(PunkteMatchState state) {
+        return new PunkteMatchState(state.value() + 1);
     }
 }

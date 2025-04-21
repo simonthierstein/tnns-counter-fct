@@ -7,7 +7,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
 
 import ch.sth.dojo.beh.DomainProblem;
-import ch.sth.dojo.beh.cmatch.domain.CMatch;
+import ch.sth.dojo.beh.cmatch.domain.MatchScore;
+import ch.sth.dojo.beh.cmatch.domain.state.MatchState;
 import ch.sth.dojo.beh.evt.DomainEvent;
 import ch.sth.dojo.beh.evt.GegnerGameGewonnen;
 import ch.sth.dojo.beh.evt.GegnerMatchGewonnen;
@@ -34,8 +35,8 @@ class CMatchEventHandlerTest {
         "GegnerPunktGewonnen"
     })
     void handleSpielerEvent_PunktOrGameGewonnen(String inputEventString) {
-        final CMatch inputState = CMatch.zero();
-        final CMatch expectedState = CMatch.zero();
+        final MatchState inputState = MatchScore.zero();
+        final MatchState expectedState = MatchScore.zero();
 
         Either.<DomainProblem, String>right(inputEventString)
             .map(stringToEvent())
@@ -52,8 +53,8 @@ class CMatchEventHandlerTest {
     })
     void handleSpielerEvent_SatzGewonnen(String inputEventString, Integer inputSpielerSatzScore, Integer inputGegnerSatzScoreInteger, Integer expectedSpielerSatzScore,
         Integer expectedGegnerSatzScore) {
-        final CMatch inputState = CMatch.of(inputSpielerSatzScore, inputGegnerSatzScoreInteger).get();
-        final CMatch expectedState = CMatch.of(expectedSpielerSatzScore, expectedGegnerSatzScore).get();
+        final MatchState inputState = MatchScore.of(inputSpielerSatzScore, inputGegnerSatzScoreInteger).get();
+        final MatchState expectedState = MatchScore.of(expectedSpielerSatzScore, expectedGegnerSatzScore).get();
 
         Either.<DomainProblem, String>right(inputEventString)
             .map(stringToEvent())
@@ -70,8 +71,8 @@ class CMatchEventHandlerTest {
     })
     void handleSpielerEvent_MatchGewonnen(String inputEventString, Integer inputSpielerSatzScore, Integer inputGegnerSatzScoreInteger, Integer expectedSpielerSatzScore,
         Integer expectedGegnerSatzScore) {
-        final CMatch inputState = CMatch.of(inputSpielerSatzScore, inputGegnerSatzScoreInteger).get();
-        final CMatch expectedState = CMatch.of(expectedSpielerSatzScore, expectedGegnerSatzScore).get();
+        final MatchState inputState = MatchScore.of(inputSpielerSatzScore, inputGegnerSatzScoreInteger).get();
+        final MatchState expectedState = MatchScore.of(expectedSpielerSatzScore, expectedGegnerSatzScore).get();
 
         Either.<DomainProblem, String>right(inputEventString)
             .map(stringToEvent())
@@ -84,7 +85,7 @@ class CMatchEventHandlerTest {
         strings = {"SpielerMatchGewonnen", "GegnerMatchGewonnen"}
     )
     void handleSpielerEvent_MatchGewonnen_invalidevent(String event) {
-        final CMatch inputState = CMatch.zero();
+        final MatchState inputState = MatchScore.zero();
         final DomainEvent inputEvent = Option.some(event).map(stringToEvent()).get();
         final DomainProblem expectedError = DomainProblem.eventNotValid;
 

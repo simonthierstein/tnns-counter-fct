@@ -3,8 +3,10 @@ package ch.sth.dojo.beh.cmatch;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import ch.sth.dojo.beh.Condition;
-import ch.sth.dojo.beh.cmatch.domain.AbgeschlossenesMatch;
-import ch.sth.dojo.beh.cmatch.domain.CMatch;
+import ch.sth.dojo.beh.cmatch.domain.LaufendesMatch;
+import ch.sth.dojo.beh.cmatch.domain.MatchScore;
+import ch.sth.dojo.beh.cmatch.domain.state.AbgeschlossenesMatchState;
+import ch.sth.dojo.beh.cmatch.domain.state.MatchState;
 import ch.sth.dojo.beh.evt.DomainEvent;
 import io.vavr.Predicates;
 import io.vavr.Tuple;
@@ -40,7 +42,7 @@ class CMatchTest {
         }
     )
     void count(String input, String cmd, String expected) {
-        final Tuple3<CMatch, MatchCommand, CMatch> map = Tuple.of(input, cmd, expected)
+        final Tuple3<MatchState, MatchCommand, MatchState> map = Tuple.of(input, cmd, expected)
             .map(parseMatchScore(), parseCommand(), parseMatchScore());
         var re = map
             .apply(CMatchTest::executeCommand);
@@ -52,29 +54,29 @@ class CMatchTest {
             .isEqualTo(map._3);
     }
 
-    private static Either<String, CMatch> executeCommand(CMatch match, MatchCommand matchCommand, CMatch match1) {
+    private static Either<String, MatchState> executeCommand(MatchState match, MatchCommand matchCommand, MatchState match1) {
         return Condition.condition(matchCommand, x -> x == MatchCommand.SpielerTransition,
-            xx -> CMatch.apply(match, laufendesMatch -> Either.right(laufendesMatch.spielerPunktet()), x -> Either.left("Abgeschlossenes Match")),
-            xx -> CMatch.apply(match, laufendesMatch -> Either.right(laufendesMatch.gegnerPunktet()), x -> Either.left("Abgeschlossenes Match")));
+            xx -> MatchScore.apply(match, laufendesMatch -> Either.right(LaufendesMatch.spielerPunktet(laufendesMatch)), x -> Either.left("Abgeschlossenes Match")),
+            xx -> MatchScore.apply(match, laufendesMatch -> Either.right(LaufendesMatch.gegnerPunktet(laufendesMatch)), x -> Either.left("Abgeschlossenes Match")));
     }
 
     private Function<String, MatchCommand> parseCommand() {
         return MatchCommand::valueOf;
     }
 
-    private Function<String, CMatch> parseMatchScore() {
+    private Function<String, MatchState> parseMatchScore() {
         return input -> Option.some(input)
             .filter(Predicates.not("MATCH"::equals))
-            .toEither(new AbgeschlossenesMatch())
+            .toEither(new AbgeschlossenesMatchState())
             .map(str -> str.split("-"))
             .map(Arrays::stream)
             .map(List::ofAll)
             .map(list -> list.map(Integer::parseInt))
-            .map(list -> CMatch.of(list.get(0), list.get(1)).get())
+            .map(list -> MatchScore.of(list.get(0), list.get(1)).get())
             .fold(Function.identity(), Function.identity());
     }
 
-    private static CMatch nextExpectedState() {
+    private static MatchState nextExpectedState() {
         return null;
     }
 
@@ -82,7 +84,7 @@ class CMatchTest {
         return null;
     }
 
-    private static CMatch prevMatchState() {
+    private static MatchState prevMatchState() {
         return null;
     }
 }
