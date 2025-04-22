@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import ch.sth.dojo.beh.Condition;
 import ch.sth.dojo.beh.cmatch.domain.LaufendesMatch;
-import ch.sth.dojo.beh.cmatch.domain.MatchScore;
+import ch.sth.dojo.beh.cmatch.domain.MatchScoreEvent;
 import ch.sth.dojo.beh.cmatch.domain.state.AbgeschlossenesMatchState;
 import ch.sth.dojo.beh.cmatch.domain.state.MatchState;
 import ch.sth.dojo.beh.evt.DomainEvent;
@@ -56,8 +56,8 @@ class CMatchTest {
 
     private static Either<String, MatchState> executeCommand(MatchState match, MatchCommand matchCommand, MatchState match1) {
         return Condition.condition(matchCommand, x -> x == MatchCommand.SpielerTransition,
-            xx -> MatchScore.apply(match, laufendesMatch -> Either.right(LaufendesMatch.spielerPunktet(laufendesMatch)), x -> Either.left("Abgeschlossenes Match")),
-            xx -> MatchScore.apply(match, laufendesMatch -> Either.right(LaufendesMatch.gegnerPunktet(laufendesMatch)), x -> Either.left("Abgeschlossenes Match")));
+            xx -> MatchScoreEvent.apply(match, laufendesMatch -> Either.right(LaufendesMatch.spielerPunktet(laufendesMatch)), x -> Either.left("Abgeschlossenes Match")),
+            xx -> MatchScoreEvent.apply(match, laufendesMatch -> Either.right(LaufendesMatch.gegnerPunktet(laufendesMatch)), x -> Either.left("Abgeschlossenes Match")));
     }
 
     private Function<String, MatchCommand> parseCommand() {
@@ -72,7 +72,7 @@ class CMatchTest {
             .map(Arrays::stream)
             .map(List::ofAll)
             .map(list -> list.map(Integer::parseInt))
-            .map(list -> MatchScore.of(list.get(0), list.get(1)).get())
+            .map(list -> MatchScoreEvent.of(list.get(0), list.get(1)).get())
             .fold(Function.identity(), Function.identity());
     }
 

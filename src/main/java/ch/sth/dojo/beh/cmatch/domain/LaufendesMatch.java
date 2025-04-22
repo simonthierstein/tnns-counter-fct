@@ -34,7 +34,7 @@ public class LaufendesMatch {
     public static MatchState gegnerPunktet(LaufendesMatchState laufendesMatch) {
         return condition(laufendesMatch.gegnerPunkteMatch().punkteMatchState(), PunkteMatch.hasOneSet,
             x -> new AbgeschlossenesMatchState(),
-            x -> new LaufendesMatchState(laufendesMatch.spielerPunkteMatch(), GegnerPunkteMatch.incerement(laufendesMatch.gegnerPunkteMatch()))
+            x -> new LaufendesMatchState(laufendesMatch.spielerPunkteMatch(), GegnerPunkteMatch.increment(laufendesMatch.gegnerPunkteMatch()))
         );
     }
 

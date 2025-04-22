@@ -10,14 +10,14 @@ import static io.vavr.API.Match;
 import static io.vavr.Predicates.instanceOf;
 
 import ch.sth.dojo.beh.cgame.domain.CGame;
-import ch.sth.dojo.beh.cmatch.domain.MatchScore;
+import ch.sth.dojo.beh.cmatch.domain.MatchScoreEvent;
 import ch.sth.dojo.beh.csatz.domain.CSatz;
 import java.util.function.Function;
 
 public interface MatchState {
 
     static MatchState zero() {
-        return gameMatchState(MatchScore.zero(), CSatz.zero(), CGame.zero());
+        return gameMatchState(MatchScoreEvent.zero(), CSatz.zero(), CGame.zero());
     }
 
     static GameMatchState gameMatchState(final ch.sth.dojo.beh.cmatch.domain.state.MatchState nextMatch, final CSatz nextSatz, final CGame nextGame) {

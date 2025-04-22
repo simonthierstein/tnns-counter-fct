@@ -6,7 +6,7 @@ import ch.sth.dojo.beh.DomainProblem;
 import ch.sth.dojo.beh.cgame.domain.GegnerPunkteBisGame;
 import ch.sth.dojo.beh.cgame.domain.LaufendesCGame;
 import ch.sth.dojo.beh.cgame.domain.SpielerPunkteBisGame;
-import ch.sth.dojo.beh.cmatch.domain.MatchScore;
+import ch.sth.dojo.beh.cmatch.domain.MatchScoreEvent;
 import ch.sth.dojo.beh.csatz.domain.LaufenderCSatz;
 import ch.sth.dojo.beh.evt.DomainEvent;
 import ch.sth.dojo.beh.evt.GegnerGameGewonnen;
@@ -30,7 +30,7 @@ class DomainCommandTest {
     }
 
     private static GameMatchState zeroGame() {
-        return MatchState.gameMatchState(MatchScore.zero(), LaufenderCSatz.zero(), LaufendesCGame.zero());
+        return MatchState.gameMatchState(MatchScoreEvent.zero(), LaufenderCSatz.zero(), LaufendesCGame.zero());
     }
 
     @Test
@@ -42,7 +42,7 @@ class DomainCommandTest {
     }
 
     private static GameMatchState laufendesGameWith(final int spielerValue, final int gegnerValue) {
-        return MatchState.gameMatchState(MatchScore.zero(), LaufenderCSatz.zero(), new LaufendesCGame(new SpielerPunkteBisGame(spielerValue), new GegnerPunkteBisGame(gegnerValue)));
+        return MatchState.gameMatchState(MatchScoreEvent.zero(), LaufenderCSatz.zero(), new LaufendesCGame(new SpielerPunkteBisGame(spielerValue), new GegnerPunkteBisGame(gegnerValue)));
     }
 
     @Test

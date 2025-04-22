@@ -18,7 +18,7 @@ public class GegnerPunkteMatch {
         return new GegnerPunkteMatchState(PunkteMatch.zero());
     }
 
-    public static GegnerPunkteMatchState incerement(GegnerPunkteMatchState state) {
+    public static GegnerPunkteMatchState increment(GegnerPunkteMatchState state) {
         return new GegnerPunkteMatchState(PunkteMatch.increment(state.punkteMatchState()));
     }
 }

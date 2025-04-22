@@ -17,8 +17,11 @@ import ch.sth.dojo.beh.evt.DomainEvent;
 import io.vavr.control.Either;
 import io.vavr.control.Option;
 import java.util.function.Function;
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 
-public class MatchScore {
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+public class MatchScoreEvent {
 
     public static final Function<AbgeschlossenesMatchState, Either<DomainProblem, MatchState>> abgeschlossenesMatchToDomainProblem = abgeschlossenesMatch -> left(DomainProblem.eventNotValid);
     public static final Function<LaufendesMatchState, Either<DomainProblem, MatchState>> laufendesMatchSpielerPunktet = laufendesMatch -> right(LaufendesMatch.spielerPunktet(laufendesMatch));
@@ -50,7 +53,7 @@ public class MatchScore {
 
     public static MatchState createMatchInstance(SpielerPunkteMatchState spielerPunkteMatch, GegnerPunkteMatchState gegnerPunkteMatch) {
         return Option.when(SpielerPunkteMatch.hasWon.test(spielerPunkteMatch) || GegnerPunkteMatch.hasWon.test(gegnerPunkteMatch), new AbgeschlossenesMatchState())
-            .map(MatchScore::narrow)
+            .map(MatchScoreEvent::narrow)
             .getOrElse(() -> new LaufendesMatchState(spielerPunkteMatch, gegnerPunkteMatch));
     }
 
@@ -92,15 +95,4 @@ public class MatchScore {
         return new AbgeschlossenesMatchState();
     }
 
-    public static Either<DomainProblem, DomainEvent> spielerGewinntSatz(MatchState state) {
-        return apply(state,
-            laufendesMatch -> right(LaufendesMatch.spielerGewinntSatz(laufendesMatch)),
-            abgeschlossenesMatchToDomainProblemEvt);
-    }
-
-    public static Either<DomainProblem, DomainEvent> gegnerGewinntSatz(MatchState state) {
-        return apply(state,
-            laufendesMatch -> right(LaufendesMatch.gegnerGewinntSatz(laufendesMatch)),
-            abgeschlossenesMatchToDomainProblemEvt);
-    }
 }

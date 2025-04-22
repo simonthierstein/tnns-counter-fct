@@ -16,7 +16,7 @@ import ch.sth.dojo.beh.cgame.domain.GegnerPunkteBisGame;
 import ch.sth.dojo.beh.cgame.domain.LaufendesCGame;
 import ch.sth.dojo.beh.cgame.domain.SpielerPunkteBisGame;
 import ch.sth.dojo.beh.cgame.domain.Tiebreak;
-import ch.sth.dojo.beh.cmatch.domain.MatchScore;
+import ch.sth.dojo.beh.cmatch.domain.MatchScoreEvent;
 import ch.sth.dojo.beh.cmatch.domain.state.MatchState;
 import ch.sth.dojo.beh.csatz.domain.AbgeschlossenerCSatz;
 import ch.sth.dojo.beh.csatz.domain.CSatz;
@@ -135,7 +135,7 @@ class ScenarioTest {
     }
 
     private static MatchState match() {
-        return MatchScore.zero();
+        return MatchScoreEvent.zero();
     }
 
     @ParameterizedTest
@@ -185,7 +185,7 @@ class ScenarioTest {
     private static Function<String, MatchState> parseMatchState() {
         return input -> scoreParsing(Option.some(input)
             .filter(Predicates.not("MATCH"::equals))
-            .toEither(MatchScore.abgeschlossenesMatch()), list -> MatchScore.of(list.get(0), list.get(1)).get());
+            .toEither(MatchScoreEvent.abgeschlossenesMatch()), list -> MatchScoreEvent.of(list.get(0), list.get(1)).get());
     }
 
     private static <T> T scoreParsing(final Either<T, String> scoreEither, final Function<List<Integer>, T> createrFunction) {
@@ -350,7 +350,7 @@ class ScenarioTest {
     }
 
     private static GameMatchState zeroGame() {
-        return gameMatchState(MatchScore.zero(), LaufenderCSatz.zero(), LaufendesCGame.zero());
+        return gameMatchState(MatchScoreEvent.zero(), LaufenderCSatz.zero(), LaufendesCGame.zero());
     }
 
     @Test
