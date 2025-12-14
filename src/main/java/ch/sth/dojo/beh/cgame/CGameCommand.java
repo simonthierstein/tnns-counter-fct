@@ -13,40 +13,42 @@ import ch.sth.dojo.beh.evt.GegnerPunktGewonnen;
 import ch.sth.dojo.beh.evt.SpielerGameGewonnen;
 import ch.sth.dojo.beh.evt.SpielerPunktGewonnen;
 import io.vavr.control.Either;
+import io.vavr.control.Option;
+
 import static io.vavr.control.Either.left;
 import static io.vavr.control.Either.right;
-import io.vavr.control.Option;
 
 public class CGameCommand {
 
     public static Either<DomainProblem, DomainEvent> gegnerGewinntPunkt(final CGame state) {
         return state.apply(
-            laufendesCGame -> right(gegnerGewinntPunkt(laufendesCGame)),
-            abgeschlossenesCGame -> left(DomainProblem.valueNotValid),
-            TiebreakCommand::gegnerGewinntPunkt
+                laufendesCGame -> right(gegnerGewinntPunkt(laufendesCGame)),
+                abgeschlossenesCGame -> left(DomainProblem.valueNotValid),
+                TiebreakCommand::gegnerGewinntPunkt
         );
     }
 
     private static DomainEvent gegnerGewinntPunkt(final LaufendesCGame state) {
         return Option.some(state)
-            .filter(LaufendesCGame.passIfGegnerOnePunktBisCGame)
-            .map(x -> gegnerGameGewonnen())
-            .getOrElse(gegnerPunktGewonnen());
+                .filter(LaufendesCGame.passIfGegnerOnePunktBisCGame)
+                .fold(
+                        CGameCommand::gegnerPunktGewonnen,
+                        x -> gegnerGameGewonnen());
     }
 
     public static Either<DomainProblem, DomainEvent> spielerGewinntPunkt(CGame state) {
         return state.apply(
-            laufendesCGame -> right(spielerGewinntPunkt(laufendesCGame)),
-            abgeschlossenesCGame -> left(DomainProblem.valueNotValid),
-            TiebreakCommand::spielerGewinntPunkt
+                laufendesCGame -> right(spielerGewinntPunkt(laufendesCGame)),
+                abgeschlossenesCGame -> left(DomainProblem.valueNotValid),
+                TiebreakCommand::spielerGewinntPunkt
         );
     }
 
     private static DomainEvent spielerGewinntPunkt(final LaufendesCGame state) {
         return Option.some(state)
-            .filter(LaufendesCGame.passIfSpielerOnePunktBisCGame)
-            .map(x -> spielerGameGewonnen())
-            .getOrElse(spielerPunktGewonnen());
+                .filter(LaufendesCGame.passIfSpielerOnePunktBisCGame)
+                .map(x -> spielerGameGewonnen())
+                .getOrElse(spielerPunktGewonnen());
     }
 
     private static DomainEvent spielerGameGewonnen() {
