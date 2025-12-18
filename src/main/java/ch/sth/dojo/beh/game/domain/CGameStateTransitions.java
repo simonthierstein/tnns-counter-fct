@@ -2,7 +2,7 @@
  * Copyright (C) Schweizerische Bundesbahnen SBB, 2025.
  */
 
-package ch.sth.dojo.beh.cgame.domain;
+package ch.sth.dojo.beh.game.domain;
 
 import static ch.sth.dojo.beh.shared.domain.GewinnerVerlierer.of;
 

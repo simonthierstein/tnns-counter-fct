@@ -5,7 +5,7 @@
 package ch.sth.dojo.beh.matchstate;
 
 import ch.sth.dojo.beh.DomainProblem;
-import ch.sth.dojo.beh.cgame.domain.CGame;
+import ch.sth.dojo.beh.game.domain.CGame;
 import ch.sth.dojo.beh.cmatch.domain.CMatch;
 import ch.sth.dojo.beh.csatz.domain.CSatz;
 import io.vavr.Function3;

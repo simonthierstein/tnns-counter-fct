@@ -1,8 +1,8 @@
 package ch.sth.dojo.beh;
 
-import ch.sth.dojo.beh.cgame.domain.CGame;
-import ch.sth.dojo.beh.cgame.domain.Tiebreak;
-import ch.sth.dojo.beh.cgame.evt.CGameEventHandler;
+import ch.sth.dojo.beh.game.domain.CGame;
+import ch.sth.dojo.beh.game.domain.Tiebreak;
+import ch.sth.dojo.beh.game.evt.CGameEventHandler;
 import ch.sth.dojo.beh.cmatch.domain.CMatch;
 import ch.sth.dojo.beh.cmatch.evt.CMatchEventHandler;
 import ch.sth.dojo.beh.csatz.domain.CSatz;

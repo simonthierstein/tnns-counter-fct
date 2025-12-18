@@ -13,11 +13,11 @@ import static io.vavr.control.Either.left;
 import static io.vavr.control.Either.right;
 
 import ch.sth.dojo.beh.DomainProblem;
-import ch.sth.dojo.beh.cgame.CGameCommand;
-import ch.sth.dojo.beh.cgame.TiebreakCommand;
-import ch.sth.dojo.beh.cgame.domain.CGame;
-import ch.sth.dojo.beh.cgame.domain.LaufendesCGame;
-import ch.sth.dojo.beh.cgame.domain.Tiebreak;
+import ch.sth.dojo.beh.game.CGameCommand;
+import ch.sth.dojo.beh.game.TiebreakCommand;
+import ch.sth.dojo.beh.game.domain.CGame;
+import ch.sth.dojo.beh.game.domain.LaufendesCGame;
+import ch.sth.dojo.beh.game.domain.Tiebreak;
 import ch.sth.dojo.beh.cmatch.CMatchCommand;
 import ch.sth.dojo.beh.cmatch.domain.CMatch;
 import ch.sth.dojo.beh.cmatch.domain.LaufendesMatch;

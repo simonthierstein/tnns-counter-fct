@@ -1,6 +1,6 @@
-package ch.sth.dojo.beh.cgame.domain;
+package ch.sth.dojo.beh.game.domain;
 
-import static ch.sth.dojo.beh.cgame.domain.PunkteBisGame.PunkteBisGame;
+import static ch.sth.dojo.beh.game.domain.PunkteBisGame.PunkteBisGame;
 
 import ch.sth.dojo.beh.DomainProblem;
 import io.vavr.control.Either;

@@ -1,7 +1,7 @@
-package ch.sth.dojo.beh.cgame.domain;
+package ch.sth.dojo.beh.game.domain;
 
 import ch.sth.dojo.beh.DomainProblem;
-import static ch.sth.dojo.beh.cgame.domain.LaufendesCGame.LaufendesCGame;
+import static ch.sth.dojo.beh.game.domain.LaufendesCGame.LaufendesCGame;
 import static io.vavr.API.$;
 import static io.vavr.API.Case;
 import static io.vavr.API.Match;

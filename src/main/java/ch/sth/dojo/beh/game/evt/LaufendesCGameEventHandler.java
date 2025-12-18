@@ -2,16 +2,16 @@
  * Copyright (C) Schweizerische Bundesbahnen SBB, 2025.
  */
 
-package ch.sth.dojo.beh.cgame.evt;
+package ch.sth.dojo.beh.game.evt;
 
 import static io.vavr.control.Either.right;
 
 import ch.sth.dojo.beh.DomainProblem;
-import ch.sth.dojo.beh.cgame.domain.AbgeschlossenesCGame;
-import ch.sth.dojo.beh.cgame.domain.CGame;
-import ch.sth.dojo.beh.cgame.domain.GegnerPunkteBisGame;
-import ch.sth.dojo.beh.cgame.domain.LaufendesCGame;
-import ch.sth.dojo.beh.cgame.domain.SpielerPunkteBisGame;
+import ch.sth.dojo.beh.game.domain.AbgeschlossenesCGame;
+import ch.sth.dojo.beh.game.domain.CGame;
+import ch.sth.dojo.beh.game.domain.GegnerPunkteBisGame;
+import ch.sth.dojo.beh.game.domain.LaufendesCGame;
+import ch.sth.dojo.beh.game.domain.SpielerPunkteBisGame;
 import ch.sth.dojo.beh.shared.domain.Gewinner;
 import ch.sth.dojo.beh.shared.domain.Verlierer;
 import io.vavr.control.Either;
