@@ -7,7 +7,7 @@ package ch.sth.dojo.beh.game.evt;
 import static io.vavr.control.Either.right;
 
 import ch.sth.dojo.beh.DomainProblem;
-import ch.sth.dojo.beh.game.domain.AbgeschlossenesCGame;
+import ch.sth.dojo.beh.game.domain.AbgeschlossenesGame;
 import ch.sth.dojo.beh.game.domain.CGame;
 import ch.sth.dojo.beh.game.domain.GegnerPunkteBisGame;
 import ch.sth.dojo.beh.game.domain.LaufendesCGame;
@@ -39,7 +39,7 @@ class LaufendesCGameEventHandler {
     }
 
     static Either<DomainProblem, CGame> gegnerMatchGewonnen(final LaufendesCGame laufendesCGame) {
-        return right(new AbgeschlossenesCGame());
+        return right(new AbgeschlossenesGame());
     }
 
     static Either<DomainProblem, CGame> gegnerSatzGewonnen(final LaufendesCGame laufendesCGame) {
@@ -47,7 +47,7 @@ class LaufendesCGameEventHandler {
     }
 
     static Either<DomainProblem, CGame> spielerMatchGewonnen(final LaufendesCGame state) {
-        return right(new AbgeschlossenesCGame());
+        return right(new AbgeschlossenesGame());
     }
 
     static Either<DomainProblem, CGame> spielerSatzGewonnen(LaufendesCGame state) {

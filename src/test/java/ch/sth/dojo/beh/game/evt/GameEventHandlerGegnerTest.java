@@ -15,7 +15,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
-class CGameEventHandlerGegnerTest {
+class GameEventHandlerGegnerTest {
 
     @DisplayName("Scoring 😎")
     @ParameterizedTest(name = "gegner punktet {0} - {1}")
@@ -100,7 +100,7 @@ class CGameEventHandlerGegnerTest {
         "3,0",
     })
     void gameGewonnenNotAllowedEvent2(Integer gegnerValue, Integer spielerValue) {
-        final Either<DomainProblem, CGame> cGames = CGameEventHandler.handleEvent(createStandardState(spielerValue, gegnerValue), new SpielerPunktGewonnen());
+        final Either<DomainProblem, CGame> cGames = GameEventHandler.handleEvent(createStandardState(spielerValue, gegnerValue), new SpielerPunktGewonnen());
 
         assertThat(cGames.isRight()).isFalse();
         assertThat(cGames.getLeft()).isEqualTo(DomainProblem.eventNotValid);

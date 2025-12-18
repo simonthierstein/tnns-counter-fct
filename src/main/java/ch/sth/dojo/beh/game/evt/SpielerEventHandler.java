@@ -6,7 +6,7 @@ package ch.sth.dojo.beh.game.evt;
 
 import ch.sth.dojo.beh.DomainProblem;
 import ch.sth.dojo.beh.game.domain.CGame;
-import static ch.sth.dojo.beh.game.evt.CGameEventHandler.abgeschlossenToLeft;
+import static ch.sth.dojo.beh.game.evt.GameEventHandler.abgeschlossenToLeft;
 import ch.sth.dojo.beh.evt.SpielerDomainEvent;
 import ch.sth.dojo.beh.evt.SpielerGameGewonnen;
 import ch.sth.dojo.beh.evt.SpielerMatchGewonnen;

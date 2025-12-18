@@ -13,7 +13,7 @@ import static io.vavr.control.Either.left;
 import static io.vavr.control.Either.right;
 
 import ch.sth.dojo.beh.DomainProblem;
-import ch.sth.dojo.beh.game.CGameCommand;
+import ch.sth.dojo.beh.game.GameCommand;
 import ch.sth.dojo.beh.game.TiebreakCommand;
 import ch.sth.dojo.beh.game.domain.CGame;
 import ch.sth.dojo.beh.game.domain.LaufendesCGame;
@@ -51,7 +51,7 @@ public record GegnerPunktet(UUID uuid) implements DomainCommand {
     }
 
     private static Either<DomainProblem, DomainEvent> apply(CMatch cMatch, CSatz cSatz, CGame cGame) {
-        final Either<DomainProblem, DomainEvent> domainEvents = CGameCommand.gegnerGewinntPunkt(cGame);
+        final Either<DomainProblem, DomainEvent> domainEvents = GameCommand.gegnerGewinntPunkt(cGame);
         return domainEvents
             .flatMap(handleGameEvent(cSatz))
             .flatMap(handleSatzEvent(cMatch));

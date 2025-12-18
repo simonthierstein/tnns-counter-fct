@@ -18,7 +18,7 @@ import io.vavr.control.Option;
 import static io.vavr.control.Either.left;
 import static io.vavr.control.Either.right;
 
-public class CGameCommand {
+public class GameCommand {
 
     public static Either<DomainProblem, DomainEvent> gegnerGewinntPunkt(final CGame state) {
         return state.apply(
@@ -32,7 +32,7 @@ public class CGameCommand {
         return Option.some(state)
                 .filter(LaufendesCGame.passIfGegnerOnePunktBisCGame)
                 .fold(
-                        CGameCommand::gegnerPunktGewonnen,
+                        GameCommand::gegnerPunktGewonnen,
                         x -> gegnerGameGewonnen());
     }
 

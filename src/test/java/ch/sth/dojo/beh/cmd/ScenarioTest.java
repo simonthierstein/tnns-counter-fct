@@ -10,7 +10,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import ch.sth.dojo.beh.DomainProblem;
 import ch.sth.dojo.beh.RootEventHandler;
-import ch.sth.dojo.beh.game.domain.AbgeschlossenesCGame;
+import ch.sth.dojo.beh.game.domain.AbgeschlossenesGame;
 import ch.sth.dojo.beh.game.domain.CGame;
 import ch.sth.dojo.beh.game.domain.GegnerPunkteBisGame;
 import ch.sth.dojo.beh.game.domain.LaufendesCGame;
@@ -246,7 +246,7 @@ class ScenarioTest {
             Case($("AD-DA"), Tuple.of(1, 3).apply(CGame::of)),
             Case($("DA-AD"), Tuple.of(3, 1).apply(CGame::of)),
             Case($("DEUCE"), Tuple.of(2, 2).apply(CGame::of)),
-            Case($("GAME"), Either.right(new AbgeschlossenesCGame()))
+            Case($("GAME"), Either.right(new AbgeschlossenesGame()))
         ).get();
     }
 

@@ -10,7 +10,7 @@ import io.vavr.control.Either;
 import io.vavr.control.Option;
 import java.util.function.Function;
 
-public sealed interface CGame permits AbgeschlossenesCGame, LaufendesCGame, Tiebreak {
+public sealed interface CGame permits AbgeschlossenesGame, LaufendesCGame, Tiebreak {
 
     static CGame zero() {
         return LaufendesCGame.zero();
@@ -25,11 +25,11 @@ public sealed interface CGame permits AbgeschlossenesCGame, LaufendesCGame, Tieb
 
     default <T> T apply(
         Function<LaufendesCGame, T> laufendesCGameTFunction,
-        Function<AbgeschlossenesCGame, T> abgeschlossenesCGameTFunction,
+        Function<AbgeschlossenesGame, T> abgeschlossenesCGameTFunction,
         Function<Tiebreak, T> tiebreakTFunction) {
         return Match(this).of(
             Case($(instanceOf(LaufendesCGame.class)), laufendesCGameTFunction),
-            Case($(instanceOf(AbgeschlossenesCGame.class)), abgeschlossenesCGameTFunction),
+            Case($(instanceOf(AbgeschlossenesGame.class)), abgeschlossenesCGameTFunction),
             Case($(instanceOf(Tiebreak.class)), tiebreakTFunction)
         );
     }

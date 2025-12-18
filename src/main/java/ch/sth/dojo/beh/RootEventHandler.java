@@ -2,7 +2,7 @@ package ch.sth.dojo.beh;
 
 import ch.sth.dojo.beh.game.domain.CGame;
 import ch.sth.dojo.beh.game.domain.Tiebreak;
-import ch.sth.dojo.beh.game.evt.CGameEventHandler;
+import ch.sth.dojo.beh.game.evt.GameEventHandler;
 import ch.sth.dojo.beh.cmatch.domain.CMatch;
 import ch.sth.dojo.beh.cmatch.evt.CMatchEventHandler;
 import ch.sth.dojo.beh.csatz.domain.CSatz;
@@ -53,7 +53,7 @@ public interface RootEventHandler {
             prevGameMatchState -> prevGameMatchState.apply(
                 prevMatch -> CMatchEventHandler.handleEvent(prevMatch, event),
                 prevSatz -> CSatzEventHandler.handleEvent(prevSatz, event),
-                prevGame -> CGameEventHandler.handleEvent(prevGame, event))
+                prevGame -> GameEventHandler.handleEvent(prevGame, event))
         ));
     }
 
