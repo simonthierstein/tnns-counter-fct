@@ -14,7 +14,7 @@ import io.vavr.collection.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-public final class CGameStateTransitions {
+public final class GameStateTransitions {
 
     private static final Predicate<GewinnerVerlierer> deuce30AllCondition = t2 ->
         t2.gewinner().value() == 2 && t2.verlierer().value() == 2;

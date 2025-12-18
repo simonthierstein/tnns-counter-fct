@@ -16,7 +16,7 @@ import ch.sth.dojo.beh.shared.domain.Gewinner;
 import ch.sth.dojo.beh.shared.domain.Verlierer;
 import io.vavr.control.Either;
 
-class LaufendesCGameEventHandler {
+class LaufendesGameEventHandler {
     //
     //    static Either<DomainProblem, CGame> handleEvent(final LaufendesCGame state, final DomainEvent event) {
     //       var res=  DomainEvent.apply(event,

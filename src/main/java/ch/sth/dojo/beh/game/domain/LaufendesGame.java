@@ -28,7 +28,7 @@ public record LaufendesGame(SpielerPunkteBisGame spielerPunkteBisGame, GegnerPun
         final Function<GewinnerVerlierer, Game> tuple2CGameFunction = t2 -> cgameCreator.tupled().apply(t2.tupled());
 
         return Either.<DomainProblem, GewinnerVerlierer>right(GewinnerVerlierer.of(gewinner, verlierer))
-            .flatMap(StateTransition.apply(CGameStateTransitions.stateTransitions))
+            .flatMap(StateTransition.apply(GameStateTransitions.stateTransitions))
             .map(tuple2CGameFunction);
     }
 }

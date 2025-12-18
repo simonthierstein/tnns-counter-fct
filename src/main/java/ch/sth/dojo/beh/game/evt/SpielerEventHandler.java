@@ -27,7 +27,7 @@ public interface SpielerEventHandler {
 
     private static Either<DomainProblem, Game> handleEvent(Game state, SpielerMatchGewonnen evt) {
         return state.apply(
-            LaufendesCGameEventHandler::spielerMatchGewonnen,
+            LaufendesGameEventHandler::spielerMatchGewonnen,
             abgeschlossenToLeft,
             TiebreakEventHandler.handleWithNarrow(evt)
         );
@@ -35,7 +35,7 @@ public interface SpielerEventHandler {
 
     private static Either<DomainProblem, Game> handleEvent(Game state, SpielerSatzGewonnen evt) {
         return state.apply(
-            LaufendesCGameEventHandler::spielerSatzGewonnen,
+            LaufendesGameEventHandler::spielerSatzGewonnen,
             abgeschlossenToLeft,
             TiebreakEventHandler.handleWithNarrow(evt)
         );
@@ -43,7 +43,7 @@ public interface SpielerEventHandler {
 
     private static Either<DomainProblem, Game> handleEvent(Game state, SpielerGameGewonnen evt) {
         return state.apply(
-            LaufendesCGameEventHandler::spielerGameGewonnen,
+            LaufendesGameEventHandler::spielerGameGewonnen,
             abgeschlossenToLeft,
             TiebreakEventHandler.handleWithNarrow(evt)
         );
@@ -51,7 +51,7 @@ public interface SpielerEventHandler {
 
     private static Either<DomainProblem, Game> handleEvent(Game state, SpielerPunktGewonnen evt) {
         return state.apply(
-            LaufendesCGameEventHandler::spielerPunktGewonnen,
+            LaufendesGameEventHandler::spielerPunktGewonnen,
             abgeschlossenToLeft,
             TiebreakEventHandler.handleWithNarrow(evt)
         );
