@@ -5,7 +5,7 @@
 package ch.sth.dojo.beh.game.evt;
 
 import ch.sth.dojo.beh.DomainProblem;
-import ch.sth.dojo.beh.game.domain.CGame;
+import ch.sth.dojo.beh.game.domain.Game;
 import static ch.sth.dojo.beh.game.evt.GameEventHandler.abgeschlossenToLeft;
 import ch.sth.dojo.beh.evt.SpielerDomainEvent;
 import ch.sth.dojo.beh.evt.SpielerGameGewonnen;
@@ -16,7 +16,7 @@ import io.vavr.control.Either;
 
 public interface SpielerEventHandler {
 
-    static Either<DomainProblem, CGame> handleSpielerEvent(CGame state, SpielerDomainEvent event) {
+    static Either<DomainProblem, Game> handleSpielerEvent(Game state, SpielerDomainEvent event) {
         return switch (event) {
             case SpielerPunktGewonnen evt -> handleEvent(state, evt);
             case SpielerGameGewonnen evt -> handleEvent(state, evt);
@@ -25,7 +25,7 @@ public interface SpielerEventHandler {
         };
     }
 
-    private static Either<DomainProblem, CGame> handleEvent(CGame state, SpielerMatchGewonnen evt) {
+    private static Either<DomainProblem, Game> handleEvent(Game state, SpielerMatchGewonnen evt) {
         return state.apply(
             LaufendesCGameEventHandler::spielerMatchGewonnen,
             abgeschlossenToLeft,
@@ -33,7 +33,7 @@ public interface SpielerEventHandler {
         );
     }
 
-    private static Either<DomainProblem, CGame> handleEvent(CGame state, SpielerSatzGewonnen evt) {
+    private static Either<DomainProblem, Game> handleEvent(Game state, SpielerSatzGewonnen evt) {
         return state.apply(
             LaufendesCGameEventHandler::spielerSatzGewonnen,
             abgeschlossenToLeft,
@@ -41,7 +41,7 @@ public interface SpielerEventHandler {
         );
     }
 
-    private static Either<DomainProblem, CGame> handleEvent(CGame state, SpielerGameGewonnen evt) {
+    private static Either<DomainProblem, Game> handleEvent(Game state, SpielerGameGewonnen evt) {
         return state.apply(
             LaufendesCGameEventHandler::spielerGameGewonnen,
             abgeschlossenToLeft,
@@ -49,7 +49,7 @@ public interface SpielerEventHandler {
         );
     }
 
-    private static Either<DomainProblem, CGame> handleEvent(CGame state, SpielerPunktGewonnen evt) {
+    private static Either<DomainProblem, Game> handleEvent(Game state, SpielerPunktGewonnen evt) {
         return state.apply(
             LaufendesCGameEventHandler::spielerPunktGewonnen,
             abgeschlossenToLeft,

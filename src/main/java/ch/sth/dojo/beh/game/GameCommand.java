@@ -5,8 +5,8 @@
 package ch.sth.dojo.beh.game;
 
 import ch.sth.dojo.beh.DomainProblem;
-import ch.sth.dojo.beh.game.domain.CGame;
-import ch.sth.dojo.beh.game.domain.LaufendesCGame;
+import ch.sth.dojo.beh.game.domain.Game;
+import ch.sth.dojo.beh.game.domain.LaufendesGame;
 import ch.sth.dojo.beh.evt.DomainEvent;
 import ch.sth.dojo.beh.evt.GegnerGameGewonnen;
 import ch.sth.dojo.beh.evt.GegnerPunktGewonnen;
@@ -20,7 +20,7 @@ import static io.vavr.control.Either.right;
 
 public class GameCommand {
 
-    public static Either<DomainProblem, DomainEvent> gegnerGewinntPunkt(final CGame state) {
+    public static Either<DomainProblem, DomainEvent> gegnerGewinntPunkt(final Game state) {
         return state.apply(
                 laufendesCGame -> right(gegnerGewinntPunkt(laufendesCGame)),
                 abgeschlossenesCGame -> left(DomainProblem.valueNotValid),
@@ -28,15 +28,15 @@ public class GameCommand {
         );
     }
 
-    private static DomainEvent gegnerGewinntPunkt(final LaufendesCGame state) {
+    private static DomainEvent gegnerGewinntPunkt(final LaufendesGame state) {
         return Option.some(state)
-                .filter(LaufendesCGame.passIfGegnerOnePunktBisCGame)
+                .filter(LaufendesGame.passIfGegnerOnePunktBisCGame)
                 .fold(
                         GameCommand::gegnerPunktGewonnen,
                         x -> gegnerGameGewonnen());
     }
 
-    public static Either<DomainProblem, DomainEvent> spielerGewinntPunkt(CGame state) {
+    public static Either<DomainProblem, DomainEvent> spielerGewinntPunkt(Game state) {
         return state.apply(
                 laufendesCGame -> right(spielerGewinntPunkt(laufendesCGame)),
                 abgeschlossenesCGame -> left(DomainProblem.valueNotValid),
@@ -44,9 +44,9 @@ public class GameCommand {
         );
     }
 
-    private static DomainEvent spielerGewinntPunkt(final LaufendesCGame state) {
+    private static DomainEvent spielerGewinntPunkt(final LaufendesGame state) {
         return Option.some(state)
-                .filter(LaufendesCGame.passIfSpielerOnePunktBisCGame)
+                .filter(LaufendesGame.passIfSpielerOnePunktBisCGame)
                 .map(x -> spielerGameGewonnen())
                 .getOrElse(spielerPunktGewonnen());
     }

@@ -11,7 +11,7 @@ import static io.vavr.Predicates.instanceOf;
 
 import ch.sth.dojo.beh.DomainProblem;
 import ch.sth.dojo.beh.game.GameCommand;
-import ch.sth.dojo.beh.game.domain.CGame;
+import ch.sth.dojo.beh.game.domain.Game;
 import ch.sth.dojo.beh.cmatch.CMatchCommand;
 import ch.sth.dojo.beh.cmatch.domain.CMatch;
 import ch.sth.dojo.beh.csatz.CSatzCommand;
@@ -40,7 +40,7 @@ public record SpielerPunktet(UUID id) implements DomainCommand {
         );
     }
 
-    private static Function3<CMatch, CSatz, CGame, Either<DomainProblem, DomainEvent>> apply() {
+    private static Function3<CMatch, CSatz, Game, Either<DomainProblem, DomainEvent>> apply() {
         return (match, satz, game) ->
             GameCommand.spielerGewinntPunkt(game)
                 .flatMap(handleGameEvent(satz))

@@ -4,7 +4,7 @@
 
 package ch.sth.dojo.beh.matchstate;
 
-import ch.sth.dojo.beh.game.domain.CGame;
+import ch.sth.dojo.beh.game.domain.Game;
 import ch.sth.dojo.beh.cmatch.domain.CMatch;
 import ch.sth.dojo.beh.csatz.domain.CSatz;
 import static io.vavr.API.$;
@@ -16,10 +16,10 @@ import java.util.function.Function;
 public interface MatchState {
 
     static MatchState zero() {
-        return gameMatchState(CMatch.zero(), CSatz.zero(), CGame.zero());
+        return gameMatchState(CMatch.zero(), CSatz.zero(), Game.zero());
     }
 
-    static GameMatchState gameMatchState(final CMatch nextMatch, final CSatz nextSatz, final CGame nextGame) {
+    static GameMatchState gameMatchState(final CMatch nextMatch, final CSatz nextSatz, final Game nextGame) {
         return new GameMatchState(nextMatch, nextSatz, nextGame);
     }
 

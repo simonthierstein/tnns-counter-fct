@@ -5,7 +5,7 @@
 package ch.sth.dojo.beh.game.evt;
 
 import ch.sth.dojo.beh.DomainProblem;
-import ch.sth.dojo.beh.game.domain.CGame;
+import ch.sth.dojo.beh.game.domain.Game;
 import ch.sth.dojo.beh.game.domain.Tiebreak;
 import ch.sth.dojo.beh.evt.DomainEvent;
 import ch.sth.dojo.beh.evt.GegnerMatchGewonnen;
@@ -58,8 +58,8 @@ public class TiebreakEventHandler {
         return right(state.gegnerPunktGewonnen());
     }
 
-    static Function<Tiebreak, Either<DomainProblem, CGame>> handleWithNarrow(final DomainEvent evt) {
-        return tiebreak -> handleEvent(tiebreak, evt).map(CGame::narrow);
+    static Function<Tiebreak, Either<DomainProblem, Game>> handleWithNarrow(final DomainEvent evt) {
+        return tiebreak -> handleEvent(tiebreak, evt).map(Game::narrow);
     }
 }
 

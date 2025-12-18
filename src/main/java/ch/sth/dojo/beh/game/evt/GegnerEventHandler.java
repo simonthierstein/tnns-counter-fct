@@ -5,8 +5,8 @@
 package ch.sth.dojo.beh.game.evt;
 
 import ch.sth.dojo.beh.DomainProblem;
-import ch.sth.dojo.beh.game.domain.CGame;
-import ch.sth.dojo.beh.game.domain.LaufendesCGame;
+import ch.sth.dojo.beh.game.domain.Game;
+import ch.sth.dojo.beh.game.domain.LaufendesGame;
 import ch.sth.dojo.beh.evt.GegnerDomainEvent;
 import ch.sth.dojo.beh.evt.GegnerGameGewonnen;
 import ch.sth.dojo.beh.evt.GegnerMatchGewonnen;
@@ -17,7 +17,7 @@ import static io.vavr.control.Either.right;
 
 interface GegnerEventHandler {
 
-    static Either<DomainProblem, CGame> handleGegnerEvent(CGame state, GegnerDomainEvent event) {
+    static Either<DomainProblem, Game> handleGegnerEvent(Game state, GegnerDomainEvent event) {
         return GegnerDomainEvent.apply(event,
             evt -> handleEvent(state, evt),
             evt -> handleEvent(state, evt),
@@ -26,7 +26,7 @@ interface GegnerEventHandler {
         );
     }
 
-    private static Either<DomainProblem, CGame> handleEvent(CGame state, GegnerMatchGewonnen evt) {
+    private static Either<DomainProblem, Game> handleEvent(Game state, GegnerMatchGewonnen evt) {
         return state.apply(
             LaufendesCGameEventHandler::gegnerMatchGewonnen,
             GameEventHandler.abgeschlossenToLeft,
@@ -34,7 +34,7 @@ interface GegnerEventHandler {
         );
     }
 
-    private static Either<DomainProblem, CGame> handleEvent(CGame state, GegnerSatzGewonnen evt) {
+    private static Either<DomainProblem, Game> handleEvent(Game state, GegnerSatzGewonnen evt) {
         return state.apply(
             LaufendesCGameEventHandler::gegnerSatzGewonnen,
             GameEventHandler.abgeschlossenToLeft,
@@ -42,7 +42,7 @@ interface GegnerEventHandler {
         );
     }
 
-    private static Either<DomainProblem, CGame> handleEvent(CGame state, GegnerPunktGewonnen evt) {
+    private static Either<DomainProblem, Game> handleEvent(Game state, GegnerPunktGewonnen evt) {
         return state.apply(
             LaufendesCGameEventHandler::gegnerPunktGewonnen,
             GameEventHandler.abgeschlossenToLeft,
@@ -50,8 +50,8 @@ interface GegnerEventHandler {
         );
     }
 
-    private static Either<DomainProblem, CGame> handleEvent(CGame state, GegnerGameGewonnen evt) {
-        return right(LaufendesCGame.zero());
+    private static Either<DomainProblem, Game> handleEvent(Game state, GegnerGameGewonnen evt) {
+        return right(LaufendesGame.zero());
     }
 
 }

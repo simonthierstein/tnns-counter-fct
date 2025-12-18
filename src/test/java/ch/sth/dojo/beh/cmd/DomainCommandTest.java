@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import ch.sth.dojo.beh.DomainProblem;
 import ch.sth.dojo.beh.game.domain.GegnerPunkteBisGame;
-import ch.sth.dojo.beh.game.domain.LaufendesCGame;
+import ch.sth.dojo.beh.game.domain.LaufendesGame;
 import ch.sth.dojo.beh.game.domain.SpielerPunkteBisGame;
 import ch.sth.dojo.beh.cmatch.domain.CMatch;
 import ch.sth.dojo.beh.csatz.domain.LaufenderCSatz;
@@ -30,7 +30,7 @@ class DomainCommandTest {
     }
 
     private static GameMatchState zeroGame() {
-        return MatchState.gameMatchState(CMatch.zero(), LaufenderCSatz.zero(), LaufendesCGame.zero());
+        return MatchState.gameMatchState(CMatch.zero(), LaufenderCSatz.zero(), LaufendesGame.zero());
     }
 
     @Test
@@ -42,7 +42,7 @@ class DomainCommandTest {
     }
 
     private static GameMatchState laufendesGameWith(final int spielerValue, final int gegnerValue) {
-        return MatchState.gameMatchState(CMatch.zero(), LaufenderCSatz.zero(), new LaufendesCGame(new SpielerPunkteBisGame(spielerValue), new GegnerPunkteBisGame(gegnerValue)));
+        return MatchState.gameMatchState(CMatch.zero(), LaufenderCSatz.zero(), new LaufendesGame(new SpielerPunkteBisGame(spielerValue), new GegnerPunkteBisGame(gegnerValue)));
     }
 
     @Test

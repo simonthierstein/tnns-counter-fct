@@ -3,9 +3,9 @@ package ch.sth.dojo.beh.game.evt;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import ch.sth.dojo.beh.DomainProblem;
-import ch.sth.dojo.beh.game.domain.CGame;
+import ch.sth.dojo.beh.game.domain.Game;
 import ch.sth.dojo.beh.game.domain.GegnerPunkteBisGame;
-import ch.sth.dojo.beh.game.domain.LaufendesCGame;
+import ch.sth.dojo.beh.game.domain.LaufendesGame;
 import ch.sth.dojo.beh.game.domain.SpielerPunkteBisGame;
 import ch.sth.dojo.beh.evt.GegnerGameGewonnen;
 import ch.sth.dojo.beh.evt.GegnerPunktGewonnen;
@@ -23,10 +23,10 @@ class GameEventHandlerGegnerTest {
         "3,4", "3,3", "3,2", "4,1"
     })
     void handleEvent(Integer gegnerValue, Integer spielerValue) {
-        final Either<DomainProblem, CGame> cGames = GegnerEventHandler.handleGegnerEvent(createStandardState(spielerValue, gegnerValue), new GegnerPunktGewonnen());
+        final Either<DomainProblem, Game> cGames = GegnerEventHandler.handleGegnerEvent(createStandardState(spielerValue, gegnerValue), new GegnerPunktGewonnen());
 
         assertThat(cGames.isRight()).isTrue();
-        assertThat(cGames.map(LaufendesCGame.class::cast))
+        assertThat(cGames.map(LaufendesGame.class::cast))
             .allMatch(x -> x.spielerPunkteBisGame().value().equals(spielerValue))
             .allMatch(x -> x.gegnerPunkteBisGame().value().equals(gegnerValue - 1));
     }
@@ -37,10 +37,10 @@ class GameEventHandlerGegnerTest {
         "2,2,1,3", "3,1,2,2", "2,4,1,5", "2,3,1,4"
     })
     void punktGewonnenInfluenced(Integer gegnerValue, Integer spielerValue, Integer expGegnerValue, Integer expSpielerValue) {
-        final Either<DomainProblem, CGame> cGames = GegnerEventHandler.handleGegnerEvent(createStandardState(spielerValue, gegnerValue), new GegnerPunktGewonnen());
+        final Either<DomainProblem, Game> cGames = GegnerEventHandler.handleGegnerEvent(createStandardState(spielerValue, gegnerValue), new GegnerPunktGewonnen());
 
         assertThat(cGames.isRight()).isTrue();
-        assertThat(cGames.map(LaufendesCGame.class::cast))
+        assertThat(cGames.map(LaufendesGame.class::cast))
             .allMatch(x -> x.spielerPunkteBisGame().value().equals(expSpielerValue))
             .allMatch(x -> x.gegnerPunkteBisGame().value().equals(expGegnerValue));
     }
@@ -53,10 +53,10 @@ class GameEventHandlerGegnerTest {
         "1,3"
     })
     void gameGewonnen(Integer gegnerValue, Integer spielerValue) {
-        final Either<DomainProblem, CGame> cGames = GegnerEventHandler.handleGegnerEvent(createStandardState(spielerValue, gegnerValue), new GegnerGameGewonnen());
+        final Either<DomainProblem, Game> cGames = GegnerEventHandler.handleGegnerEvent(createStandardState(spielerValue, gegnerValue), new GegnerGameGewonnen());
 
         assertThat(cGames.isRight()).isTrue();
-        assertThat(cGames.get()).isEqualTo(LaufendesCGame.zero());
+        assertThat(cGames.get()).isEqualTo(LaufendesGame.zero());
     }
 
     @DisplayName("Wrong Event Punkt Gewonnen on Game Gewonnen 😎")
@@ -67,7 +67,7 @@ class GameEventHandlerGegnerTest {
         "1,3"
     })
     void gameGewonnenWrongEvent(Integer gegnerValue, Integer spielerValue) {
-        final Either<DomainProblem, CGame> cGames = GegnerEventHandler.handleGegnerEvent(createStandardState(spielerValue, gegnerValue), new GegnerPunktGewonnen());
+        final Either<DomainProblem, Game> cGames = GegnerEventHandler.handleGegnerEvent(createStandardState(spielerValue, gegnerValue), new GegnerPunktGewonnen());
 
         assertThat(cGames.isRight()).isFalse();
     }
@@ -83,7 +83,7 @@ class GameEventHandlerGegnerTest {
         "3,0",
     })
     void gameGewonnenNotAllowedEvent(Integer gegnerValue, Integer spielerValue) {
-        final Either<DomainProblem, CGame> cGames = GegnerEventHandler.handleGegnerEvent(createStandardState(spielerValue, gegnerValue), new GegnerPunktGewonnen());
+        final Either<DomainProblem, Game> cGames = GegnerEventHandler.handleGegnerEvent(createStandardState(spielerValue, gegnerValue), new GegnerPunktGewonnen());
 
         assertThat(cGames.isRight()).isFalse();
         assertThat(cGames.getLeft()).isEqualTo(DomainProblem.eventNotValid);
@@ -100,13 +100,13 @@ class GameEventHandlerGegnerTest {
         "3,0",
     })
     void gameGewonnenNotAllowedEvent2(Integer gegnerValue, Integer spielerValue) {
-        final Either<DomainProblem, CGame> cGames = GameEventHandler.handleEvent(createStandardState(spielerValue, gegnerValue), new SpielerPunktGewonnen());
+        final Either<DomainProblem, Game> cGames = GameEventHandler.handleEvent(createStandardState(spielerValue, gegnerValue), new SpielerPunktGewonnen());
 
         assertThat(cGames.isRight()).isFalse();
         assertThat(cGames.getLeft()).isEqualTo(DomainProblem.eventNotValid);
     }
 
-    private static LaufendesCGame createStandardState(final int spielerValue, final int gegnerValue) {
-        return new LaufendesCGame(new SpielerPunkteBisGame(spielerValue), new GegnerPunkteBisGame(gegnerValue));
+    private static LaufendesGame createStandardState(final int spielerValue, final int gegnerValue) {
+        return new LaufendesGame(new SpielerPunkteBisGame(spielerValue), new GegnerPunkteBisGame(gegnerValue));
     }
 }

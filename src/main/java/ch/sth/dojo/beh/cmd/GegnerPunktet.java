@@ -15,8 +15,8 @@ import static io.vavr.control.Either.right;
 import ch.sth.dojo.beh.DomainProblem;
 import ch.sth.dojo.beh.game.GameCommand;
 import ch.sth.dojo.beh.game.TiebreakCommand;
-import ch.sth.dojo.beh.game.domain.CGame;
-import ch.sth.dojo.beh.game.domain.LaufendesCGame;
+import ch.sth.dojo.beh.game.domain.Game;
+import ch.sth.dojo.beh.game.domain.LaufendesGame;
 import ch.sth.dojo.beh.game.domain.Tiebreak;
 import ch.sth.dojo.beh.cmatch.CMatchCommand;
 import ch.sth.dojo.beh.cmatch.domain.CMatch;
@@ -50,8 +50,8 @@ public record GegnerPunktet(UUID uuid) implements DomainCommand {
         );
     }
 
-    private static Either<DomainProblem, DomainEvent> apply(CMatch cMatch, CSatz cSatz, CGame cGame) {
-        final Either<DomainProblem, DomainEvent> domainEvents = GameCommand.gegnerGewinntPunkt(cGame);
+    private static Either<DomainProblem, DomainEvent> apply(CMatch cMatch, CSatz cSatz, Game game) {
+        final Either<DomainProblem, DomainEvent> domainEvents = GameCommand.gegnerGewinntPunkt(game);
         return domainEvents
             .flatMap(handleGameEvent(cSatz))
             .flatMap(handleSatzEvent(cMatch));
@@ -91,8 +91,8 @@ public record GegnerPunktet(UUID uuid) implements DomainCommand {
         ));
     }
 
-    private static Either<DomainProblem, DomainEvent> applyToLaufendesCGame(LaufendesCGame laufendesCGame, CSatz satz, final CMatch cMatch) {
-        return condition(laufendesCGame, LaufendesCGame.passIfSpielerOnePunktBisCGame,
+    private static Either<DomainProblem, DomainEvent> applyToLaufendesCGame(LaufendesGame laufendesCGame, CSatz satz, final CMatch cMatch) {
+        return condition(laufendesCGame, LaufendesGame.passIfSpielerOnePunktBisCGame,
             game -> applyToCSatz(satz, cMatch),
             x -> right(new SpielerPunktGewonnen()));
     }

@@ -4,7 +4,7 @@
 
 package ch.sth.dojo.beh.game.domain;
 
-public record AbgeschlossenesGame() implements CGame {
+public record AbgeschlossenesGame() implements Game {
 
 }
 

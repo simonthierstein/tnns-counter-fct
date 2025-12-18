@@ -11,9 +11,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import ch.sth.dojo.beh.DomainProblem;
 import ch.sth.dojo.beh.RootEventHandler;
 import ch.sth.dojo.beh.game.domain.AbgeschlossenesGame;
-import ch.sth.dojo.beh.game.domain.CGame;
+import ch.sth.dojo.beh.game.domain.Game;
 import ch.sth.dojo.beh.game.domain.GegnerPunkteBisGame;
-import ch.sth.dojo.beh.game.domain.LaufendesCGame;
+import ch.sth.dojo.beh.game.domain.LaufendesGame;
 import ch.sth.dojo.beh.game.domain.SpielerPunkteBisGame;
 import ch.sth.dojo.beh.game.domain.Tiebreak;
 import ch.sth.dojo.beh.cmatch.domain.CMatch;
@@ -153,14 +153,14 @@ class ScenarioTest {
 
         var result = applyCommand(psc)
             .map(state -> PartialScenarioConfig.partialScenarioConfig(new GegnerPunktet(UUID.randomUUID()), state, new GegnerPunktGewonnen(),
-                State.bindGame.apply(match(), CSatz.of(0, 1).get(), CGame.of(4, 3).get())))
+                State.bindGame.apply(match(), CSatz.of(0, 1).get(), Game.of(4, 3).get())))
             .flatMap(ScenarioTest::applyCommand);
 
         assertThat(result.isRight())
             .withFailMessage(result::getLeft)
             .isTrue();
         assertThat(result.get().game)
-            .isEqualTo(CGame.of(4, 3).get());
+            .isEqualTo(Game.of(4, 3).get());
 
     }
 
@@ -170,7 +170,7 @@ class ScenarioTest {
             .get();
     }
 
-    private Function<String, CGame> parseGameState() {
+    private Function<String, Game> parseGameState() {
         return input -> Option.some(input)
             .map(parseTennisToCommandDomain())
             .get();
@@ -226,26 +226,26 @@ class ScenarioTest {
 
     }
 
-    private static Function<String, CGame> parseTennisToCommandDomain() {
+    private static Function<String, Game> parseTennisToCommandDomain() {
         return tennisStr -> Match(tennisStr).of(
-            Case($("00-00"), Tuple.of(4, 4).apply(CGame::of)),
-            Case($("15-00"), Tuple.of(3, 4).apply(CGame::of)),
-            Case($("30-00"), Tuple.of(2, 4).apply(CGame::of)),
-            Case($("40-00"), Tuple.of(1, 5).apply(CGame::of)),
-            Case($("00-15"), Tuple.of(4, 3).apply(CGame::of)),
-            Case($("15-15"), Tuple.of(3, 3).apply(CGame::of)),
-            Case($("30-15"), Tuple.of(2, 3).apply(CGame::of)),
-            Case($("40-15"), Tuple.of(1, 4).apply(CGame::of)),
-            Case($("00-30"), Tuple.of(4, 2).apply(CGame::of)),
-            Case($("15-30"), Tuple.of(3, 2).apply(CGame::of)),
-            Case($("30-30"), Tuple.of(2, 2).apply(CGame::of)),
-            Case($("40-30"), Tuple.of(1, 3).apply(CGame::of)),
-            Case($("00-40"), Tuple.of(5, 1).apply(CGame::of)),
-            Case($("15-40"), Tuple.of(4, 1).apply(CGame::of)),
-            Case($("30-40"), Tuple.of(3, 1).apply(CGame::of)),
-            Case($("AD-DA"), Tuple.of(1, 3).apply(CGame::of)),
-            Case($("DA-AD"), Tuple.of(3, 1).apply(CGame::of)),
-            Case($("DEUCE"), Tuple.of(2, 2).apply(CGame::of)),
+            Case($("00-00"), Tuple.of(4, 4).apply(Game::of)),
+            Case($("15-00"), Tuple.of(3, 4).apply(Game::of)),
+            Case($("30-00"), Tuple.of(2, 4).apply(Game::of)),
+            Case($("40-00"), Tuple.of(1, 5).apply(Game::of)),
+            Case($("00-15"), Tuple.of(4, 3).apply(Game::of)),
+            Case($("15-15"), Tuple.of(3, 3).apply(Game::of)),
+            Case($("30-15"), Tuple.of(2, 3).apply(Game::of)),
+            Case($("40-15"), Tuple.of(1, 4).apply(Game::of)),
+            Case($("00-30"), Tuple.of(4, 2).apply(Game::of)),
+            Case($("15-30"), Tuple.of(3, 2).apply(Game::of)),
+            Case($("30-30"), Tuple.of(2, 2).apply(Game::of)),
+            Case($("40-30"), Tuple.of(1, 3).apply(Game::of)),
+            Case($("00-40"), Tuple.of(5, 1).apply(Game::of)),
+            Case($("15-40"), Tuple.of(4, 1).apply(Game::of)),
+            Case($("30-40"), Tuple.of(3, 1).apply(Game::of)),
+            Case($("AD-DA"), Tuple.of(1, 3).apply(Game::of)),
+            Case($("DA-AD"), Tuple.of(3, 1).apply(Game::of)),
+            Case($("DEUCE"), Tuple.of(2, 2).apply(Game::of)),
             Case($("GAME"), Either.right(new AbgeschlossenesGame()))
         ).get();
     }
@@ -296,9 +296,9 @@ class ScenarioTest {
 
     }
 
-    record State(CMatch match, CSatz satz, CGame game) {
+    record State(CMatch match, CSatz satz, Game game) {
 
-        static Function3<CMatch, CSatz, CGame, State> bindGame = State::new;
+        static Function3<CMatch, CSatz, Game, State> bindGame = State::new;
         static Function1<State, MatchState> toTuple = State::tuple;
 
         static State untuple(MatchState stateTuple) {
@@ -350,7 +350,7 @@ class ScenarioTest {
     }
 
     private static GameMatchState zeroGame() {
-        return gameMatchState(CMatch.zero(), LaufenderCSatz.zero(), LaufendesCGame.zero());
+        return gameMatchState(CMatch.zero(), LaufenderCSatz.zero(), LaufendesGame.zero());
     }
 
     @Test
@@ -362,7 +362,7 @@ class ScenarioTest {
     }
 
     private static MatchState laufendesGameWith(final int spielerValue, final int gegnerValue) {
-        return gameMatchState(match(), LaufenderCSatz.zero(), new LaufendesCGame(new SpielerPunkteBisGame(spielerValue), new GegnerPunkteBisGame(gegnerValue)));
+        return gameMatchState(match(), LaufenderCSatz.zero(), new LaufendesGame(new SpielerPunkteBisGame(spielerValue), new GegnerPunkteBisGame(gegnerValue)));
     }
 
     @Test

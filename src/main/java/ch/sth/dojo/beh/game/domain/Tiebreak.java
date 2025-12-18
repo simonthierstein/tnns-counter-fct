@@ -9,7 +9,7 @@ import static ch.sth.dojo.beh.PredicateUtils.compose;
 import io.vavr.control.Either;
 import java.util.function.Predicate;
 
-public record Tiebreak(TiebreakSpielerPunkteBisGame tiebreakSpielerPunkteBisGame, TiebreakGegnerPunkteBisGame tiebreakGegnerPunkteBisGame) implements CGame {
+public record Tiebreak(TiebreakSpielerPunkteBisGame tiebreakSpielerPunkteBisGame, TiebreakGegnerPunkteBisGame tiebreakGegnerPunkteBisGame) implements Game {
 
     public static final Predicate<Tiebreak> passIfGegnerOnePunktBisSatz = compose(TiebreakGegnerPunkteBisGame.eq1, Tiebreak::tiebreakGegnerPunkteBisGame);
     public static final Predicate<Tiebreak> passIfSpielerOnePunktBisSatz = compose(TiebreakSpielerPunkteBisGame.eq1, Tiebreak::tiebreakSpielerPunkteBisGame);

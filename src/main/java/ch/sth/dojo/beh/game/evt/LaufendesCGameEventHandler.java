@@ -8,9 +8,9 @@ import static io.vavr.control.Either.right;
 
 import ch.sth.dojo.beh.DomainProblem;
 import ch.sth.dojo.beh.game.domain.AbgeschlossenesGame;
-import ch.sth.dojo.beh.game.domain.CGame;
+import ch.sth.dojo.beh.game.domain.Game;
 import ch.sth.dojo.beh.game.domain.GegnerPunkteBisGame;
-import ch.sth.dojo.beh.game.domain.LaufendesCGame;
+import ch.sth.dojo.beh.game.domain.LaufendesGame;
 import ch.sth.dojo.beh.game.domain.SpielerPunkteBisGame;
 import ch.sth.dojo.beh.shared.domain.Gewinner;
 import ch.sth.dojo.beh.shared.domain.Verlierer;
@@ -33,33 +33,33 @@ class LaufendesCGameEventHandler {
     //        return null;
     //    }
 
-    static Either<DomainProblem, CGame> gegnerPunktGewonnen(LaufendesCGame state) {
-        return LaufendesCGame.punktGewonnen(state, new Gewinner(state.gegnerPunkteBisGame().value()), new Verlierer(state.spielerPunkteBisGame().value()),
-            (gewinner, verlierer) -> LaufendesCGame.LaufendesCGame(new SpielerPunkteBisGame(verlierer.value()), new GegnerPunkteBisGame(gewinner.value())));
+    static Either<DomainProblem, Game> gegnerPunktGewonnen(LaufendesGame state) {
+        return LaufendesGame.punktGewonnen(state, new Gewinner(state.gegnerPunkteBisGame().value()), new Verlierer(state.spielerPunkteBisGame().value()),
+            (gewinner, verlierer) -> LaufendesGame.LaufendesGame(new SpielerPunkteBisGame(verlierer.value()), new GegnerPunkteBisGame(gewinner.value())));
     }
 
-    static Either<DomainProblem, CGame> gegnerMatchGewonnen(final LaufendesCGame laufendesCGame) {
+    static Either<DomainProblem, Game> gegnerMatchGewonnen(final LaufendesGame laufendesCGame) {
         return right(new AbgeschlossenesGame());
     }
 
-    static Either<DomainProblem, CGame> gegnerSatzGewonnen(final LaufendesCGame laufendesCGame) {
-        return right(LaufendesCGame.zero());
+    static Either<DomainProblem, Game> gegnerSatzGewonnen(final LaufendesGame laufendesCGame) {
+        return right(LaufendesGame.zero());
     }
 
-    static Either<DomainProblem, CGame> spielerMatchGewonnen(final LaufendesCGame state) {
+    static Either<DomainProblem, Game> spielerMatchGewonnen(final LaufendesGame state) {
         return right(new AbgeschlossenesGame());
     }
 
-    static Either<DomainProblem, CGame> spielerSatzGewonnen(LaufendesCGame state) {
-        return right(LaufendesCGame.zero());
+    static Either<DomainProblem, Game> spielerSatzGewonnen(LaufendesGame state) {
+        return right(LaufendesGame.zero());
     }
 
-    static Either<DomainProblem, CGame> spielerGameGewonnen(LaufendesCGame state) {
-        return right(LaufendesCGame.zero());
+    static Either<DomainProblem, Game> spielerGameGewonnen(LaufendesGame state) {
+        return right(LaufendesGame.zero());
     }
 
-    static Either<DomainProblem, CGame> spielerPunktGewonnen(LaufendesCGame state) {
-        return LaufendesCGame.punktGewonnen(state, new Gewinner(state.spielerPunkteBisGame().value()), new Verlierer(state.gegnerPunkteBisGame().value()),
-            (gewinner, verlierer) -> LaufendesCGame.LaufendesCGame(new SpielerPunkteBisGame(gewinner.value()), new GegnerPunkteBisGame(verlierer.value())));
+    static Either<DomainProblem, Game> spielerPunktGewonnen(LaufendesGame state) {
+        return LaufendesGame.punktGewonnen(state, new Gewinner(state.spielerPunkteBisGame().value()), new Verlierer(state.gegnerPunkteBisGame().value()),
+            (gewinner, verlierer) -> LaufendesGame.LaufendesGame(new SpielerPunkteBisGame(gewinner.value()), new GegnerPunkteBisGame(verlierer.value())));
     }
 }
