@@ -21,7 +21,9 @@ class CommandHandler {
     }
 
     private static Either<DomainProblem, DomainEvent> gegnerPunktet(final MatchState zero, final GegnerPunktetCommand cmd) {
-        return GegnerPunktet.gegnerPunktet(cmd.commandId()).toEither(DomainProblem.valueNotValid).flatMap(x -> GegnerPunktet.applyC(zero, x));
+        return GegnerPunktet.gegnerPunktet(cmd.commandId())
+                .toEither(DomainProblem.valueNotValid)
+                .flatMap(x -> GegnerPunktet.applyC(zero, x));
     }
 
     private static Either<DomainProblem, DomainEvent> spielerPunktet(final MatchState zero, final SpielerPunktetCommand cmd) {
