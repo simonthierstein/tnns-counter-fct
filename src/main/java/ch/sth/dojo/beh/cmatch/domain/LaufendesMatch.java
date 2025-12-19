@@ -9,21 +9,21 @@ import static ch.sth.dojo.beh.PredicateUtils.compose;
 
 import java.util.function.Predicate;
 
-public record LaufendesMatch(SpielerPunkteMatch spielerPunkteMatch, GegnerPunkteMatch gegnerPunkteMatch) implements CMatch {
+public record LaufendesMatch(SpielerPunkteMatch spielerPunkteMatch, GegnerPunkteMatch gegnerPunkteMatch) implements Match {
 
     public static final Predicate<LaufendesMatch> passIfSpielerOneSatzBisMatch =
         compose(PunkteMatch.hasOneSet, x -> x.spielerPunkteMatch.punkteMatch());
     public static final Predicate<? super LaufendesMatch> passIfGegnerOneSatzBisMatch =
         compose(PunkteMatch.hasOneSet, x -> x.gegnerPunkteMatch.punkteMatch());
 
-    public CMatch spielerPunktet() {
+    public Match spielerPunktet() {
         return condition(spielerPunkteMatch.punkteMatch(), PunkteMatch.hasOneSet,
             x -> new AbgeschlossenesMatch(),
             x -> new LaufendesMatch(spielerPunkteMatch.increment(), gegnerPunkteMatch)
         );
     }
 
-    public CMatch gegnerPunktet() {
+    public Match gegnerPunktet() {
         return condition(gegnerPunkteMatch.punkteMatch(), PunkteMatch.hasOneSet,
             x -> new AbgeschlossenesMatch(),
             x -> new LaufendesMatch(spielerPunkteMatch, gegnerPunkteMatch.incerement())

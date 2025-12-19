@@ -8,15 +8,15 @@ import io.vavr.control.Either;
 import io.vavr.control.Option;
 import java.util.function.Function;
 
-public sealed interface CMatch permits LaufendesMatch, AbgeschlossenesMatch {
+public sealed interface Match permits LaufendesMatch, AbgeschlossenesMatch {
 
-    Function<AbgeschlossenesMatch, Either<DomainProblem, CMatch>> abgeschlossenesMatchToDomainProblem = abgeschlossenesMatch -> left(DomainProblem.eventNotValid);
-    Function<LaufendesMatch, Either<DomainProblem, CMatch>> laufendesMatchSpielerPunktet = laufendesMatch -> right(laufendesMatch.spielerPunktet());
-    Function<LaufendesMatch, Either<DomainProblem, CMatch>> laufendesMatchGegnerPunktet = laufendesMatch -> right(laufendesMatch.gegnerPunktet());
+    Function<AbgeschlossenesMatch, Either<DomainProblem, Match>> abgeschlossenesMatchToDomainProblem = abgeschlossenesMatch -> left(DomainProblem.eventNotValid);
+    Function<LaufendesMatch, Either<DomainProblem, Match>> laufendesMatchSpielerPunktet = laufendesMatch -> right(laufendesMatch.spielerPunktet());
+    Function<LaufendesMatch, Either<DomainProblem, Match>> laufendesMatchGegnerPunktet = laufendesMatch -> right(laufendesMatch.gegnerPunktet());
 
-    static <T> T apply(CMatch target,
-        Function<LaufendesMatch, T> f1,
-        Function<AbgeschlossenesMatch, T> f2
+    static <T> T apply(Match target,
+                       Function<LaufendesMatch, T> f1,
+                       Function<AbgeschlossenesMatch, T> f2
     ) {
         return switch (target) {
             case LaufendesMatch laufendesMatch -> f1.apply(laufendesMatch);
@@ -24,11 +24,11 @@ public sealed interface CMatch permits LaufendesMatch, AbgeschlossenesMatch {
         };
     }
 
-    static CMatch zero() {
+    static Match zero() {
         return new LaufendesMatch(SpielerPunkteMatch.zero(), GegnerPunkteMatch.zero());
     }
 
-    static Either<DomainProblem, CMatch> of(Integer spielerScore, Integer gegnerScore) {
+    static Either<DomainProblem, Match> of(Integer spielerScore, Integer gegnerScore) {
         var ssc = PunkteMatch.of(spielerScore).map(SpielerPunkteMatch::new);
         var gsc = PunkteMatch.of(gegnerScore).map(GegnerPunkteMatch::new);
 
@@ -37,20 +37,20 @@ public sealed interface CMatch permits LaufendesMatch, AbgeschlossenesMatch {
                 createMatchInstance(sscx, gscx)));
     }
 
-    static CMatch createMatchInstance(SpielerPunkteMatch spielerPunkteMatch, GegnerPunkteMatch gegnerPunkteMatch) {
+    static Match createMatchInstance(SpielerPunkteMatch spielerPunkteMatch, GegnerPunkteMatch gegnerPunkteMatch) {
         return Option.when(SpielerPunkteMatch.hasWon.test(spielerPunkteMatch) || GegnerPunkteMatch.hasWon.test(gegnerPunkteMatch), new AbgeschlossenesMatch())
-            .map(CMatch::narrow)
+            .map(Match::narrow)
             .getOrElse(() -> new LaufendesMatch(spielerPunkteMatch, gegnerPunkteMatch));
     }
 
-    static Either<DomainProblem, CMatch> spielerSatzGewonnen(CMatch state) {
+    static Either<DomainProblem, Match> spielerSatzGewonnen(Match state) {
         return apply(state,
             laufendesMatchSpielerPunktet,
             abgeschlossenesMatchToDomainProblem
         );
     }
 
-    static Either<DomainProblem, CMatch> spielerMatchGewonnen(CMatch state) {
+    static Either<DomainProblem, Match> spielerMatchGewonnen(Match state) {
         return apply(state,
             laufendesMatchSpielerPunktet,
             abgeschlossenesMatchToDomainProblem
@@ -58,7 +58,7 @@ public sealed interface CMatch permits LaufendesMatch, AbgeschlossenesMatch {
             .filterOrElse(AbgeschlossenesMatch.class::isInstance, x -> DomainProblem.eventNotValid);
     }
 
-    static Either<DomainProblem, CMatch> gegnerMatchGewonnen(CMatch state) {
+    static Either<DomainProblem, Match> gegnerMatchGewonnen(Match state) {
         return apply(state,
             laufendesMatchGegnerPunktet,
             abgeschlossenesMatchToDomainProblem
@@ -66,14 +66,14 @@ public sealed interface CMatch permits LaufendesMatch, AbgeschlossenesMatch {
             .filterOrElse(AbgeschlossenesMatch.class::isInstance, x -> DomainProblem.eventNotValid);
     }
 
-    static Either<DomainProblem, CMatch> gegnerSatzGewonnen(CMatch state) {
+    static Either<DomainProblem, Match> gegnerSatzGewonnen(Match state) {
         return apply(state,
             laufendesMatchGegnerPunktet,
             abgeschlossenesMatchToDomainProblem
         );
     }
 
-    static <T extends CMatch> CMatch narrow(T cMatch) {
+    static <T extends Match> Match narrow(T cMatch) {
         return cMatch;
     }
 

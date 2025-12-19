@@ -5,7 +5,7 @@
 package ch.sth.dojo.beh.noadrules;
 
 import ch.sth.dojo.beh.DomainProblem;
-import ch.sth.dojo.beh.cmatch.domain.CMatch;
+import ch.sth.dojo.beh.cmatch.domain.Match;
 import ch.sth.dojo.beh.cmatch.evt.MatchEventHandler;
 import ch.sth.dojo.beh.satz.domain.Satz;
 import ch.sth.dojo.beh.satz.evt.SatzEventHandler;
@@ -42,8 +42,8 @@ public class NoAdRootEventhandler {
 
     }
 
-    private static Either<DomainProblem, Tuple3<CMatch, Satz, NoAdGame>> tuple3EithersToEitherTuple3(Either<DomainProblem, CMatch> eith1, Either<DomainProblem, Satz> eith2,
-                                                                                                     Either<DomainProblem, NoAdGame> eith3) {
+    private static Either<DomainProblem, Tuple3<Match, Satz, NoAdGame>> tuple3EithersToEitherTuple3(Either<DomainProblem, Match> eith1, Either<DomainProblem, Satz> eith2,
+                                                                                                    Either<DomainProblem, NoAdGame> eith3) {
         return eith1.flatMap(match -> eith2.flatMap(satz -> eith3.map(game -> Tuple.of(match, satz, game))));
     }
 
@@ -72,13 +72,13 @@ public class NoAdRootEventhandler {
 
 }
 
-record NoAdMatchState(CMatch match, Satz satz, NoAdGame game) {
+record NoAdMatchState(Match match, Satz satz, NoAdGame game) {
 
-    static NoAdMatchState untuple(Tuple3<CMatch, Satz, NoAdGame> tuple) {
+    static NoAdMatchState untuple(Tuple3<Match, Satz, NoAdGame> tuple) {
         return tuple.apply(NoAdMatchState::new);
     }
 
-    Tuple3<CMatch, Satz, NoAdGame> tupled() {
+    Tuple3<Match, Satz, NoAdGame> tupled() {
         return Tuple.of(match, satz, game);
     }
 }

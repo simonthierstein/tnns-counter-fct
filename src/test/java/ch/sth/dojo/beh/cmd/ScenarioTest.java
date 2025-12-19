@@ -16,7 +16,7 @@ import ch.sth.dojo.beh.game.domain.GegnerPunkteBisGame;
 import ch.sth.dojo.beh.game.domain.LaufendesGame;
 import ch.sth.dojo.beh.game.domain.SpielerPunkteBisGame;
 import ch.sth.dojo.beh.game.domain.Tiebreak;
-import ch.sth.dojo.beh.cmatch.domain.CMatch;
+import ch.sth.dojo.beh.cmatch.domain.Match;
 import ch.sth.dojo.beh.satz.domain.AbgeschlossenerSatz;
 import ch.sth.dojo.beh.satz.domain.Satz;
 import ch.sth.dojo.beh.satz.domain.LaufenderSatz;
@@ -134,8 +134,8 @@ class ScenarioTest {
 
     }
 
-    private static CMatch match() {
-        return CMatch.zero();
+    private static Match match() {
+        return Match.zero();
     }
 
     @ParameterizedTest
@@ -182,10 +182,10 @@ class ScenarioTest {
             .toEither(new AbgeschlossenerSatz()), list -> Satz.of(list.get(0), list.get(1)).get());
     }
 
-    private static Function<String, CMatch> parseMatchState() {
+    private static Function<String, Match> parseMatchState() {
         return input -> scoreParsing(Option.some(input)
             .filter(Predicates.not("MATCH"::equals))
-            .toEither(CMatch.abgeschlossenesMatch()), list -> CMatch.of(list.get(0), list.get(1)).get());
+            .toEither(Match.abgeschlossenesMatch()), list -> Match.of(list.get(0), list.get(1)).get());
     }
 
     private static <T> T scoreParsing(final Either<T, String> scoreEither, final Function<List<Integer>, T> createrFunction) {
@@ -296,9 +296,9 @@ class ScenarioTest {
 
     }
 
-    record State(CMatch match, Satz satz, Game game) {
+    record State(Match match, Satz satz, Game game) {
 
-        static Function3<CMatch, Satz, Game, State> bindGame = State::new;
+        static Function3<Match, Satz, Game, State> bindGame = State::new;
         static Function1<State, MatchState> toTuple = State::tuple;
 
         static State untuple(MatchState stateTuple) {
@@ -350,7 +350,7 @@ class ScenarioTest {
     }
 
     private static GameMatchState zeroGame() {
-        return gameMatchState(CMatch.zero(), LaufenderSatz.zero(), LaufendesGame.zero());
+        return gameMatchState(Match.zero(), LaufenderSatz.zero(), LaufendesGame.zero());
     }
 
     @Test
