@@ -18,7 +18,7 @@ import ch.sth.dojo.beh.game.TiebreakCommand;
 import ch.sth.dojo.beh.game.domain.Game;
 import ch.sth.dojo.beh.game.domain.LaufendesGame;
 import ch.sth.dojo.beh.game.domain.Tiebreak;
-import ch.sth.dojo.beh.cmatch.CMatchCommand;
+import ch.sth.dojo.beh.cmatch.MatchCommand;
 import ch.sth.dojo.beh.cmatch.domain.CMatch;
 import ch.sth.dojo.beh.cmatch.domain.LaufendesMatch;
 import ch.sth.dojo.beh.satz.SatzCommand;
@@ -68,10 +68,10 @@ public record GegnerPunktet(UUID uuid) implements DomainCommand {
         return satzEvent -> Match(satzEvent).of(
             Case($(instanceOf(SpielerPunktGewonnen.class)), Either::right),
             Case($(instanceOf(SpielerGameGewonnen.class)), Either::right),
-            Case($(instanceOf(SpielerSatzGewonnen.class)), event -> CMatchCommand.spielerGewinntSatz(state, event)),
+            Case($(instanceOf(SpielerSatzGewonnen.class)), event -> MatchCommand.spielerGewinntSatz(state, event)),
             Case($(instanceOf(GegnerPunktGewonnen.class)), Either::right),
             Case($(instanceOf(GegnerGameGewonnen.class)), Either::right),
-            Case($(instanceOf(GegnerSatzGewonnen.class)), event -> CMatchCommand.gegnerGewinntSatz(state, event))
+            Case($(instanceOf(GegnerSatzGewonnen.class)), event -> MatchCommand.gegnerGewinntSatz(state, event))
         );
     }
 

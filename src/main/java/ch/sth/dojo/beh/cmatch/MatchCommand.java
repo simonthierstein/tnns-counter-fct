@@ -16,7 +16,7 @@ import io.vavr.control.Either;
 import static io.vavr.control.Either.left;
 import static io.vavr.control.Either.right;
 
-public class CMatchCommand {
+public class MatchCommand {
 
     public static Either<DomainProblem, DomainEvent> spielerGewinntSatz(final CMatch state, DomainEvent event) {
         return CMatch.apply(state,

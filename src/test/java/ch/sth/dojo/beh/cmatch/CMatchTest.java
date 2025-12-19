@@ -40,7 +40,7 @@ class CMatchTest {
         }
     )
     void count(String input, String cmd, String expected) {
-        final Tuple3<CMatch, MatchCommand, CMatch> map = Tuple.of(input, cmd, expected)
+        final Tuple3<CMatch, MatchScenario, CMatch> map = Tuple.of(input, cmd, expected)
             .map(parseMatchScore(), parseCommand(), parseMatchScore());
         var re = map
             .apply(CMatchTest::executeCommand);
@@ -52,14 +52,14 @@ class CMatchTest {
             .isEqualTo(map._3);
     }
 
-    private static Either<String, CMatch> executeCommand(CMatch match, MatchCommand matchCommand, CMatch match1) {
-        return Condition.condition(matchCommand, x -> x == MatchCommand.SpielerTransition,
+    private static Either<String, CMatch> executeCommand(CMatch match, MatchScenario matchScenario, CMatch match1) {
+        return Condition.condition(matchScenario, x -> x == MatchScenario.SpielerTransition,
             xx -> CMatch.apply(match, laufendesMatch -> Either.right(laufendesMatch.spielerPunktet()), x -> Either.left("Abgeschlossenes Match")),
             xx -> CMatch.apply(match, laufendesMatch -> Either.right(laufendesMatch.gegnerPunktet()), x -> Either.left("Abgeschlossenes Match")));
     }
 
-    private Function<String, MatchCommand> parseCommand() {
-        return MatchCommand::valueOf;
+    private Function<String, MatchScenario> parseCommand() {
+        return MatchScenario::valueOf;
     }
 
     private Function<String, CMatch> parseMatchScore() {
@@ -87,6 +87,6 @@ class CMatchTest {
     }
 }
 
-enum MatchCommand {
+enum MatchScenario {
     SpielerTransition, GegnerTransition
 }
