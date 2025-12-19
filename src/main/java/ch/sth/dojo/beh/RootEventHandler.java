@@ -4,7 +4,7 @@ import ch.sth.dojo.beh.game.domain.Game;
 import ch.sth.dojo.beh.game.domain.Tiebreak;
 import ch.sth.dojo.beh.game.evt.GameEventHandler;
 import ch.sth.dojo.beh.cmatch.domain.CMatch;
-import ch.sth.dojo.beh.cmatch.evt.CMatchEventHandler;
+import ch.sth.dojo.beh.cmatch.evt.MatchEventHandler;
 import ch.sth.dojo.beh.satz.domain.Satz;
 import ch.sth.dojo.beh.satz.evt.SatzEventHandler;
 import ch.sth.dojo.beh.evt.DomainEvent;
@@ -51,7 +51,7 @@ public interface RootEventHandler {
     private static Either<DomainProblem, MatchState> delegateEventHandling(final MatchState prev, final DomainEvent event) {
         return Either.narrow(prev.apply(
             prevGameMatchState -> prevGameMatchState.apply(
-                prevMatch -> CMatchEventHandler.handleEvent(prevMatch, event),
+                prevMatch -> MatchEventHandler.handleEvent(prevMatch, event),
                 prevSatz -> SatzEventHandler.handleEvent(prevSatz, event),
                 prevGame -> GameEventHandler.handleEvent(prevGame, event))
         ));

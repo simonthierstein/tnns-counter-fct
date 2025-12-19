@@ -21,7 +21,7 @@ import ch.sth.dojo.beh.evt.SpielerPunktGewonnen;
 import ch.sth.dojo.beh.evt.SpielerSatzGewonnen;
 import io.vavr.control.Either;
 
-public final class CMatchEventHandler {
+public final class MatchEventHandler {
 
     public static Either<DomainProblem, CMatch> handleEvent(CMatch state, DomainEvent event) {
         return switch (event) {

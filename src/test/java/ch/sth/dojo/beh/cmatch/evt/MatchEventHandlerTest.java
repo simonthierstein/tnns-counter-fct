@@ -24,7 +24,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-class CMatchEventHandlerTest {
+class MatchEventHandlerTest {
 
     @ParameterizedTest
     @ValueSource(strings = {
@@ -39,7 +39,7 @@ class CMatchEventHandlerTest {
 
         Either.<DomainProblem, String>right(inputEventString)
             .map(stringToEvent())
-            .flatMap(evt -> CMatchEventHandler.handleEvent(inputState, evt))
+            .flatMap(evt -> MatchEventHandler.handleEvent(inputState, evt))
             .fold(err -> fail(err.toString()), succ -> assertThat(succ).isEqualTo(expectedState));
     }
 
@@ -57,7 +57,7 @@ class CMatchEventHandlerTest {
 
         Either.<DomainProblem, String>right(inputEventString)
             .map(stringToEvent())
-            .flatMap(evt -> CMatchEventHandler.handleEvent(inputState, evt))
+            .flatMap(evt -> MatchEventHandler.handleEvent(inputState, evt))
             .fold(err -> fail(err.toString()), succ -> assertThat(succ).isEqualTo(expectedState));
     }
 
@@ -75,7 +75,7 @@ class CMatchEventHandlerTest {
 
         Either.<DomainProblem, String>right(inputEventString)
             .map(stringToEvent())
-            .flatMap(evt -> CMatchEventHandler.handleEvent(inputState, evt))
+            .flatMap(evt -> MatchEventHandler.handleEvent(inputState, evt))
             .fold(err -> fail(err.toString()), succ -> assertThat(succ).isEqualTo(expectedState));
     }
 
@@ -88,7 +88,7 @@ class CMatchEventHandlerTest {
         final DomainEvent inputEvent = Option.some(event).map(stringToEvent()).get();
         final DomainProblem expectedError = DomainProblem.eventNotValid;
 
-        CMatchEventHandler.handleEvent(inputState, inputEvent)
+        MatchEventHandler.handleEvent(inputState, inputEvent)
             .fold(
                 err -> assertThat(err).isEqualTo(expectedError),
                 succ -> fail("Expected error but was %s", succ)
