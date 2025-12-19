@@ -1,11 +1,11 @@
-package ch.sth.dojo.beh.csatz.evt;
+package ch.sth.dojo.beh.satz.evt;
 
 import static ch.sth.dojo.beh.DomainProblem.eventNotValid;
 import static io.vavr.control.Either.left;
 
 import ch.sth.dojo.beh.DomainProblem;
-import ch.sth.dojo.beh.csatz.domain.AbgeschlossenerSatz;
-import ch.sth.dojo.beh.csatz.domain.Satz;
+import ch.sth.dojo.beh.satz.domain.AbgeschlossenerSatz;
+import ch.sth.dojo.beh.satz.domain.Satz;
 import ch.sth.dojo.beh.evt.DomainEvent;
 import ch.sth.dojo.beh.evt.GegnerDomainEvent;
 import ch.sth.dojo.beh.evt.SpielerDomainEvent;

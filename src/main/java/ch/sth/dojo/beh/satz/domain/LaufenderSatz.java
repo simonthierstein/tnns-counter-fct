@@ -1,4 +1,4 @@
-package ch.sth.dojo.beh.csatz.domain;
+package ch.sth.dojo.beh.satz.domain;
 
 import ch.sth.dojo.beh.shared.domain.Gewinner;
 import ch.sth.dojo.beh.shared.domain.GewinnerVerlierer;

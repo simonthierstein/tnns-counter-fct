@@ -1,4 +1,4 @@
-package ch.sth.dojo.beh.csatz.domain;
+package ch.sth.dojo.beh.satz.domain;
 
 import ch.sth.dojo.beh.DomainProblem;
 import io.vavr.control.Either;

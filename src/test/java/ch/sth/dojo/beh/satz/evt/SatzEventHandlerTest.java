@@ -1,11 +1,11 @@
-package ch.sth.dojo.beh.csatz.evt;
+package ch.sth.dojo.beh.satz.evt;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import ch.sth.dojo.beh.csatz.domain.Satz;
-import ch.sth.dojo.beh.csatz.domain.GegnerPunkteSatz;
-import ch.sth.dojo.beh.csatz.domain.LaufenderSatz;
-import ch.sth.dojo.beh.csatz.domain.SpielerPunkteSatz;
+import ch.sth.dojo.beh.satz.domain.Satz;
+import ch.sth.dojo.beh.satz.domain.GegnerPunkteSatz;
+import ch.sth.dojo.beh.satz.domain.LaufenderSatz;
+import ch.sth.dojo.beh.satz.domain.SpielerPunkteSatz;
 import ch.sth.dojo.beh.evt.GegnerGameGewonnen;
 import ch.sth.dojo.beh.evt.GegnerSatzGewonnen;
 import ch.sth.dojo.beh.evt.SpielerGameGewonnen;

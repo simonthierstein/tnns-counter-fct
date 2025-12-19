@@ -2,12 +2,12 @@
  * Copyright (C) Schweizerische Bundesbahnen SBB, 2025.
  */
 
-package ch.sth.dojo.beh.csatz;
+package ch.sth.dojo.beh.satz;
 
 import static ch.sth.dojo.beh.Condition.condition;
 import ch.sth.dojo.beh.DomainProblem;
-import ch.sth.dojo.beh.csatz.domain.Satz;
-import ch.sth.dojo.beh.csatz.domain.LaufenderSatz;
+import ch.sth.dojo.beh.satz.domain.Satz;
+import ch.sth.dojo.beh.satz.domain.LaufenderSatz;
 import ch.sth.dojo.beh.evt.DomainEvent;
 import ch.sth.dojo.beh.evt.GegnerGameGewonnen;
 import ch.sth.dojo.beh.evt.GegnerSatzGewonnen;

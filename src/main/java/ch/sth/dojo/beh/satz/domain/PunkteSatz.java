@@ -2,7 +2,7 @@
  * Copyright (C) Schweizerische Bundesbahnen SBB, 2025.
  */
 
-package ch.sth.dojo.beh.csatz.domain;
+package ch.sth.dojo.beh.satz.domain;
 
 import ch.sth.dojo.beh.DomainProblem;
 import io.vavr.Predicates;

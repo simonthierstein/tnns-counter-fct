@@ -2,18 +2,18 @@
  * Copyright (C) Schweizerische Bundesbahnen SBB, 2025.
  */
 
-package ch.sth.dojo.beh.csatz.evt;
+package ch.sth.dojo.beh.satz.evt;
 
-import static ch.sth.dojo.beh.csatz.evt.SatzEventHandler.abgeschlossenerSatzToProblem;
+import static ch.sth.dojo.beh.satz.evt.SatzEventHandler.abgeschlossenerSatzToProblem;
 import static io.vavr.control.Either.left;
 import static io.vavr.control.Either.right;
 
 import ch.sth.dojo.beh.DomainProblem;
-import ch.sth.dojo.beh.csatz.domain.AbgeschlossenerSatz;
-import ch.sth.dojo.beh.csatz.domain.Satz;
-import ch.sth.dojo.beh.csatz.domain.GegnerPunkteSatz;
-import ch.sth.dojo.beh.csatz.domain.LaufenderSatz;
-import ch.sth.dojo.beh.csatz.domain.SpielerPunkteSatz;
+import ch.sth.dojo.beh.satz.domain.AbgeschlossenerSatz;
+import ch.sth.dojo.beh.satz.domain.Satz;
+import ch.sth.dojo.beh.satz.domain.GegnerPunkteSatz;
+import ch.sth.dojo.beh.satz.domain.LaufenderSatz;
+import ch.sth.dojo.beh.satz.domain.SpielerPunkteSatz;
 import ch.sth.dojo.beh.evt.GegnerDomainEvent;
 import ch.sth.dojo.beh.evt.GegnerGameGewonnen;
 import ch.sth.dojo.beh.evt.GegnerMatchGewonnen;

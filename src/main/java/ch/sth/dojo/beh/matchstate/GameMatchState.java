@@ -7,7 +7,7 @@ package ch.sth.dojo.beh.matchstate;
 import ch.sth.dojo.beh.DomainProblem;
 import ch.sth.dojo.beh.game.domain.Game;
 import ch.sth.dojo.beh.cmatch.domain.CMatch;
-import ch.sth.dojo.beh.csatz.domain.Satz;
+import ch.sth.dojo.beh.satz.domain.Satz;
 import io.vavr.Function3;
 import io.vavr.Tuple;
 import io.vavr.Tuple3;

@@ -6,7 +6,7 @@ package ch.sth.dojo.beh.matchstate;
 
 import ch.sth.dojo.beh.game.domain.Game;
 import ch.sth.dojo.beh.cmatch.domain.CMatch;
-import ch.sth.dojo.beh.csatz.domain.Satz;
+import ch.sth.dojo.beh.satz.domain.Satz;
 import static io.vavr.API.$;
 import static io.vavr.API.Case;
 import static io.vavr.API.Match;

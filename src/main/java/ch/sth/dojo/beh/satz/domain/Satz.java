@@ -1,4 +1,4 @@
-package ch.sth.dojo.beh.csatz.domain;
+package ch.sth.dojo.beh.satz.domain;
 
 import static io.vavr.API.$;
 import static io.vavr.API.Case;
