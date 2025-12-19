@@ -4,7 +4,7 @@
 
 package ch.sth.dojo.beh.csatz.evt;
 
-import static ch.sth.dojo.beh.csatz.evt.CSatzEventHandler.abgeschlossenerSatzToProblem;
+import static ch.sth.dojo.beh.csatz.evt.SatzEventHandler.abgeschlossenerSatzToProblem;
 import static io.vavr.control.Either.left;
 import static io.vavr.control.Either.right;
 

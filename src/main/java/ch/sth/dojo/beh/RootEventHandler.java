@@ -6,7 +6,7 @@ import ch.sth.dojo.beh.game.evt.GameEventHandler;
 import ch.sth.dojo.beh.cmatch.domain.CMatch;
 import ch.sth.dojo.beh.cmatch.evt.CMatchEventHandler;
 import ch.sth.dojo.beh.csatz.domain.CSatz;
-import ch.sth.dojo.beh.csatz.evt.CSatzEventHandler;
+import ch.sth.dojo.beh.csatz.evt.SatzEventHandler;
 import ch.sth.dojo.beh.evt.DomainEvent;
 import ch.sth.dojo.beh.evt.GegnerGameGewonnen;
 import ch.sth.dojo.beh.evt.GegnerMatchGewonnen;
@@ -52,7 +52,7 @@ public interface RootEventHandler {
         return Either.narrow(prev.apply(
             prevGameMatchState -> prevGameMatchState.apply(
                 prevMatch -> CMatchEventHandler.handleEvent(prevMatch, event),
-                prevSatz -> CSatzEventHandler.handleEvent(prevSatz, event),
+                prevSatz -> SatzEventHandler.handleEvent(prevSatz, event),
                 prevGame -> GameEventHandler.handleEvent(prevGame, event))
         ));
     }

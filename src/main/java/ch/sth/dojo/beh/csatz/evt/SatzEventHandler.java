@@ -12,7 +12,7 @@ import ch.sth.dojo.beh.evt.SpielerDomainEvent;
 import io.vavr.control.Either;
 import java.util.function.Function;
 
-public interface CSatzEventHandler {
+public interface SatzEventHandler {
 
     Function<AbgeschlossenerCSatz, Either<DomainProblem, CSatz>> abgeschlossenerSatzToProblem = abgeschlossenerCSatz -> left(eventNotValid);
 

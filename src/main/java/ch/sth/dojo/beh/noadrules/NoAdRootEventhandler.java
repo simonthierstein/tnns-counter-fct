@@ -8,7 +8,7 @@ import ch.sth.dojo.beh.DomainProblem;
 import ch.sth.dojo.beh.cmatch.domain.CMatch;
 import ch.sth.dojo.beh.cmatch.evt.CMatchEventHandler;
 import ch.sth.dojo.beh.csatz.domain.CSatz;
-import ch.sth.dojo.beh.csatz.evt.CSatzEventHandler;
+import ch.sth.dojo.beh.csatz.evt.SatzEventHandler;
 import ch.sth.dojo.beh.evt.DomainEvent;
 import ch.sth.dojo.beh.evt.GegnerDomainEvent;
 import ch.sth.dojo.beh.evt.GegnerGameGewonnen;
@@ -49,7 +49,7 @@ public class NoAdRootEventhandler {
 
     private static Either<DomainProblem, NoAdMatchState> delegateEventHandling(final NoAdMatchState prev, final DomainEvent event) {
         return prev.tupled().map1(prevMatch -> CMatchEventHandler.handleEvent(prevMatch, event))
-            .map2(prevSatz -> CSatzEventHandler.handleEvent(prevSatz, event))
+            .map2(prevSatz -> SatzEventHandler.handleEvent(prevSatz, event))
             .map3(prevGame -> NoAdGameEventHandler.handleEvent(prevGame, event))
             .apply(NoAdRootEventhandler::tuple3EithersToEitherTuple3)
             .map(NoAdMatchState::untuple);

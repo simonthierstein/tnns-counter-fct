@@ -4,7 +4,7 @@
 
 package ch.sth.dojo.beh.csatz.evt;
 
-import static ch.sth.dojo.beh.csatz.evt.CSatzEventHandler.abgeschlossenerSatzToProblem;
+import static ch.sth.dojo.beh.csatz.evt.SatzEventHandler.abgeschlossenerSatzToProblem;
 
 import ch.sth.dojo.beh.DomainProblem;
 import ch.sth.dojo.beh.csatz.domain.CSatz;
