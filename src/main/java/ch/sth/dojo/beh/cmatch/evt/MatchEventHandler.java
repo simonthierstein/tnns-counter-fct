@@ -7,7 +7,7 @@ package ch.sth.dojo.beh.cmatch.evt;
 import static io.vavr.control.Either.right;
 
 import ch.sth.dojo.beh.DomainProblem;
-import ch.sth.dojo.beh.cmatch.domain.Match;
+import ch.sth.dojo.beh.cmatch.domain.TennisMatch;
 import ch.sth.dojo.beh.evt.DomainEvent;
 import ch.sth.dojo.beh.evt.GegnerDomainEvent;
 import ch.sth.dojo.beh.evt.GegnerGameGewonnen;
@@ -23,14 +23,14 @@ import io.vavr.control.Either;
 
 public final class MatchEventHandler {
 
-    public static Either<DomainProblem, Match> handleEvent(Match state, DomainEvent event) {
+    public static Either<DomainProblem, TennisMatch> handleEvent(TennisMatch state, DomainEvent event) {
         return switch (event) {
             case SpielerDomainEvent evt -> handleSpielerEvent(state, evt);
             case GegnerDomainEvent evt -> handleGegnerEvent(state, evt);
         };
     }
 
-    private static Either<DomainProblem, Match> handleSpielerEvent(final Match state, final SpielerDomainEvent evt) {
+    private static Either<DomainProblem, TennisMatch> handleSpielerEvent(final TennisMatch state, final SpielerDomainEvent evt) {
         return switch (evt) {
             case SpielerPunktGewonnen event -> right(state);
             case SpielerGameGewonnen event -> right(state);
@@ -39,15 +39,15 @@ public final class MatchEventHandler {
         };
     }
 
-    private static Either<DomainProblem, Match> spielerMatchGewonnen(final Match state, final SpielerMatchGewonnen event) {
-        return Match.spielerMatchGewonnen(state);
+    private static Either<DomainProblem, TennisMatch> spielerMatchGewonnen(final TennisMatch state, final SpielerMatchGewonnen event) {
+        return TennisMatch.spielerMatchGewonnen(state);
     }
 
-    private static Either<DomainProblem, Match> spielerSatzGewonnen(final Match state, final SpielerSatzGewonnen event) {
-        return Match.spielerSatzGewonnen(state);
+    private static Either<DomainProblem, TennisMatch> spielerSatzGewonnen(final TennisMatch state, final SpielerSatzGewonnen event) {
+        return TennisMatch.spielerSatzGewonnen(state);
     }
 
-    private static Either<DomainProblem, Match> handleGegnerEvent(final Match state, final GegnerDomainEvent evt) {
+    private static Either<DomainProblem, TennisMatch> handleGegnerEvent(final TennisMatch state, final GegnerDomainEvent evt) {
         return switch (evt) {
             case GegnerPunktGewonnen event -> right(state);
             case GegnerGameGewonnen event -> right(state);
@@ -56,12 +56,12 @@ public final class MatchEventHandler {
         };
     }
 
-    private static Either<DomainProblem, Match> gegnerSatzGewonnen(final Match state, final GegnerSatzGewonnen event) {
-        return Match.gegnerSatzGewonnen(state);
+    private static Either<DomainProblem, TennisMatch> gegnerSatzGewonnen(final TennisMatch state, final GegnerSatzGewonnen event) {
+        return TennisMatch.gegnerSatzGewonnen(state);
     }
 
-    private static Either<DomainProblem, Match> gegnerMatchGewonnen(final Match state, final GegnerMatchGewonnen event) {
-        return Match.gegnerMatchGewonnen(state);
+    private static Either<DomainProblem, TennisMatch> gegnerMatchGewonnen(final TennisMatch state, final GegnerMatchGewonnen event) {
+        return TennisMatch.gegnerMatchGewonnen(state);
     }
 
 }

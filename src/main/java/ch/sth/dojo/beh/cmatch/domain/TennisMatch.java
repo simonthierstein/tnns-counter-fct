@@ -8,13 +8,13 @@ import io.vavr.control.Either;
 import io.vavr.control.Option;
 import java.util.function.Function;
 
-public sealed interface Match permits LaufendesMatch, AbgeschlossenesMatch {
+public sealed interface TennisMatch permits LaufendesMatch, AbgeschlossenesMatch {
 
-    Function<AbgeschlossenesMatch, Either<DomainProblem, Match>> abgeschlossenesMatchToDomainProblem = abgeschlossenesMatch -> left(DomainProblem.eventNotValid);
-    Function<LaufendesMatch, Either<DomainProblem, Match>> laufendesMatchSpielerPunktet = laufendesMatch -> right(laufendesMatch.spielerPunktet());
-    Function<LaufendesMatch, Either<DomainProblem, Match>> laufendesMatchGegnerPunktet = laufendesMatch -> right(laufendesMatch.gegnerPunktet());
+    Function<AbgeschlossenesMatch, Either<DomainProblem, TennisMatch>> abgeschlossenesMatchToDomainProblem = abgeschlossenesMatch -> left(DomainProblem.eventNotValid);
+    Function<LaufendesMatch, Either<DomainProblem, TennisMatch>> laufendesMatchSpielerPunktet = laufendesMatch -> right(laufendesMatch.spielerPunktet());
+    Function<LaufendesMatch, Either<DomainProblem, TennisMatch>> laufendesMatchGegnerPunktet = laufendesMatch -> right(laufendesMatch.gegnerPunktet());
 
-    static <T> T apply(Match target,
+    static <T> T apply(TennisMatch target,
                        Function<LaufendesMatch, T> f1,
                        Function<AbgeschlossenesMatch, T> f2
     ) {
@@ -24,11 +24,11 @@ public sealed interface Match permits LaufendesMatch, AbgeschlossenesMatch {
         };
     }
 
-    static Match zero() {
+    static TennisMatch zero() {
         return new LaufendesMatch(SpielerPunkteMatch.zero(), GegnerPunkteMatch.zero());
     }
 
-    static Either<DomainProblem, Match> of(Integer spielerScore, Integer gegnerScore) {
+    static Either<DomainProblem, TennisMatch> of(Integer spielerScore, Integer gegnerScore) {
         var ssc = PunkteMatch.of(spielerScore).map(SpielerPunkteMatch::new);
         var gsc = PunkteMatch.of(gegnerScore).map(GegnerPunkteMatch::new);
 
@@ -37,20 +37,20 @@ public sealed interface Match permits LaufendesMatch, AbgeschlossenesMatch {
                 createMatchInstance(sscx, gscx)));
     }
 
-    static Match createMatchInstance(SpielerPunkteMatch spielerPunkteMatch, GegnerPunkteMatch gegnerPunkteMatch) {
+    static TennisMatch createMatchInstance(SpielerPunkteMatch spielerPunkteMatch, GegnerPunkteMatch gegnerPunkteMatch) {
         return Option.when(SpielerPunkteMatch.hasWon.test(spielerPunkteMatch) || GegnerPunkteMatch.hasWon.test(gegnerPunkteMatch), new AbgeschlossenesMatch())
-            .map(Match::narrow)
+            .map(TennisMatch::narrow)
             .getOrElse(() -> new LaufendesMatch(spielerPunkteMatch, gegnerPunkteMatch));
     }
 
-    static Either<DomainProblem, Match> spielerSatzGewonnen(Match state) {
+    static Either<DomainProblem, TennisMatch> spielerSatzGewonnen(TennisMatch state) {
         return apply(state,
             laufendesMatchSpielerPunktet,
             abgeschlossenesMatchToDomainProblem
         );
     }
 
-    static Either<DomainProblem, Match> spielerMatchGewonnen(Match state) {
+    static Either<DomainProblem, TennisMatch> spielerMatchGewonnen(TennisMatch state) {
         return apply(state,
             laufendesMatchSpielerPunktet,
             abgeschlossenesMatchToDomainProblem
@@ -58,7 +58,7 @@ public sealed interface Match permits LaufendesMatch, AbgeschlossenesMatch {
             .filterOrElse(AbgeschlossenesMatch.class::isInstance, x -> DomainProblem.eventNotValid);
     }
 
-    static Either<DomainProblem, Match> gegnerMatchGewonnen(Match state) {
+    static Either<DomainProblem, TennisMatch> gegnerMatchGewonnen(TennisMatch state) {
         return apply(state,
             laufendesMatchGegnerPunktet,
             abgeschlossenesMatchToDomainProblem
@@ -66,14 +66,14 @@ public sealed interface Match permits LaufendesMatch, AbgeschlossenesMatch {
             .filterOrElse(AbgeschlossenesMatch.class::isInstance, x -> DomainProblem.eventNotValid);
     }
 
-    static Either<DomainProblem, Match> gegnerSatzGewonnen(Match state) {
+    static Either<DomainProblem, TennisMatch> gegnerSatzGewonnen(TennisMatch state) {
         return apply(state,
             laufendesMatchGegnerPunktet,
             abgeschlossenesMatchToDomainProblem
         );
     }
 
-    static <T extends Match> Match narrow(T cMatch) {
+    static <T extends TennisMatch> TennisMatch narrow(T cMatch) {
         return cMatch;
     }
 

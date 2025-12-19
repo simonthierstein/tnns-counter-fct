@@ -4,7 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import ch.sth.dojo.beh.Condition;
 import ch.sth.dojo.beh.cmatch.domain.AbgeschlossenesMatch;
-import ch.sth.dojo.beh.cmatch.domain.Match;
+import ch.sth.dojo.beh.cmatch.domain.TennisMatch;
 import ch.sth.dojo.beh.evt.DomainEvent;
 import io.vavr.Predicates;
 import io.vavr.Tuple;
@@ -18,7 +18,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
-class MatchTest {
+class TennisMatchTest {
 
     @Test
     void initial() {
@@ -40,10 +40,10 @@ class MatchTest {
         }
     )
     void count(String input, String cmd, String expected) {
-        final Tuple3<Match, MatchScenario, Match> map = Tuple.of(input, cmd, expected)
+        final Tuple3<TennisMatch, MatchScenario, TennisMatch> map = Tuple.of(input, cmd, expected)
             .map(parseMatchScore(), parseCommand(), parseMatchScore());
         var re = map
-            .apply(MatchTest::executeCommand);
+            .apply(TennisMatchTest::executeCommand);
 
         assertThat(re.isRight())
             .withFailMessage(re::getLeft)
@@ -52,17 +52,17 @@ class MatchTest {
             .isEqualTo(map._3);
     }
 
-    private static Either<String, Match> executeCommand(Match match, MatchScenario matchScenario, Match match1) {
+    private static Either<String, TennisMatch> executeCommand(TennisMatch match, MatchScenario matchScenario, TennisMatch match1) {
         return Condition.condition(matchScenario, x -> x == MatchScenario.SpielerTransition,
-            xx -> Match.apply(match, laufendesMatch -> Either.right(laufendesMatch.spielerPunktet()), x -> Either.left("Abgeschlossenes Match")),
-            xx -> Match.apply(match, laufendesMatch -> Either.right(laufendesMatch.gegnerPunktet()), x -> Either.left("Abgeschlossenes Match")));
+            xx -> TennisMatch.apply(match, laufendesMatch -> Either.right(laufendesMatch.spielerPunktet()), x -> Either.left("Abgeschlossenes Match")),
+            xx -> TennisMatch.apply(match, laufendesMatch -> Either.right(laufendesMatch.gegnerPunktet()), x -> Either.left("Abgeschlossenes Match")));
     }
 
     private Function<String, MatchScenario> parseCommand() {
         return MatchScenario::valueOf;
     }
 
-    private Function<String, Match> parseMatchScore() {
+    private Function<String, TennisMatch> parseMatchScore() {
         return input -> Option.some(input)
             .filter(Predicates.not("MATCH"::equals))
             .toEither(new AbgeschlossenesMatch())
@@ -70,11 +70,11 @@ class MatchTest {
             .map(Arrays::stream)
             .map(List::ofAll)
             .map(list -> list.map(Integer::parseInt))
-            .map(list -> Match.of(list.get(0), list.get(1)).get())
+            .map(list -> TennisMatch.of(list.get(0), list.get(1)).get())
             .fold(Function.identity(), Function.identity());
     }
 
-    private static Match nextExpectedState() {
+    private static TennisMatch nextExpectedState() {
         return null;
     }
 
@@ -82,7 +82,7 @@ class MatchTest {
         return null;
     }
 
-    private static Match prevMatchState() {
+    private static TennisMatch prevMatchState() {
         return null;
     }
 }

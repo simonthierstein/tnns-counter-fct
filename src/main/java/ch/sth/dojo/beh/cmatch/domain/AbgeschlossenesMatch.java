@@ -4,6 +4,6 @@
 
 package ch.sth.dojo.beh.cmatch.domain;
 
-public record AbgeschlossenesMatch() implements Match {
+public record AbgeschlossenesMatch() implements TennisMatch {
 
 }

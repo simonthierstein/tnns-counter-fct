@@ -6,7 +6,7 @@ package ch.sth.dojo.beh.cmatch;
 
 import static ch.sth.dojo.beh.Condition.condition;
 import ch.sth.dojo.beh.DomainProblem;
-import ch.sth.dojo.beh.cmatch.domain.Match;
+import ch.sth.dojo.beh.cmatch.domain.TennisMatch;
 import ch.sth.dojo.beh.cmatch.domain.LaufendesMatch;
 import ch.sth.dojo.beh.evt.DomainEvent;
 import ch.sth.dojo.beh.evt.GegnerMatchGewonnen;
@@ -18,8 +18,8 @@ import static io.vavr.control.Either.right;
 
 public class MatchCommand {
 
-    public static Either<DomainProblem, DomainEvent> spielerGewinntSatz(final Match state, DomainEvent event) {
-        return Match.apply(state,
+    public static Either<DomainProblem, DomainEvent> spielerGewinntSatz(final TennisMatch state, DomainEvent event) {
+        return TennisMatch.apply(state,
             laufendesMatch -> right(spielerGewinntSatzLaufendesMatch(laufendesMatch, event)),
             abgeschlossenesMatch -> left(DomainProblem.eventNotValid));
     }
@@ -30,8 +30,8 @@ public class MatchCommand {
             x -> event);
     }
 
-    public static Either<DomainProblem, DomainEvent> gegnerGewinntSatz(final Match state, final GegnerSatzGewonnen event) {
-        return Match.apply(state,
+    public static Either<DomainProblem, DomainEvent> gegnerGewinntSatz(final TennisMatch state, final GegnerSatzGewonnen event) {
+        return TennisMatch.apply(state,
             laufendesMatch -> right(gegnerGewinntSatzLaufendesMatch(laufendesMatch, event)),
             abgeschlossenesMatch -> left(DomainProblem.eventNotValid));
 

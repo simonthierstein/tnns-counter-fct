@@ -3,7 +3,7 @@ package ch.sth.dojo.beh;
 import ch.sth.dojo.beh.game.domain.Game;
 import ch.sth.dojo.beh.game.domain.Tiebreak;
 import ch.sth.dojo.beh.game.evt.GameEventHandler;
-import ch.sth.dojo.beh.cmatch.domain.Match;
+import ch.sth.dojo.beh.cmatch.domain.TennisMatch;
 import ch.sth.dojo.beh.cmatch.evt.MatchEventHandler;
 import ch.sth.dojo.beh.satz.domain.Satz;
 import ch.sth.dojo.beh.satz.evt.SatzEventHandler;
@@ -57,7 +57,7 @@ public interface RootEventHandler {
         ));
     }
 
-    private static MatchState gameGewonnenTiebreakSwitch(final Match nextMatch, final Satz nextSatz, final Game nextGame) {
+    private static MatchState gameGewonnenTiebreakSwitch(final TennisMatch nextMatch, final Satz nextSatz, final Game nextGame) {
         return Condition.condition(nextSatz, Satz::isSixAll,
             satz -> MatchState.gameMatchState(nextMatch, satz, Tiebreak.zero()),
             satz -> MatchState.gameMatchState(nextMatch, nextSatz, nextGame));
