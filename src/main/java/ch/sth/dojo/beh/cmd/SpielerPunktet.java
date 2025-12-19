@@ -14,7 +14,7 @@ import ch.sth.dojo.beh.game.GameCommand;
 import ch.sth.dojo.beh.game.domain.Game;
 import ch.sth.dojo.beh.cmatch.CMatchCommand;
 import ch.sth.dojo.beh.cmatch.domain.CMatch;
-import ch.sth.dojo.beh.csatz.CSatzCommand;
+import ch.sth.dojo.beh.csatz.SatzCommand;
 import ch.sth.dojo.beh.csatz.domain.CSatz;
 import ch.sth.dojo.beh.evt.DomainEvent;
 import ch.sth.dojo.beh.evt.SpielerGameGewonnen;
@@ -58,7 +58,7 @@ public record SpielerPunktet(UUID id) implements DomainCommand {
     private static Function<DomainEvent, Either<DomainProblem, DomainEvent>> handleGameEvent(final CSatz cSatz) {
         return event -> Match(event).of(
             Case($(instanceOf(SpielerPunktGewonnen.class)), Either::right),
-            Case($(instanceOf(SpielerGameGewonnen.class)), evt -> CSatzCommand.spielerGewinntGame(cSatz, evt))
+            Case($(instanceOf(SpielerGameGewonnen.class)), evt -> SatzCommand.spielerGewinntGame(cSatz, evt))
         );
     }
 

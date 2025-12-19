@@ -16,7 +16,7 @@ import io.vavr.control.Either;
 import static io.vavr.control.Either.left;
 import static io.vavr.control.Either.right;
 
-public final class CSatzCommand {
+public final class SatzCommand {
 
     public static Either<DomainProblem, DomainEvent> gegnerGewinntGame(final CSatz state, final GegnerGameGewonnen evt) {
         return CSatz.apply(state,
