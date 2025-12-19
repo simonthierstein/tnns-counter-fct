@@ -22,8 +22,8 @@ import ch.sth.dojo.beh.cmatch.CMatchCommand;
 import ch.sth.dojo.beh.cmatch.domain.CMatch;
 import ch.sth.dojo.beh.cmatch.domain.LaufendesMatch;
 import ch.sth.dojo.beh.csatz.SatzCommand;
-import ch.sth.dojo.beh.csatz.domain.CSatz;
-import ch.sth.dojo.beh.csatz.domain.LaufenderCSatz;
+import ch.sth.dojo.beh.csatz.domain.Satz;
+import ch.sth.dojo.beh.csatz.domain.LaufenderSatz;
 import ch.sth.dojo.beh.evt.DomainEvent;
 import ch.sth.dojo.beh.evt.GegnerGameGewonnen;
 import ch.sth.dojo.beh.evt.GegnerPunktGewonnen;
@@ -50,17 +50,17 @@ public record GegnerPunktet(UUID uuid) implements DomainCommand {
         );
     }
 
-    private static Either<DomainProblem, DomainEvent> apply(CMatch cMatch, CSatz cSatz, Game game) {
+    private static Either<DomainProblem, DomainEvent> apply(CMatch cMatch, Satz satz, Game game) {
         final Either<DomainProblem, DomainEvent> domainEvents = GameCommand.gegnerGewinntPunkt(game);
         return domainEvents
-            .flatMap(handleGameEvent(cSatz))
+            .flatMap(handleGameEvent(satz))
             .flatMap(handleSatzEvent(cMatch));
     }
 
-    private static Either<DomainProblem, DomainEvent> apply(CMatch cMatch, CSatz cSatz, Tiebreak cGame) {
+    private static Either<DomainProblem, DomainEvent> apply(CMatch cMatch, Satz satz, Tiebreak cGame) {
         final Either<DomainProblem, DomainEvent> domainEvents = TiebreakCommand.gegnerGewinntPunkt(cGame);
         return domainEvents
-            .flatMap(handleGameEvent(cSatz))
+            .flatMap(handleGameEvent(satz))
             .flatMap(handleSatzEvent(cMatch));
     }
 
@@ -75,12 +75,12 @@ public record GegnerPunktet(UUID uuid) implements DomainCommand {
         );
     }
 
-    private static Function<DomainEvent, Either<DomainProblem, DomainEvent>> handleGameEvent(final CSatz cSatz) {
+    private static Function<DomainEvent, Either<DomainProblem, DomainEvent>> handleGameEvent(final Satz satz) {
         return event -> Match(event).of(
             Case($(instanceOf(SpielerPunktGewonnen.class)), Either::right),
-            Case($(instanceOf(SpielerGameGewonnen.class)), evt -> SatzCommand.spielerGewinntGame(cSatz, evt)),
+            Case($(instanceOf(SpielerGameGewonnen.class)), evt -> SatzCommand.spielerGewinntGame(satz, evt)),
             Case($(instanceOf(GegnerPunktGewonnen.class)), Either::right),
-            Case($(instanceOf(GegnerGameGewonnen.class)), evt -> SatzCommand.gegnerGewinntGame(cSatz, evt))
+            Case($(instanceOf(GegnerGameGewonnen.class)), evt -> SatzCommand.gegnerGewinntGame(satz, evt))
         );
     }
 
@@ -91,20 +91,20 @@ public record GegnerPunktet(UUID uuid) implements DomainCommand {
         ));
     }
 
-    private static Either<DomainProblem, DomainEvent> applyToLaufendesCGame(LaufendesGame laufendesCGame, CSatz satz, final CMatch cMatch) {
+    private static Either<DomainProblem, DomainEvent> applyToLaufendesCGame(LaufendesGame laufendesCGame, Satz satz, final CMatch cMatch) {
         return condition(laufendesCGame, LaufendesGame.passIfSpielerOnePunktBisCGame,
             game -> applyToCSatz(satz, cMatch),
             x -> right(new SpielerPunktGewonnen()));
     }
 
-    private static Either<DomainProblem, DomainEvent> applyToCSatz(CSatz satz, final CMatch cMatch) {
-        return CSatz.apply(satz,
+    private static Either<DomainProblem, DomainEvent> applyToCSatz(Satz satz, final CMatch cMatch) {
+        return Satz.apply(satz,
             laufenderCSatz -> applyToLaufenderSatz(laufenderCSatz, cMatch),
             x -> left(DomainProblem.valueNotValid));
     }
 
-    private static Either<DomainProblem, DomainEvent> applyToLaufenderSatz(final LaufenderCSatz laufenderCSatz, final CMatch cMatch) {
-        return condition(laufenderCSatz, LaufenderCSatz.passIfSpielerOneGameBisSatz,
+    private static Either<DomainProblem, DomainEvent> applyToLaufenderSatz(final LaufenderSatz laufenderCSatz, final CMatch cMatch) {
+        return condition(laufenderCSatz, LaufenderSatz.passIfSpielerOneGameBisSatz,
             x -> applyToMatch(cMatch),
             x -> right(new SpielerGameGewonnen()));
     }
@@ -123,8 +123,8 @@ public record GegnerPunktet(UUID uuid) implements DomainCommand {
         );
     }
 
-    private static Either<DomainProblem, DomainEvent> applyToAbgeschlossenesCGame(final CSatz prev) {
-        return CSatz.apply(prev,
+    private static Either<DomainProblem, DomainEvent> applyToAbgeschlossenesCGame(final Satz prev) {
+        return Satz.apply(prev,
             laufend -> right(new SpielerPunktGewonnen()),
             abgeschlossenerCSatz -> left(DomainProblem.valueNotValid));
     }

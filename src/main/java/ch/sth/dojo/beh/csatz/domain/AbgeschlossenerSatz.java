@@ -4,6 +4,6 @@
 
 package ch.sth.dojo.beh.csatz.domain;
 
-public record AbgeschlossenerCSatz() implements CSatz {
+public record AbgeschlossenerSatz() implements Satz {
 
 }

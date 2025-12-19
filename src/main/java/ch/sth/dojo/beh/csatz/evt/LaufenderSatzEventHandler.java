@@ -7,46 +7,46 @@ package ch.sth.dojo.beh.csatz.evt;
 import static io.vavr.control.Either.right;
 
 import ch.sth.dojo.beh.DomainProblem;
-import ch.sth.dojo.beh.csatz.domain.AbgeschlossenerCSatz;
-import ch.sth.dojo.beh.csatz.domain.CSatz;
+import ch.sth.dojo.beh.csatz.domain.AbgeschlossenerSatz;
+import ch.sth.dojo.beh.csatz.domain.Satz;
 import ch.sth.dojo.beh.csatz.domain.GegnerPunkteSatz;
-import ch.sth.dojo.beh.csatz.domain.LaufenderCSatz;
+import ch.sth.dojo.beh.csatz.domain.LaufenderSatz;
 import ch.sth.dojo.beh.csatz.domain.SpielerPunkteSatz;
 import io.vavr.control.Either;
 
 final class LaufenderSatzEventHandler {
 
-    static Either<DomainProblem, CSatz> gegnerSatzGewonnen(LaufenderCSatz state) {
-        return right(LaufenderCSatz.zero());
+    static Either<DomainProblem, Satz> gegnerSatzGewonnen(LaufenderSatz state) {
+        return right(LaufenderSatz.zero());
     }
 
-    static Either<DomainProblem, CSatz> gegnerPunktGewonnen(LaufenderCSatz state) {
+    static Either<DomainProblem, Satz> gegnerPunktGewonnen(LaufenderSatz state) {
         return right(state);
     }
 
-    static Either<DomainProblem, CSatz> gegnerMatchGewonnen(LaufenderCSatz state) {
-        return right(new AbgeschlossenerCSatz());
+    static Either<DomainProblem, Satz> gegnerMatchGewonnen(LaufenderSatz state) {
+        return right(new AbgeschlossenerSatz());
     }
 
-    static Either<DomainProblem, CSatz> gegnerGameGewonnen(LaufenderCSatz state) {
-        return right(new LaufenderCSatz(new SpielerPunkteSatz(state.spielerPunkteSatz().value()),
+    static Either<DomainProblem, Satz> gegnerGameGewonnen(LaufenderSatz state) {
+        return right(new LaufenderSatz(new SpielerPunkteSatz(state.spielerPunkteSatz().value()),
             new GegnerPunkteSatz(state.gegnerPunkteSatz().value() + 1)));
     }
 
-    static Either<DomainProblem, CSatz> spielerSatzGewonnen(LaufenderCSatz state) {
-        return right(LaufenderCSatz.zero());
+    static Either<DomainProblem, Satz> spielerSatzGewonnen(LaufenderSatz state) {
+        return right(LaufenderSatz.zero());
     }
 
-    static Either<DomainProblem, CSatz> spielerPunktGewonnen(LaufenderCSatz state) {
+    static Either<DomainProblem, Satz> spielerPunktGewonnen(LaufenderSatz state) {
         return right(state);
     }
 
-    static Either<DomainProblem, CSatz> spielerMatchGewonnen(LaufenderCSatz state) {
-        return right(new AbgeschlossenerCSatz());
+    static Either<DomainProblem, Satz> spielerMatchGewonnen(LaufenderSatz state) {
+        return right(new AbgeschlossenerSatz());
     }
 
-    static Either<DomainProblem, CSatz> spielerGameGewonnen(LaufenderCSatz state) {
-        return right(new LaufenderCSatz(new SpielerPunkteSatz(state.spielerPunkteSatz().value() + 1),
+    static Either<DomainProblem, Satz> spielerGameGewonnen(LaufenderSatz state) {
+        return right(new LaufenderSatz(new SpielerPunkteSatz(state.spielerPunkteSatz().value() + 1),
             state.gegnerPunkteSatz()));
     }
 }

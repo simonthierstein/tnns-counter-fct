@@ -17,9 +17,9 @@ import ch.sth.dojo.beh.game.domain.LaufendesGame;
 import ch.sth.dojo.beh.game.domain.SpielerPunkteBisGame;
 import ch.sth.dojo.beh.game.domain.Tiebreak;
 import ch.sth.dojo.beh.cmatch.domain.CMatch;
-import ch.sth.dojo.beh.csatz.domain.AbgeschlossenerCSatz;
-import ch.sth.dojo.beh.csatz.domain.CSatz;
-import ch.sth.dojo.beh.csatz.domain.LaufenderCSatz;
+import ch.sth.dojo.beh.csatz.domain.AbgeschlossenerSatz;
+import ch.sth.dojo.beh.csatz.domain.Satz;
+import ch.sth.dojo.beh.csatz.domain.LaufenderSatz;
 import ch.sth.dojo.beh.evt.DomainEvent;
 import ch.sth.dojo.beh.evt.GegnerGameGewonnen;
 import ch.sth.dojo.beh.evt.GegnerMatchGewonnen;
@@ -153,7 +153,7 @@ class ScenarioTest {
 
         var result = applyCommand(psc)
             .map(state -> PartialScenarioConfig.partialScenarioConfig(new GegnerPunktet(UUID.randomUUID()), state, new GegnerPunktGewonnen(),
-                State.bindGame.apply(match(), CSatz.of(0, 1).get(), Game.of(4, 3).get())))
+                State.bindGame.apply(match(), Satz.of(0, 1).get(), Game.of(4, 3).get())))
             .flatMap(ScenarioTest::applyCommand);
 
         assertThat(result.isRight())
@@ -176,10 +176,10 @@ class ScenarioTest {
             .get();
     }
 
-    private Function<String, CSatz> parseSatzState() {
+    private Function<String, Satz> parseSatzState() {
         return input -> scoreParsing(Option.some(input)
             .filter(Predicates.not("SATZ"::equals))
-            .toEither(new AbgeschlossenerCSatz()), list -> CSatz.of(list.get(0), list.get(1)).get());
+            .toEither(new AbgeschlossenerSatz()), list -> Satz.of(list.get(0), list.get(1)).get());
     }
 
     private static Function<String, CMatch> parseMatchState() {
@@ -296,9 +296,9 @@ class ScenarioTest {
 
     }
 
-    record State(CMatch match, CSatz satz, Game game) {
+    record State(CMatch match, Satz satz, Game game) {
 
-        static Function3<CMatch, CSatz, Game, State> bindGame = State::new;
+        static Function3<CMatch, Satz, Game, State> bindGame = State::new;
         static Function1<State, MatchState> toTuple = State::tuple;
 
         static State untuple(MatchState stateTuple) {
@@ -350,7 +350,7 @@ class ScenarioTest {
     }
 
     private static GameMatchState zeroGame() {
-        return gameMatchState(CMatch.zero(), LaufenderCSatz.zero(), LaufendesGame.zero());
+        return gameMatchState(CMatch.zero(), LaufenderSatz.zero(), LaufendesGame.zero());
     }
 
     @Test
@@ -362,7 +362,7 @@ class ScenarioTest {
     }
 
     private static MatchState laufendesGameWith(final int spielerValue, final int gegnerValue) {
-        return gameMatchState(match(), LaufenderCSatz.zero(), new LaufendesGame(new SpielerPunkteBisGame(spielerValue), new GegnerPunkteBisGame(gegnerValue)));
+        return gameMatchState(match(), LaufenderSatz.zero(), new LaufendesGame(new SpielerPunkteBisGame(spielerValue), new GegnerPunkteBisGame(gegnerValue)));
     }
 
     @Test

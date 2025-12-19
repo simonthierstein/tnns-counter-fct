@@ -7,7 +7,7 @@ package ch.sth.dojo.beh.csatz.evt;
 import static ch.sth.dojo.beh.csatz.evt.SatzEventHandler.abgeschlossenerSatzToProblem;
 
 import ch.sth.dojo.beh.DomainProblem;
-import ch.sth.dojo.beh.csatz.domain.CSatz;
+import ch.sth.dojo.beh.csatz.domain.Satz;
 import ch.sth.dojo.beh.evt.SpielerDomainEvent;
 import ch.sth.dojo.beh.evt.SpielerGameGewonnen;
 import ch.sth.dojo.beh.evt.SpielerMatchGewonnen;
@@ -17,7 +17,7 @@ import io.vavr.control.Either;
 
 interface SpielerEventHandler {
 
-    static Either<DomainProblem, CSatz> handleSpielerEvent(CSatz prev, SpielerDomainEvent event) {
+    static Either<DomainProblem, Satz> handleSpielerEvent(Satz prev, SpielerDomainEvent event) {
         return switch (event) {
             case SpielerGameGewonnen evt -> spielerGameGewonnen(prev, evt);
             case SpielerMatchGewonnen evt -> spielerMatchGewonnen(prev, evt);
@@ -26,29 +26,29 @@ interface SpielerEventHandler {
         };
     }
 
-    static Either<DomainProblem, CSatz> spielerSatzGewonnen(CSatz state, SpielerSatzGewonnen evt) {
-        return CSatz.apply(state,
+    static Either<DomainProblem, Satz> spielerSatzGewonnen(Satz state, SpielerSatzGewonnen evt) {
+        return Satz.apply(state,
             LaufenderSatzEventHandler::spielerSatzGewonnen,
             abgeschlossenerSatzToProblem
         );
     }
 
-    static Either<DomainProblem, CSatz> spielerPunktGewonnen(CSatz state, SpielerPunktGewonnen evt) {
-        return CSatz.apply(state,
+    static Either<DomainProblem, Satz> spielerPunktGewonnen(Satz state, SpielerPunktGewonnen evt) {
+        return Satz.apply(state,
             LaufenderSatzEventHandler::spielerPunktGewonnen,
             abgeschlossenerSatzToProblem
         );
     }
 
-    static Either<DomainProblem, CSatz> spielerMatchGewonnen(CSatz state, SpielerMatchGewonnen evt) {
-        return CSatz.apply(state,
+    static Either<DomainProblem, Satz> spielerMatchGewonnen(Satz state, SpielerMatchGewonnen evt) {
+        return Satz.apply(state,
             LaufenderSatzEventHandler::spielerMatchGewonnen,
             abgeschlossenerSatzToProblem
         );
     }
 
-    static Either<DomainProblem, CSatz> spielerGameGewonnen(CSatz state, SpielerGameGewonnen evt) {
-        return CSatz.apply(state,
+    static Either<DomainProblem, Satz> spielerGameGewonnen(Satz state, SpielerGameGewonnen evt) {
+        return Satz.apply(state,
             LaufenderSatzEventHandler::spielerGameGewonnen,
             abgeschlossenerSatzToProblem
         );

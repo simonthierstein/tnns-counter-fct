@@ -2,9 +2,9 @@ package ch.sth.dojo.beh.csatz.evt;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import ch.sth.dojo.beh.csatz.domain.CSatz;
+import ch.sth.dojo.beh.csatz.domain.Satz;
 import ch.sth.dojo.beh.csatz.domain.GegnerPunkteSatz;
-import ch.sth.dojo.beh.csatz.domain.LaufenderCSatz;
+import ch.sth.dojo.beh.csatz.domain.LaufenderSatz;
 import ch.sth.dojo.beh.csatz.domain.SpielerPunkteSatz;
 import ch.sth.dojo.beh.evt.GegnerGameGewonnen;
 import ch.sth.dojo.beh.evt.GegnerSatzGewonnen;
@@ -27,7 +27,7 @@ class SatzEventHandlerTest {
     @ParameterizedTest
     @ArgumentsSource(SatzScoreProvider.class)
     void handleGegnerGameGewonnenEvent(Integer left, Integer right) {
-        var prev = new LaufenderCSatz(new SpielerPunkteSatz(left), new GegnerPunkteSatz(right));
+        var prev = new LaufenderSatz(new SpielerPunkteSatz(left), new GegnerPunkteSatz(right));
         var res = SatzEventHandler.handleEvent(prev, new GegnerGameGewonnen());
 
         assertThat(res.isRight()).isTrue();
@@ -38,7 +38,7 @@ class SatzEventHandlerTest {
     @ParameterizedTest
     @ArgumentsSource(SatzScoreProvider.class)
     void handleSpielerGameGewonnenEvent(Integer left, Integer right) {
-        var prev = new LaufenderCSatz(new SpielerPunkteSatz(left), new GegnerPunkteSatz(right));
+        var prev = new LaufenderSatz(new SpielerPunkteSatz(left), new GegnerPunkteSatz(right));
         var res = SatzEventHandler.handleEvent(prev, new SpielerGameGewonnen());
 
         assertThat(res.isRight()).isTrue();
@@ -47,28 +47,28 @@ class SatzEventHandlerTest {
 
     @Test
     void handleSpielerGameGewonnenEvent5_5() {
-        var prev = new LaufenderCSatz(new SpielerPunkteSatz(5), new GegnerPunkteSatz(5));
+        var prev = new LaufenderSatz(new SpielerPunkteSatz(5), new GegnerPunkteSatz(5));
         var res = SatzEventHandler.handleEvent(prev, new SpielerGameGewonnen());
 
         assertThat(res.isRight()).isTrue();
-        assertThat(res.get()).isInstanceOf(LaufenderCSatz.class);
+        assertThat(res.get()).isInstanceOf(LaufenderSatz.class);
         assertThat(res
-            .map(LaufenderCSatz.class::cast)
+            .map(LaufenderSatz.class::cast)
             .get())
-            .isEqualTo(new LaufenderCSatz(new SpielerPunkteSatz(6), new GegnerPunkteSatz(5)));
+            .isEqualTo(new LaufenderSatz(new SpielerPunkteSatz(6), new GegnerPunkteSatz(5)));
     }
 
     @Test
     void handleGegnerGameGewonnenEvent5_5() {
-        var prev = new LaufenderCSatz(new SpielerPunkteSatz(5), new GegnerPunkteSatz(5));
+        var prev = new LaufenderSatz(new SpielerPunkteSatz(5), new GegnerPunkteSatz(5));
         var res = SatzEventHandler.handleEvent(prev, new GegnerGameGewonnen());
 
         assertThat(res.isRight()).isTrue();
-        assertThat(res.get()).isInstanceOf(LaufenderCSatz.class);
+        assertThat(res.get()).isInstanceOf(LaufenderSatz.class);
         assertThat(res
-            .map(LaufenderCSatz.class::cast)
+            .map(LaufenderSatz.class::cast)
             .get())
-            .isEqualTo(new LaufenderCSatz(new SpielerPunkteSatz(5), new GegnerPunkteSatz(6)));
+            .isEqualTo(new LaufenderSatz(new SpielerPunkteSatz(5), new GegnerPunkteSatz(6)));
     }
 
     @DisplayName("Spieler Satz gewonnen: {0} - {1}")
@@ -82,13 +82,13 @@ class SatzEventHandlerTest {
         "6,5",
         "6,6"})
     void handleSpielerSatzGewonnenEvent(Integer left, Integer right) {
-        var prev = new LaufenderCSatz(new SpielerPunkteSatz(left), new GegnerPunkteSatz(right));
+        var prev = new LaufenderSatz(new SpielerPunkteSatz(left), new GegnerPunkteSatz(right));
         var res = SatzEventHandler.handleEvent(prev, new SpielerSatzGewonnen());
 
         assertThat(res.isRight()).isTrue();
         assertThat(res.get())
-            .isInstanceOf(LaufenderCSatz.class)
-            .isEqualTo(CSatz.zero());
+            .isInstanceOf(LaufenderSatz.class)
+            .isEqualTo(Satz.zero());
     }
 
     @DisplayName("Gegner Satz gewonnen: {0} - {1}")
@@ -102,13 +102,13 @@ class SatzEventHandlerTest {
         "6,5",
         "6,6"})
     void handleGegnerSatzGewonnenEvent(Integer left, Integer right) {
-        var prev = new LaufenderCSatz(new SpielerPunkteSatz(right), new GegnerPunkteSatz(left));
+        var prev = new LaufenderSatz(new SpielerPunkteSatz(right), new GegnerPunkteSatz(left));
         var res = SatzEventHandler.handleEvent(prev, new GegnerSatzGewonnen());
 
         assertThat(res.isRight()).isTrue();
         assertThat(res.get())
-            .isInstanceOf(LaufenderCSatz.class)
-            .isEqualTo(CSatz.zero());
+            .isInstanceOf(LaufenderSatz.class)
+            .isEqualTo(Satz.zero());
     }
 
 }

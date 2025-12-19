@@ -6,7 +6,7 @@ import ch.sth.dojo.beh.shared.domain.Verlierer;
 import io.vavr.Predicates;
 import java.util.function.Predicate;
 
-public record LaufenderCSatz(SpielerPunkteSatz spielerPunkteSatz, GegnerPunkteSatz gegnerPunkteSatz) implements CSatz {
+public record LaufenderSatz(SpielerPunkteSatz spielerPunkteSatz, GegnerPunkteSatz gegnerPunkteSatz) implements Satz {
 
     private static final Predicate<GewinnerVerlierer> passIfGewinnerOneGameBisSatz =
         Predicates.anyOf(
@@ -16,14 +16,14 @@ public record LaufenderCSatz(SpielerPunkteSatz spielerPunkteSatz, GegnerPunkteSa
         );
 
 
-    public static final Predicate<LaufenderCSatz> passIfSpielerOneGameBisSatz = in ->
+    public static final Predicate<LaufenderSatz> passIfSpielerOneGameBisSatz = in ->
         passIfGewinnerOneGameBisSatz.test(GewinnerVerlierer.of(new Gewinner(in.spielerPunkteSatz.value()), new Verlierer(in.gegnerPunkteSatz.value())));
-    public static final Predicate<LaufenderCSatz> passIfGegnerOneGameBisSatz = in ->
+    public static final Predicate<LaufenderSatz> passIfGegnerOneGameBisSatz = in ->
         passIfGewinnerOneGameBisSatz.test(GewinnerVerlierer.of(new Gewinner(in.gegnerPunkteSatz.value()), new Verlierer(in.spielerPunkteSatz.value())));
 
 
-    public static LaufenderCSatz zero() {
-        return new LaufenderCSatz(SpielerPunkteSatz.zero(), GegnerPunkteSatz.zero());
+    public static LaufenderSatz zero() {
+        return new LaufenderSatz(SpielerPunkteSatz.zero(), GegnerPunkteSatz.zero());
     }
 
 

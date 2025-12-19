@@ -10,30 +10,30 @@ import io.vavr.control.Either;
 import io.vavr.control.Option;
 import java.util.function.Function;
 
-public interface CSatz {
+public interface Satz {
 
-    static <T> T apply(CSatz target,
-        Function<LaufenderCSatz, T> laufenderCSatzTFunction,
-        Function<AbgeschlossenerCSatz, T> abgeschlossenerCSatzTFunction) {
+    static <T> T apply(Satz target,
+                       Function<LaufenderSatz, T> laufenderCSatzTFunction,
+                       Function<AbgeschlossenerSatz, T> abgeschlossenerCSatzTFunction) {
         return Match(target).of(
-            Case($(instanceOf(LaufenderCSatz.class)), laufenderCSatzTFunction),
-            Case($(instanceOf(AbgeschlossenerCSatz.class)), abgeschlossenerCSatzTFunction)
+            Case($(instanceOf(LaufenderSatz.class)), laufenderCSatzTFunction),
+            Case($(instanceOf(AbgeschlossenerSatz.class)), abgeschlossenerCSatzTFunction)
         );
     }
 
-    static CSatz zero() {
-        return LaufenderCSatz.zero();
+    static Satz zero() {
+        return LaufenderSatz.zero();
     }
 
-    static Either<DomainProblem, CSatz> of(Integer spieler, Integer gegner) {
+    static Either<DomainProblem, Satz> of(Integer spieler, Integer gegner) {
         var spielerEith = Option.of(spieler).toEither(DomainProblem.nullValueNotValid).flatMap(SpielerPunkteSatz::SpielerPunkteSatz);
         var gegnerEith = Option.of(gegner).toEither(DomainProblem.nullValueNotValid).flatMap(GegnerPunkteSatz::GegnerPunkteSatz);
 
         return spielerEith.flatMap(spielerx ->
-            gegnerEith.map(gegnerx -> new LaufenderCSatz(spielerx, gegnerx)));
+            gegnerEith.map(gegnerx -> new LaufenderSatz(spielerx, gegnerx)));
     }
 
-    static boolean isSixAll(CSatz satz) {
+    static boolean isSixAll(Satz satz) {
         return apply(satz, laufenderCSatz -> laufenderCSatz.spielerPunkteSatz().value() == 6 && laufenderCSatz.gegnerPunkteSatz().value() == 6, x -> false);
     }
 }

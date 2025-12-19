@@ -6,8 +6,8 @@ package ch.sth.dojo.beh.csatz;
 
 import static ch.sth.dojo.beh.Condition.condition;
 import ch.sth.dojo.beh.DomainProblem;
-import ch.sth.dojo.beh.csatz.domain.CSatz;
-import ch.sth.dojo.beh.csatz.domain.LaufenderCSatz;
+import ch.sth.dojo.beh.csatz.domain.Satz;
+import ch.sth.dojo.beh.csatz.domain.LaufenderSatz;
 import ch.sth.dojo.beh.evt.DomainEvent;
 import ch.sth.dojo.beh.evt.GegnerGameGewonnen;
 import ch.sth.dojo.beh.evt.GegnerSatzGewonnen;
@@ -18,26 +18,26 @@ import static io.vavr.control.Either.right;
 
 public final class SatzCommand {
 
-    public static Either<DomainProblem, DomainEvent> gegnerGewinntGame(final CSatz state, final GegnerGameGewonnen evt) {
-        return CSatz.apply(state,
+    public static Either<DomainProblem, DomainEvent> gegnerGewinntGame(final Satz state, final GegnerGameGewonnen evt) {
+        return Satz.apply(state,
             laufenderCSatz -> right(gegnerGewinntGameLaufenderSatz(laufenderCSatz, evt)),
             x -> left(DomainProblem.eventNotValid));
     }
 
-    private static DomainEvent gegnerGewinntGameLaufenderSatz(final LaufenderCSatz state, final GegnerGameGewonnen evt) {
-        return condition(state, LaufenderCSatz.passIfGegnerOneGameBisSatz,
+    private static DomainEvent gegnerGewinntGameLaufenderSatz(final LaufenderSatz state, final GegnerGameGewonnen evt) {
+        return condition(state, LaufenderSatz.passIfGegnerOneGameBisSatz,
             x -> new GegnerSatzGewonnen(),
             x -> evt);
     }
 
-    public static Either<DomainProblem, DomainEvent> spielerGewinntGame(CSatz state, final DomainEvent evt) {
-        return CSatz.apply(state,
+    public static Either<DomainProblem, DomainEvent> spielerGewinntGame(Satz state, final DomainEvent evt) {
+        return Satz.apply(state,
             laufenderCSatz -> right(spielerGewinntGameLaufenderSatz(laufenderCSatz, evt)),
             x -> left(DomainProblem.eventNotValid));
     }
 
-    private static DomainEvent spielerGewinntGameLaufenderSatz(final LaufenderCSatz state, final DomainEvent evt) {
-        return condition(state, LaufenderCSatz.passIfSpielerOneGameBisSatz,
+    private static DomainEvent spielerGewinntGameLaufenderSatz(final LaufenderSatz state, final DomainEvent evt) {
+        return condition(state, LaufenderSatz.passIfSpielerOneGameBisSatz,
             x -> new SpielerSatzGewonnen(),
             x -> evt);
     }
