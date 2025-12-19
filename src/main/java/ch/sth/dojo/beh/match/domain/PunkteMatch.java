@@ -1,4 +1,4 @@
-package ch.sth.dojo.beh.cmatch.domain;
+package ch.sth.dojo.beh.match.domain;
 
 import static ch.sth.dojo.beh.PredicateUtils.eq;
 import static ch.sth.dojo.beh.PredicateUtils.gte;

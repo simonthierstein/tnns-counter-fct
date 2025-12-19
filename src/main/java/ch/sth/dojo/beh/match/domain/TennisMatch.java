@@ -1,4 +1,4 @@
-package ch.sth.dojo.beh.cmatch.domain;
+package ch.sth.dojo.beh.match.domain;
 
 import static io.vavr.control.Either.left;
 import static io.vavr.control.Either.right;

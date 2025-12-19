@@ -1,7 +1,7 @@
-package ch.sth.dojo.beh.cmatch.domain;
+package ch.sth.dojo.beh.match.domain;
 
 import static ch.sth.dojo.beh.PredicateUtils.compose;
-import static ch.sth.dojo.beh.cmatch.domain.PunkteMatch.hasTwoSets;
+import static ch.sth.dojo.beh.match.domain.PunkteMatch.hasTwoSets;
 
 import java.util.function.Predicate;
 

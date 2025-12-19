@@ -1,4 +1,4 @@
-package ch.sth.dojo.beh.cmatch.evt;
+package ch.sth.dojo.beh.match.evt;
 
 import static io.vavr.API.$;
 import static io.vavr.API.Case;
@@ -7,7 +7,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.fail;
 
 import ch.sth.dojo.beh.DomainProblem;
-import ch.sth.dojo.beh.cmatch.domain.TennisMatch;
+import ch.sth.dojo.beh.match.domain.TennisMatch;
 import ch.sth.dojo.beh.evt.DomainEvent;
 import ch.sth.dojo.beh.evt.GegnerGameGewonnen;
 import ch.sth.dojo.beh.evt.GegnerMatchGewonnen;

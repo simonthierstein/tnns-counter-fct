@@ -2,7 +2,7 @@
  * Copyright (C) Schweizerische Bundesbahnen SBB, 2025.
  */
 
-package ch.sth.dojo.beh.cmatch.domain;
+package ch.sth.dojo.beh.match.domain;
 
 import static ch.sth.dojo.beh.Condition.condition;
 import static ch.sth.dojo.beh.PredicateUtils.compose;

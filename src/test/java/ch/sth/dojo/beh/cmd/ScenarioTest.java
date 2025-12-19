@@ -16,7 +16,7 @@ import ch.sth.dojo.beh.game.domain.GegnerPunkteBisGame;
 import ch.sth.dojo.beh.game.domain.LaufendesGame;
 import ch.sth.dojo.beh.game.domain.SpielerPunkteBisGame;
 import ch.sth.dojo.beh.game.domain.Tiebreak;
-import ch.sth.dojo.beh.cmatch.domain.TennisMatch;
+import ch.sth.dojo.beh.match.domain.TennisMatch;
 import ch.sth.dojo.beh.satz.domain.AbgeschlossenerSatz;
 import ch.sth.dojo.beh.satz.domain.Satz;
 import ch.sth.dojo.beh.satz.domain.LaufenderSatz;

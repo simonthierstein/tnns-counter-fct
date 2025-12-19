@@ -5,7 +5,7 @@
 package ch.sth.dojo.beh.matchstate;
 
 import ch.sth.dojo.beh.game.domain.Game;
-import ch.sth.dojo.beh.cmatch.domain.TennisMatch;
+import ch.sth.dojo.beh.match.domain.TennisMatch;
 import ch.sth.dojo.beh.satz.domain.Satz;
 import static io.vavr.API.$;
 import static io.vavr.API.Case;
