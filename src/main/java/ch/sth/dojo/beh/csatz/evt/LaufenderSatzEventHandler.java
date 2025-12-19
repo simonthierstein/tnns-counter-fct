@@ -14,7 +14,7 @@ import ch.sth.dojo.beh.csatz.domain.LaufenderCSatz;
 import ch.sth.dojo.beh.csatz.domain.SpielerPunkteSatz;
 import io.vavr.control.Either;
 
-final class LaufenderCSatzEventHandler {
+final class LaufenderSatzEventHandler {
 
     static Either<DomainProblem, CSatz> gegnerSatzGewonnen(LaufenderCSatz state) {
         return right(LaufenderCSatz.zero());

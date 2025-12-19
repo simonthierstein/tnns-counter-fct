@@ -34,14 +34,14 @@ interface GegnerEventHandler {
 
     static Either<DomainProblem, CSatz> gegnerSatzGewonnen(CSatz prev, GegnerSatzGewonnen evt) {
         return CSatz.apply(prev,
-            LaufenderCSatzEventHandler::gegnerSatzGewonnen,
+            LaufenderSatzEventHandler::gegnerSatzGewonnen,
             abgeschlossenerSatzToProblem
         );
     }
 
     static Either<DomainProblem, CSatz> gegnerPunktGewonnen(CSatz prev, GegnerPunktGewonnen evt) {
         return CSatz.apply(prev,
-            LaufenderCSatzEventHandler::gegnerPunktGewonnen,
+            LaufenderSatzEventHandler::gegnerPunktGewonnen,
             abgeschlossenerSatzToProblem
         );
 
@@ -49,7 +49,7 @@ interface GegnerEventHandler {
 
     static Either<DomainProblem, CSatz> gegnerMatchGewonnen(CSatz prev, GegnerMatchGewonnen evt) {
         return CSatz.apply(prev,
-            LaufenderCSatzEventHandler::gegnerMatchGewonnen,
+            LaufenderSatzEventHandler::gegnerMatchGewonnen,
             abgeschlossenerSatzToProblem
         );
 
@@ -57,7 +57,7 @@ interface GegnerEventHandler {
 
     static Either<DomainProblem, CSatz> gegnerGameGewonnen(CSatz prev, GegnerGameGewonnen evt) {
         return CSatz.apply(prev,
-            LaufenderCSatzEventHandler::gegnerGameGewonnen,
+            LaufenderSatzEventHandler::gegnerGameGewonnen,
             abgeschlossenerSatzToProblem
         );
     }

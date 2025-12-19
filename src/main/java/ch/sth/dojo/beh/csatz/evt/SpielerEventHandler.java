@@ -28,28 +28,28 @@ interface SpielerEventHandler {
 
     static Either<DomainProblem, CSatz> spielerSatzGewonnen(CSatz state, SpielerSatzGewonnen evt) {
         return CSatz.apply(state,
-            LaufenderCSatzEventHandler::spielerSatzGewonnen,
+            LaufenderSatzEventHandler::spielerSatzGewonnen,
             abgeschlossenerSatzToProblem
         );
     }
 
     static Either<DomainProblem, CSatz> spielerPunktGewonnen(CSatz state, SpielerPunktGewonnen evt) {
         return CSatz.apply(state,
-            LaufenderCSatzEventHandler::spielerPunktGewonnen,
+            LaufenderSatzEventHandler::spielerPunktGewonnen,
             abgeschlossenerSatzToProblem
         );
     }
 
     static Either<DomainProblem, CSatz> spielerMatchGewonnen(CSatz state, SpielerMatchGewonnen evt) {
         return CSatz.apply(state,
-            LaufenderCSatzEventHandler::spielerMatchGewonnen,
+            LaufenderSatzEventHandler::spielerMatchGewonnen,
             abgeschlossenerSatzToProblem
         );
     }
 
     static Either<DomainProblem, CSatz> spielerGameGewonnen(CSatz state, SpielerGameGewonnen evt) {
         return CSatz.apply(state,
-            LaufenderCSatzEventHandler::spielerGameGewonnen,
+            LaufenderSatzEventHandler::spielerGameGewonnen,
             abgeschlossenerSatzToProblem
         );
     }
